@@ -1,0 +1,15 @@
+.am-list-extra{touch-action: none;}
+.radiobutton{margin:0 10px 5px 0}
+/* .area{position: absolute;
+    left: 0;
+    right: 0;
+    top: 81px;
+    bottom: 44px;
+    overflow: auto;} */
+.stick-footer{border-top: 1px solid #aaa;z-index: 10;position: fixed;bottom: 0;width: 100%;display: flex;
+    height: 44px;
+    align-items: stretch;
+    line-height: 44px;
+    text-align: center;}
+.payBtn{background: red;color: white;font-size: 17px;font-weight: bold;}
+.payBtn:active{background: #de0202}
