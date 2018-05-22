@@ -1,15 +1,18 @@
 import React from 'react'
 import { List, Button, WhiteSpace  , Stepper, TextareaItem} from 'antd-mobile'
 import {connect} from 'react-redux'
-// import {Redirect} from 'react-router-dom'
 
 // import {update} from '../../redux/user.redux'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
+import {getNum,getTimelong, buildOrder} from '../../redux/order.redux'
+import {showToast } from '../../util'
+
+
 import './prayForm.css'
 
 @connect(
     state=>state,
-    // {update}
+    {getNum,getTimelong, buildOrder}
 )
 class PrayForm extends React.Component{
     constructor(props){
@@ -21,55 +24,74 @@ class PrayForm extends React.Component{
                 id:'ta123',
                 des: '灵隐寺飞来峰1号祈福塔简介',
             },
-            num: 2,
+            num: this.props.order.num,
             price:{
-                day:9.8,
-                month:19.8,
-                year:199,
-                all:3600
+                day:980,
+                month:1980,
+                year:19900,
+                all:360000
             },
-            chooseBtn:'',
+            time:this.props.order.time,
             total:0,
-            template:this.props.order.template
+            template:this.props.order.template,
+            position:this.props.order.position
         }
+    }
+    componentWillMount(){
+        this.setState({
+            total: ((this.state.price[this.state.time]||0)* this.state.num)
+        })
     }
 
     handleChange(num){
+        let position = this.state.position
+        if( num < position.length){
+            position = position.slice(0,num)
+        }
         this.setState({
             num,
-            total: ((this.state.price[this.state.chooseBtn]||0)* num).toFixed(2)
+            position,
+            total: ((this.state.price[this.state.time]||0)* num)
         })
+        this.props.getNum(num,position)
     }
     handleClick(time){
-        if(time===this.state.chooseBtn)
+        if(time===this.state.time)
             return
         this.setState({
-            chooseBtn:time,
-            total: (this.state.price[time] * this.state.num).toFixed(2)
+            time,
+            total: (this.state.price[time] * this.state.num)
         }) 
+        this.props.getTimelong(time)
     }
     handleTextarea(template){
         this.setState({
             template
         })
     }
-    handlePay(e){
-        // e.target.className += " payBtn-active"
+    handlePay(){
+        let order = this.props.order
+        order.total = this.state.total
+        if(order.num !== order.position.length){
+            return showToast('请完善供灯位置')
+        }
+        if(order.time===""){
+            return showToast('请选择时长')
+        }
+        // axios.get('/user/info.do')
+        //     .then(res=>{
+        //         if(res.data.code===0){
+                    this.props.buildOrder(order)
+                    this.props.history.push('/prayDetail/123')
+        //         }else{
+        //             this.props.history.push('/login')
+        //         }
+        // })
+        
     }
-    showModal = key => (e) => {
-        e.preventDefault(); // 修复 Android 上点击穿透
-        this.setState({
-          [key]: true,
-        });
-      }
-      onClose = key => () => {
-        this.setState({
-          [key]: false,
-        });
-      }
     render(){
         const obj = this.state.obj
-        const chos = this.state.chooseBtn
+        const chos = this.state.time
         const Item = List.Item
         const Brief = Item.Brief
         const btnList = [{type:'day',name:'1天'},{type:'month',name:'1月'},{type:'year',name:'1年'},{type:'all',name:'长期'}]
@@ -106,7 +128,8 @@ class PrayForm extends React.Component{
                 </List>
                 <List>
                     <Item 
-                        arrow="horizontal"
+                        arrow="horizontal" className="def-listitem"
+                        extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[0]:v[0]+',')}
                         onClick={() => this.props.history.push(`/lampDetail`)}
                     >供灯位置</Item>
                 </List>
@@ -132,8 +155,8 @@ class PrayForm extends React.Component{
                 <WhiteSpace size="lg" />
                 
                 <div className='stick-footer'>  
-                    <div style={{flex: '1 1',background:'orange' }} >供灯金额：￥{this.state.total}</div>
-                    <a className="payBtn" style={{flex: '1 1' }} onClick={(e)=>{this.handlePay(e)}}>确认祈福</a>
+                    <div style={{flex: '1 1',background:'orange' }} >供灯金额：￥{(this.state.total/100).toFixed(2)}</div>
+                    <a className="payBtn" style={{flex: '1 1' }} onClick={()=>{this.handlePay()}}>确认祈福</a>
                 </div>
 
             </div>

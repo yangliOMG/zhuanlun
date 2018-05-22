@@ -5,11 +5,13 @@ import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 import TabEx from  './tabEx.jsx'
 import {numberDictionary, recommendAI} from '../../util'
+import {getPosition} from '../../redux/order.redux'
 import './lampDetail.css'
 
 
 @connect(
-    state=>state.user,
+    state=>state.order,
+    {getPosition}
 )
 class LampDetail extends React.Component{
     constructor(props){
@@ -42,20 +44,20 @@ class LampDetail extends React.Component{
         }
     }
 
+    componentWillMount(){
+        const num = this.props.num , position = this.props.position
+        if(position.length>0){
+            position.forEach((arr,idx)=>{
+                this.seatSelection(...arr[0])})
+        }else if(num && num>0){
+            this.handleClick(num)
+        }
+    }
+
     handleClick(num){
         let data = this.state.data
         let recArrIdx = recommendAI(data,num)
         recArrIdx.forEach((v,idx)=>this.seatSelection(...v))
-        // let seledList = []
-        // for(let i=0;i<num;i++){
-        //     let type = Math.floor(Math.random()*100)+""
-        //     let ceng = Math.floor(Math.random()*11)
-        //     let name = `第${numberDictionary(ceng)}层${type.padStart(3,0)}位`
-        //     seledList.push({type,name})
-        // }
-        // this.setState({
-        //     seledList
-        // })
     }
     
     turnPage(curPage){
@@ -85,6 +87,11 @@ class LampDetail extends React.Component{
             data,
             seledList:new Map()
         })
+    }
+    handleClickSureSelect(){
+        
+        this.props.getPosition([...this.state.seledList])
+        this.props.history.goBack()
     }
 
     render(){
@@ -128,20 +135,24 @@ class LampDetail extends React.Component{
                                 onClick={()=>this.handleClick(v.type)}>{v.name}</Button>
                         )}
                     </div>
-                    <div className={`seled-bar ${selednum===0&&'hidden'}`}>  
-                        <div style={{padding: '0 10px' }}>
-                            <div>已选灯位
-                                <FontAwesome name={'times-circle'} size="2x" 
-                                    onClick={()=>this.seatDelete()}
-                                    style={{color:'#bbb',float:'right',lineHeight: '30px' }}/>
+                    <div className={`seled-bar ${selednum===0?'hidden':'showin'}`}>  
+                        <div className="seled-div">
+                            <div style={{padding: '0 10px' }}>
+                                <div>已选灯位
+                                    <FontAwesome name={'times-circle'} size="2x" 
+                                        onClick={()=>this.seatDelete()}
+                                        style={{color:'#bbb',float:'right',lineHeight: '30px' }}/>
+                                </div>
+                                <div className="nowrap">
+                                    {[...this.state.seledList].map((v,idx)=>
+                                        <div className="nameplate" key={v[0]}>{v[1]}</div>
+                                    )}
+                                </div>
                             </div>
-                            <div className="nowrap">
-                                {[...this.state.seledList].map((v,idx)=>
-                                    <div className="nameplate" key={v[0]}>{v[1]}</div>
-                                )}
-                            </div>
+                            <Button type="primary"
+                                    onClick={()=>this.handleClickSureSelect()}
+                            >{selednum!==0?('已选'+selednum+'个 '):''}确认选位</Button>
                         </div>
-                        <Button type="primary">{selednum!==0?(selednum*19+'元 '):''}确认选位</Button>
                     </div>
                 </div>
 

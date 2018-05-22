@@ -4,6 +4,7 @@ import { Route, Switch} from 'react-router-dom';
 import Shouye from './pray/shouye/shouye.jsx';
 import Temple from './pray/temple/temple.jsx'
 import TempleDetail from './pray/templeDetail/templeDetail.jsx'
+import PrayDetail from './pray/prayDetail/prayDetail.jsx'
 import Tower from './pray/tower/tower.jsx'
 
 // import AuthRoute from './component/authroute/authroute.jsx';
@@ -32,6 +33,7 @@ class App extends React.Component{
                     <Route path='/temple/:id' component={Temple}></Route>
                     <Route path='/templeDetail/:id' component={TempleDetail}></Route>
                     <Route path='/tower/:id' component={Tower}></Route>
+                    <Route path='/prayDetail/:id' component={PrayDetail}></Route>
                     <Route component={Dashboard}></Route>
                 </Switch>
             </div>

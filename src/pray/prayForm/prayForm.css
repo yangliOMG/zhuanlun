@@ -6,6 +6,7 @@
     top: 81px;
     bottom: 44px;
     overflow: auto;} */
+.def-listitem.am-list-item .am-list-line .am-list-extra{flex-basis: 60%;}
 .stick-footer{border-top: 1px solid #aaa;z-index: 10;position: fixed;bottom: 0;width: 100%;display: flex;
     height: 44px;
     align-items: stretch;

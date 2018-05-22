@@ -2,35 +2,19 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-05-21 17:47:17
+ * @Last Modified time: 2018-05-22 14:07:04
  */
+import { Toast } from 'antd-mobile';
+
+export function showToast(msg) {
+    Toast.info(msg, 1);
+}
+
 export function numberDictionary(num){
     let dick = ['一','二','三','四','五','六','七','八','九','十',
                 '十一','十二','十三','十四','十五','十六','十七','十八','十九','二十',]
     return dick[num] || "超出边界"
 }
-
-
-// data : [
-//     [
-//         [0,1,0,1,0,0,0,0,0],
-//         [0,1,0,1,0,0,1,0,0],
-//         [0,1,0,1,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0],
-//     ],
-//     [
-//         [0,1,0,1,0,0,0,0,0],
-//         [0,1,0,1,0,0,0,0,0],
-//         [0,1,0,1,1,1,1,1,0],
-//         [0,1,0,1,0,0,1,0,0],
-//     ],
-//     [
-//         [0,1,0,1,0,0,1,0,0],
-//         [0,1,0,1,0,1,0,0,0],
-//         [0,1,0,1,0,0,1,0,0],
-//         [0,1,0,1,1,1,0,1,0],
-//     ],
-// ],
 
 export function recommendAI(dataArr,num){
     let bestPos = new Map()

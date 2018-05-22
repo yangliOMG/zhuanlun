@@ -16,10 +16,13 @@
     height: 30px;line-height: 30px;
     align-items: stretch;
     text-align: center;}
-.recom-bar{line-height: 30px;padding: 0 10px;}
+.recom-bar{line-height: 30px;padding: 0 10px;height: 75px;}
 .radiobutton{margin:0 10px 5px 0}
 
-.seled-bar{line-height: 30px;}
+.seled-bar{line-height: 30px;height: 116px;background: #eee;}
+.seled-div{position: absolute;width: 100%;bottom: -48px;background: white;transition: all .5s linear;}
+.seled-bar.showin .seled-div{bottom: 0px}
+
 .nowrap{white-space: nowrap;overflow: auto;}
 .nameplate{border: 1px solid #ddd;display: inline-block;padding: 1px 4px;margin: 0 5px 5px 0;}
 
