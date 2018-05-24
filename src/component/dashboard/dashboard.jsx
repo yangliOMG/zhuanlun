@@ -11,6 +11,8 @@ import Template from '../../pray/template/template.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 
 import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
+import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
+import MyHistory from '../../personal/myHistory/myHistory.jsx'
 // import {getMsgList,recvMsg} from '../../redux/chat.redux.jsx'
 
 @connect(
@@ -38,6 +40,8 @@ class Dashboard extends React.Component{
             {path:'/template',title:'祈福语',component:Template,},
             {path:'/lampDetail',title:'选择灯位',component:LampDetail,},
             {path:'/personalCenter',title:'个人中心',component:PersonalCenter,},
+            {path:'/myCarelist',title:'我的收藏',component:MyCarelist,},
+            {path:'/myHistory',title:'我的足迹',component:MyHistory,},
         ]
         const page = navList.find(v=>v.path===pathname)
         return page?(

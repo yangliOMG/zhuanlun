@@ -34,7 +34,7 @@ class PrayDetail extends React.Component{
                 <NavBar 
                     icon={<Icon type="left" />} 
                     mode='dard' 
-                    onLeftClick={()=>this.props.history.push("/myPrayList")}
+                    onLeftClick={()=>this.props.history.push("/myPraylist")}
                     >供灯详情</NavBar>
                 <Card>
                     <Card.Body>

@@ -7,6 +7,8 @@ import TempleDetail from './pray/templeDetail/templeDetail.jsx'
 import PrayDetail from './pray/prayDetail/prayDetail.jsx'
 import Tower from './pray/tower/tower.jsx'
 
+import MyPraylist from './personal/myPraylist/myPraylist.jsx'
+
 // import AuthRoute from './component/authroute/authroute.jsx';
 import Dashboard from './component/dashboard/dashboard.jsx';
 
@@ -34,6 +36,7 @@ class App extends React.Component{
                     <Route path='/templeDetail/:id' component={TempleDetail}></Route>
                     <Route path='/tower/:id' component={Tower}></Route>
                     <Route path='/prayDetail/:id' component={PrayDetail}></Route>
+                    <Route path='/myPraylist' component={MyPraylist}></Route>
                     <Route component={Dashboard}></Route>
                 </Switch>
             </div>

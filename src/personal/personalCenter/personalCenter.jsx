@@ -26,7 +26,7 @@ class PersonalCenter extends React.Component{
         const namelist = [
                 {title:"我的祈福",path:'/myPraylist',fontname:'heart',color:'red'},
                 {title:"我的收藏",path:'/myCarelist',fontname:'star',color:'orange'},
-                {title:"浏览记录",path:'/history',fontname:'clock-o',color:'grey'},
+                {title:"浏览记录",path:'/myHistory',fontname:'clock-o',color:'grey'},
             ]
         return (
             <div>
@@ -35,16 +35,12 @@ class PersonalCenter extends React.Component{
                         <table style={{height: "100px", margin:"0 auto"}} >
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <div className="headImgDiv">
-                                            <img height="60" width="60" src={this.state.user.headimg} alt="" />
-                                        </div>
-                                    </td>
+                                    <td><div className="headImgDiv">
+                                        <img height="60" width="60" src={this.state.user.headimg} alt="" />
+                                    </div></td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style={{textAlign:"center", color:"white"}} >{this.state.user.nickname}</div>
-                                    </td>
+                                    <td><div style={{textAlign:"center", color:"white"}} >{this.state.user.nickname}</div></td>
                                 </tr>
                             </tbody>
                         </table>                    
