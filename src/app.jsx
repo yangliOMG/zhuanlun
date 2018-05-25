@@ -32,9 +32,9 @@ class App extends React.Component{
                 {/* <AuthRoute></AuthRoute> */}
                 <Switch>
                     <Route path='/shouye' component={Shouye}></Route>
-                    <Route path='/temple/:id' component={Temple}></Route>
+                    {/* <Route path='/temple/:id' component={Temple}></Route> */}
                     <Route path='/templeDetail/:id' component={TempleDetail}></Route>
-                    <Route path='/tower/:id' component={Tower}></Route>
+                    {/* <Route path='/tower/:id' component={Tower}></Route> */}
                     <Route path='/prayDetail/:id' component={PrayDetail}></Route>
                     <Route path='/myPraylist' component={MyPraylist}></Route>
                     <Route component={Dashboard}></Route>

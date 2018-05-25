@@ -8,8 +8,6 @@ class TabEx extends React.Component{
       this.state = {
       }
   }
-
-
   render(){
     
     const tabs2 = [
@@ -21,11 +19,10 @@ class TabEx extends React.Component{
     //  <div style={{position:'absolute',top:'-20px',left:'-20px',right:'-20px',bottom:'-20px',background:`url(${require('./tower.png')}) ` }}></div> 
     const data = this.props.data
       return (
-        <Tabs tabs={tabs2}
-          initialPage={0}
-          tabBarPosition="bottom"
+        <Tabs tabs={tabs2} 
+          initialPage={Number(this.props.curPage)}
           onChange={(tab,idx)=>this.props.turnPage(idx)}
-          renderTab={tab => <span>{tab.title}</span>}
+          renderTabBar={false}
         >
           {data.map((darr,idx)=>
               <div key={idx} style={{  minHeight: `${tabHeight}px`, height:'100%',padding:'10px 0 0 20px', fontSize:'22px' }}>

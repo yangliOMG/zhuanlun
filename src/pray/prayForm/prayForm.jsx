@@ -4,15 +4,21 @@ import {connect} from 'react-redux'
 
 // import {update} from '../../redux/user.redux'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
-import {getNum,getTimelong, buildOrder} from '../../redux/order.redux'
+import Popup from '../../component/popup/popup.jsx'
+import Template from '../../pray/template/template.jsx'
+import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
+
+import {updateOrder} from '../../redux/order.redux'
+import Order from '../../service/order-service.jsx'
 import {showToast } from '../../util'
 
 
 import './prayForm.css'
 
+const _order = new Order()
 @connect(
     state=>state,
-    {getNum,getTimelong, buildOrder}
+    {updateOrder}
 )
 class PrayForm extends React.Component{
     constructor(props){
@@ -37,57 +43,37 @@ class PrayForm extends React.Component{
             position:this.props.order.position
         }
     }
-    componentWillMount(){
-        this.setState({
-            total: ((this.state.price[this.state.time]||0)* this.state.num)
-        })
-    }
 
-    handleChange(num){
+    handleNumChange(num){
         let position = this.state.position
         if( num < position.length){
             position = position.slice(0,num)
         }
-        this.setState({
-            num,
-            position,
-            total: ((this.state.price[this.state.time]||0)* num)
-        })
-        this.props.getNum(num,position)
+        this.setState({num,position,})
+        this.props.updateOrder({num,position})
     }
-    handleClick(time){
-        if(time===this.state.time)
-            return
-        this.setState({
-            time,
-            total: (this.state.price[time] * this.state.num)
-        }) 
-        this.props.getTimelong(time)
+    handleTimeBtnClick(time){
+        this.setState({time,}) 
+        this.props.updateOrder({time})
     }
     handleTextarea(template){
-        this.setState({
-            template
-        })
+        this.setState({template})
+        this.props.updateOrder({template})
     }
     handlePay(){
         let order = this.props.order
-        order.total = this.state.total
+        order.total = (this.state.price[this.state.time]||0)* this.state.num
         if(order.num !== order.position.length){
             return showToast('请完善供灯位置')
         }
         if(order.time===""){
             return showToast('请选择时长')
         }
-        // axios.get('/user/info.do')
-        //     .then(res=>{
-        //         if(res.data.code===0){
-                    this.props.buildOrder(order)
-                    this.props.history.push('/prayDetail/123')
-        //         }else{
-        //             this.props.history.push('/login')
-        //         }
-        // })
-        
+        _order.createOrder(order).then(res=>{
+            console.log(res)
+            this.props.updateOrder(order)
+            this.props.history.push('/prayDetail/123')
+        })
     }
     render(){
         const obj = this.state.obj
@@ -95,6 +81,7 @@ class PrayForm extends React.Component{
         const Item = List.Item
         const Brief = Item.Brief
         const btnList = [{type:'day',name:'1天'},{type:'month',name:'1月'},{type:'year',name:'1年'},{type:'all',name:'长期'}]
+        const total = (this.state.price[this.state.time]||0)* this.state.num
         return (
             <div>
                 <PrayNavbar />
@@ -112,7 +99,7 @@ class PrayForm extends React.Component{
                         extra={<Stepper style={{ width: '100%', minWidth: '100px' }} 
                                         showNumber max={10} min={1} 
                                         value={this.state.num}
-                                        onChange={(v) =>this.handleChange(v)}
+                                        onChange={(v) =>this.handleNumChange(v)}
                                 />}
                     >供灯数量</Item>
                     <Item multipleLine
@@ -121,7 +108,7 @@ class PrayForm extends React.Component{
                             {btnList.map((v,idx)=>
                                 <Button className="radiobutton" size="small" inline key={v.type}
                                     type={chos===v.type?'primary':'ghost'}
-                                    onClick={()=>this.handleClick(v.type)}>{v.name}</Button>
+                                    onClick={()=>this.handleTimeBtnClick(v.type)}>{v.name}</Button>
                             )}
                         </Brief>
                     </Item>
@@ -155,10 +142,11 @@ class PrayForm extends React.Component{
                 <WhiteSpace size="lg" />
                 
                 <div className='stick-footer'>  
-                    <div style={{flex: '1 1',background:'orange' }} >供灯金额：￥{(this.state.total/100).toFixed(2)}</div>
+                    <div style={{flex: '1 1',background:'orange' }} >供灯金额：￥{(total/100).toFixed(2)}</div>
                     <a className="payBtn" style={{flex: '1 1' }} onClick={()=>{this.handlePay()}}>确认祈福</a>
                 </div>
-
+                
+                <Popup><LampDetail/></Popup>
             </div>
         )
     }

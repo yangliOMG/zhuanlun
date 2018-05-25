@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {NavBar,Icon} from 'antd-mobile'
 import { Route, Redirect} from 'react-router-dom' 
 // import QueueAnim from 'rc-queue-anim';
+import { AnimatedSwitch } from 'react-router-transition';
 
 
 import TempleList from '../../pray/templeList/templeList.jsx'
@@ -10,10 +11,15 @@ import PrayForm from '../../pray/prayForm/prayForm.jsx'
 import Template from '../../pray/template/template.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 
+import Temple from '../../pray/temple/temple.jsx'
+import Tower from '../../pray/tower/tower.jsx'
+
 import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
 import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
 import MyHistory from '../../personal/myHistory/myHistory.jsx'
 // import {getMsgList,recvMsg} from '../../redux/chat.redux.jsx'
+
+import {setStorage, getStorage, comparePath} from '../../util'
 
 @connect(
     state=>state,
@@ -27,37 +33,65 @@ class Dashboard extends React.Component{
         }
     }
     componentDidMount(){
-        // if(!this.props.chat.chatmsg.length){
-        //     this.props.getMsgList();
-        //     this.props.recvMsg();
-        // }
+    //     window.onscroll = function(){ 
+    //         var t = document.documentElement.scrollTop || document.body.scrollTop;  
+    //         console.log(t)
+    //    } 
     }
     render(){
         const {pathname}  = this.props.location
         const navList = [
-            {path:'/templeList',title:'寺院列表',component:TempleList,},
-            {path:'/prayForm',title:'祈福供灯',component:PrayForm,},
-            {path:'/template',title:'祈福语',component:Template,},
-            {path:'/lampDetail',title:'选择灯位',component:LampDetail,},
-            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,},
-            {path:'/myCarelist',title:'我的收藏',component:MyCarelist,},
-            {path:'/myHistory',title:'我的足迹',component:MyHistory,},
+            {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
+            {path:'/prayForm',title:'祈福供灯',component:PrayForm,father:['/tower'],son:['/template','/lampDetail']},
+            {path:'/template',title:'祈福语',component:Template,father:['/prayForm'],son:[]},
+            {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/prayForm'],son:[]},
+
+            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist']},
+            {path:'/myCarelist',title:'我的收藏',component:MyCarelist,father:['/personalCenter'],son:['/temple','tower']},
+            {path:'/myHistory',title:'我的足迹',component:MyHistory,father:['/personalCenter'],son:[]},
+
+            {path:'/temple',title:'temple',component:Temple,father:['/templeList','/myCarelist'],son:['/templeDetail','/tower']},
+            {path:'/tower',title:'tower',component:Tower,father:['/temple','/myCarelist'],son:['/prayForm']},
         ]
         const page = navList.find(v=>v.path===pathname)
-        return page?(
-            <div>
-                <NavBar icon={<Icon type="left" />} mode='dard' onLeftClick={()=>this.props.history.goBack()}>{page.title}</NavBar>
+
+        if(page){
+            let lastPath = getStorage('lastPath')
+            let plus = comparePath(lastPath,page) === 'father'? -1:1
+            setStorage('lastPath',pathname)
+            const height = document.documentElement.clientHeight -45
+            return (
                 <div>
-                    {/* <QueueAnim type={page.type}> */}
-                        {/* <Switch>
-                            {navList.map(v=> */}
-                                <Route key={page.path} path={page.path} component={page.component}></Route>
-                            {/* )}
-                        </Switch> */}
-                    {/* </QueueAnim> */}
+                    <NavBar icon={<Icon type="left" />} mode='dard' onLeftClick={()=>this.props.history.goBack()}>{page.title}</NavBar>
+                    <AnimatedSwitch
+                        atEnter={{ opacity: 0, foo: 0 }}
+                        atLeave={{ opacity: 0, foo: 2 }}
+                        atActive={{ opacity: 1, foo: 1 }}
+                        mapStyles={(styles) => {
+                            let x = plus * (styles.foo-1)*100
+                            let val = x===0? 'none': 'translateX(' + x + '%)'
+                            return {
+                                position: (styles.foo <= 1) ? 'relative': 'absolute',
+                                width: '100%',
+                                height: height+'px',
+                                opacity: styles.opacity,
+                                transform: val
+                            }
+                        }}
+                        >
+                        {/* <QueueAnim type={page.type}> */}
+                            {/* <Switch>
+                                {navList.map(v=> */}
+                                    <Route key={page.path} path={page.path} component={page.component}></Route>
+                                {/* )}
+                            </Switch> */}
+                        {/* </QueueAnim> */}
+                        </AnimatedSwitch>
                 </div>
-            </div>
-        ): <Redirect to='/shouye'></Redirect>
+            )
+        }else{
+            return <Redirect to='/shouye'></Redirect>
+        }
     }
 }
 

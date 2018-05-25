@@ -35,12 +35,12 @@ class Tower extends React.Component{
         const obj = this.state.obj;
         return (
             <div>
-                <NavBar 
+                {/* <NavBar 
                     icon={<Icon type="left" />} 
                     mode='dard' 
                     onLeftClick={()=>this.props.history.goBack()}
                     >{obj.title}</NavBar>
-                <PrayNavbar />
+                <PrayNavbar /> */}
                 <WhiteSpace />
                 <div style={{ textAlign: 'center',position:'relative' }}>
                     <img style={{ maxHeight: '260px' }} src={obj.img} alt="" />

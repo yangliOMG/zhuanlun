@@ -5,13 +5,13 @@ import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 import TabEx from  './tabEx.jsx'
 import {numberDictionary, recommendAI} from '../../util'
-import {getPosition} from '../../redux/order.redux'
+import {updateOrder} from '../../redux/order.redux'
 import './lampDetail.css'
 
 
 @connect(
     state=>state.order,
-    {getPosition}
+    {updateOrder}
 )
 class LampDetail extends React.Component{
     constructor(props){
@@ -22,10 +22,10 @@ class LampDetail extends React.Component{
                     [0,1,0,1,0,0,0,0,0],
                     [0,1,0,1,0,0,1,0,0],
                     [0,1,0,1,0,0,0,0,0],
-                    [0,0,0,0,0,0,0,0,0],
+                    [0,1,0,1,0,0,0,0,0],
                 ],
                 [
-                    [0,1,0,1,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
                     [0,1,0,1,0,0,0,0,0],
                     [0,1,0,1,1,1,1,1,0],
                     [0,1,0,1,0,0,1,0,0],
@@ -50,17 +50,18 @@ class LampDetail extends React.Component{
             position.forEach((arr,idx)=>{
                 this.seatSelection(...arr[0])})
         }else if(num && num>0){
-            this.handleClick(num)
+            this.handleRecBtnClick(num)
         }
     }
 
-    handleClick(num){
+    handleRecBtnClick(num){
         let data = this.state.data
         let recArrIdx = recommendAI(data,num)
         recArrIdx.forEach((v,idx)=>this.seatSelection(...v))
     }
     
     turnPage(curPage){
+        curPage = Number(curPage)
         const lastPageHide = curPage===0
         const nextPageHide = this.state.data.length===(curPage+1)
         this.setState({
@@ -72,7 +73,7 @@ class LampDetail extends React.Component{
         let seledList = this.state.seledList
         if(data[idx][idx1][idx2]===0){
             data[idx][idx1][idx2] = 2
-            seledList.set(`${idx}${idx1}${idx2}`,`${idx+1}面${idx1+1}层${(idx2+1+"").padStart(3,0)}位`)
+            seledList.set(`${idx}${idx1}${idx2}`,`${Number(idx)+1}面${Number(idx1)+1}层${(Number(idx2)+1+"").padStart(3,0)}位`)
         }else if(data[idx][idx1][idx2]===2){
             seledList.delete(`${idx}${idx1}${idx2}`)
             data[idx][idx1][idx2] = 0
@@ -80,17 +81,18 @@ class LampDetail extends React.Component{
         this.setState({
             data,seledList
         })
+        this.turnPage(idx)
     }
-    seatDelete(){
+    handleSeatDelete(){
         let data = JSON.parse(JSON.stringify(this.state.data).replace(/2/g,'0'))
         this.setState({
             data,
             seledList:new Map()
         })
     }
-    handleClickSureSelect(){
+    handleSureSelectClick(){
         
-        this.props.getPosition([...this.state.seledList])
+        this.props.updateOrder({position:[...this.state.seledList],num:this.state.seledList.size})
         this.props.history.goBack()
     }
 
@@ -101,7 +103,7 @@ class LampDetail extends React.Component{
         return (
             <div>
                 <div className={`area ${selednum===0?'':'b187'}`}>
-                    <TabEx data={data} 
+                    <TabEx data={data} curPage={this.state.curPage}
                         turnPage={(idx)=>this.turnPage(idx)} 
                         seatSelection={(idx,idx1,idx2)=>this.seatSelection(idx,idx1,idx2)}
                     ></TabEx>
@@ -132,7 +134,7 @@ class LampDetail extends React.Component{
                         {btnList.map((v,idx)=>
                             <Button className="radiobutton" size="small" inline key={v.type}
                                 type='ghost'
-                                onClick={()=>this.handleClick(v.type)}>{v.name}</Button>
+                                onClick={()=>this.handleRecBtnClick(v.type)}>{v.name}</Button>
                         )}
                     </div>
                     <div className={`seled-bar ${selednum===0?'hidden':'showin'}`}>  
@@ -140,7 +142,7 @@ class LampDetail extends React.Component{
                             <div style={{padding: '0 10px' }}>
                                 <div>已选灯位
                                     <FontAwesome name={'times-circle'} size="2x" 
-                                        onClick={()=>this.seatDelete()}
+                                        onClick={()=>this.handleSeatDelete()}
                                         style={{color:'#bbb',float:'right',lineHeight: '30px' }}/>
                                 </div>
                                 <div className="nowrap">
@@ -150,7 +152,7 @@ class LampDetail extends React.Component{
                                 </div>
                             </div>
                             <Button type="primary"
-                                    onClick={()=>this.handleClickSureSelect()}
+                                    onClick={()=>this.handleSureSelectClick()}
                             >{selednum!==0?('已选'+selednum+'个 '):''}确认选位</Button>
                         </div>
                     </div>

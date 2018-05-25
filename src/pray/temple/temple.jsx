@@ -47,11 +47,11 @@ class Temple extends React.Component{
         })
         return (
             <div>
-                <NavBar 
+                {/* <NavBar 
                     icon={<Icon type="left" />} 
                     mode='dard' 
                     onLeftClick={()=>this.props.history.goBack()}
-                    >{obj.title}</NavBar>
+                    >{obj.title}</NavBar> */}
                 <PrayNavbar />
                 <div style={{ padding: '50px 15px 10px',background:`url(${obj.img}) 0 0/100% 100%`,position:'relative',height:'120px' }} 
                     onClick={()=>this.handleClick(obj.id)}>
@@ -71,7 +71,7 @@ class Temple extends React.Component{
                             {row.map((v,idx)=>
                                 <div className="d-flexitem" 
                                     key={v.id} 
-                                    onClick={()=> this.props.history.push(`/tower/${v.id}`)}>
+                                    onClick={()=> this.props.history.push(`/tower#${v.id}`)}>
                                     <div className="d-flexitem-content">
                                         <div className="d-flexitem-inner-content">
                                             <img className="d-flexitem-icon" src={v.icon} alt=""/>

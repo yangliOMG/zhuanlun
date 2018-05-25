@@ -3,12 +3,12 @@ import { WhiteSpace  , SearchBar, WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 
-import {getTemplate} from '../../redux/order.redux'
+import {updateOrder} from '../../redux/order.redux'
 import './template.css'
 
 @connect(
     state=>state.user,
-    {getTemplate}
+    {updateOrder}
 )
 class Template extends React.Component{
     constructor(props){
@@ -24,14 +24,8 @@ class Template extends React.Component{
             type
         })
     }
-    handleChange(num){
-        this.setState({
-            num,
-            total: ((this.state.price[this.state.chooseBtn]||0)* num).toFixed(2)
-        })
-    }
     handleClick(e){
-        this.props.getTemplate(e.target.innerHTML)
+        this.props.updateOrder({template:e.target.innerHTML})
         this.props.history.goBack()
     }
     render(){
