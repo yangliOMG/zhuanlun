@@ -1,17 +1,10 @@
 import React from 'react'
-import { NoticeBar} from 'antd-mobile'
-import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome';
 
 // import {Redirect} from 'react-router-dom'
 
 // import {update} from '../../redux/user.redux'
 import './popup.css'
 
-@connect(
-    state=>state.user,
-    // {update}
-)
 class Popup extends React.Component{
     constructor(props){
         super(props);

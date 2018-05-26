@@ -16,10 +16,10 @@
     height: 30px;line-height: 30px;
     align-items: stretch;
     text-align: center;}
-.recom-bar{line-height: 30px;padding: 0 10px;height: 75px;}
+.recom-bar{line-height: 30px;padding: 0 10px;height: 75px;text-align: left;}
 .radiobutton{margin:0 10px 5px 0}
 
-.seled-bar{line-height: 30px;height: 116px;background: #eee;}
+.seled-bar{line-height: 30px;height: 116px;background: #eee;text-align: left;}
 .seled-div{position: absolute;width: 100%;bottom: -48px;background: white;transition: all .5s linear;}
 .seled-bar.showin .seled-div{bottom: 0px}
 

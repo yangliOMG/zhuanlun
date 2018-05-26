@@ -1,5 +1,5 @@
 import React from 'react'
-import { WhiteSpace  , SearchBar, WingBlank} from 'antd-mobile'
+import { WhiteSpace  , SearchBar, WingBlank, NavBar,Icon} from 'antd-mobile'
 import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 
@@ -26,7 +26,7 @@ class Template extends React.Component{
     }
     handleClick(e){
         this.props.updateOrder({template:e.target.innerHTML})
-        this.props.history.goBack()
+        this.props.onClose()
     }
     render(){
         const typeList = [{type:'1',name:'福寿'},{type:'2',name:'福禄'},{type:'3',name:'健康'},
@@ -35,6 +35,11 @@ class Template extends React.Component{
                             {id:'4',text:'百事可乐,万事芬达'},{id:'5',text:'愿与同僚,共分此乐'},{id:'6',text:'早生贵子，丁财两旺'}]                
         return (
             <div>
+                <NavBar 
+                    icon={<Icon type="left" />} 
+                    mode='dard' 
+                    onLeftClick={()=>this.props.onClose()}
+                    >祈福语</NavBar>
                 <SearchBar
                     placeholder="关键字搜索"
                     onChange={v=>this.setState({ keyword: v })}

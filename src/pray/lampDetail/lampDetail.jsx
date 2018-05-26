@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button} from 'antd-mobile'
+import { Button, NavBar,Icon} from 'antd-mobile'
 import FontAwesome from 'react-fontawesome';
 import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
@@ -73,7 +73,6 @@ class LampDetail extends React.Component{
         let seledList = this.state.seledList
         if(data[idx][idx1][idx2]===0){
             data[idx][idx1][idx2] = 2
-            seledList.set(`${idx}${idx1}${idx2}`,`${Number(idx)+1}面${Number(idx1)+1}层${(Number(idx2)+1+"").padStart(3,0)}位`)
         }else if(data[idx][idx1][idx2]===2){
             seledList.delete(`${idx}${idx1}${idx2}`)
             data[idx][idx1][idx2] = 0
@@ -91,9 +90,8 @@ class LampDetail extends React.Component{
         })
     }
     handleSureSelectClick(){
-        
         this.props.updateOrder({position:[...this.state.seledList],num:this.state.seledList.size})
-        this.props.history.goBack()
+        this.props.onClose()
     }
 
     render(){
@@ -102,6 +100,11 @@ class LampDetail extends React.Component{
         const data = this.state.data
         return (
             <div>
+                <NavBar 
+                    icon={<Icon type="left" />} 
+                    mode='dard' 
+                    onLeftClick={()=>this.props.onClose()}
+                    >选择灯位</NavBar>
                 <div className={`area ${selednum===0?'':'b187'}`}>
                     <TabEx data={data} curPage={this.state.curPage}
                         turnPage={(idx)=>this.turnPage(idx)} 

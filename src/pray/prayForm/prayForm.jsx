@@ -1,12 +1,11 @@
 import React from 'react'
-import { List, Button, WhiteSpace  , Stepper, TextareaItem} from 'antd-mobile'
+import { List, Button, WhiteSpace  , Stepper, TextareaItem, Modal} from 'antd-mobile'
 import {connect} from 'react-redux'
 
 // import {update} from '../../redux/user.redux'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
-import Popup from '../../component/popup/popup.jsx'
-import Template from '../../pray/template/template.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
+import Template from '../../pray/template/template.jsx'
 
 import {updateOrder} from '../../redux/order.redux'
 import Order from '../../service/order-service.jsx'
@@ -40,7 +39,9 @@ class PrayForm extends React.Component{
             time:this.props.order.time,
             total:0,
             template:this.props.order.template,
-            position:this.props.order.position
+            position:this.props.order.position,
+            modal2: false,
+            modal1: false,
         }
     }
 
@@ -75,6 +76,20 @@ class PrayForm extends React.Component{
             this.props.history.push('/prayDetail/123')
         })
     }
+
+    showModal(key,e){
+        e.preventDefault(); // 修复 Android 上点击穿透
+        this.setState({
+          [key]: true,
+        });
+    }
+    onClose = key => () => {
+        this.setState({
+          [key]: false,
+        });
+    }
+
+
     render(){
         const obj = this.state.obj
         const chos = this.state.time
@@ -117,14 +132,14 @@ class PrayForm extends React.Component{
                     <Item 
                         arrow="horizontal" className="def-listitem"
                         extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[0]:v[0]+',')}
-                        onClick={() => this.props.history.push(`/lampDetail`)}
+                        onClick={(e) => this.showModal('modal2', e)}
                     >供灯位置</Item>
                 </List>
                 <List>
                     <Item 
                         arrow="horizontal"
                         extra={'使用模板'}
-                        onClick={() => this.props.history.push(`/template`)}
+                        onClick={(e) => this.showModal('modal1', e)}
                     >祈福语</Item>
                     <TextareaItem 
                         onChange={v=>this.handleTextarea(v)}
@@ -145,8 +160,26 @@ class PrayForm extends React.Component{
                     <div style={{flex: '1 1',background:'orange' }} >供灯金额：￥{(total/100).toFixed(2)}</div>
                     <a className="payBtn" style={{flex: '1 1' }} onClick={()=>{this.handlePay()}}>确认祈福</a>
                 </div>
-                
-                <Popup><LampDetail/></Popup>
+
+
+                <Modal 
+                    visible={this.state.modal2}
+                    onClose={this.onClose('modal2')}
+                    transitionName ='slide-right'
+                    maskTransitionName  ='slide-right'
+                    >
+
+                    <LampDetail onClose={this.onClose('modal2')} />
+                </Modal>
+                <Modal 
+                    visible={this.state.modal1}
+                    onClose={this.onClose('modal1')}
+                    transitionName ='slide-right'
+                    maskTransitionName  ='slide-right'
+                    >
+
+                    <Template onClose={this.onClose('modal1')} />
+                </Modal>
             </div>
         )
     }
