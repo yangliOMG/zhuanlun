@@ -73,7 +73,7 @@ class LampDetail extends React.Component{
         let seledList = this.state.seledList
         if(data[idx][idx1][idx2]===0){
             data[idx][idx1][idx2] = 2
-            seledList.set(`${idx}${idx1}${idx2}`,`${Number(idx)+1}面${Number(idx1)+1}层${(Number(idx2)+1+"")/*.padStart(3,0)**/}位`)
+            seledList.set(`${idx}${idx1}${idx2}`,`${Number(idx)+1}面${Number(idx1)+1}层${(Number(idx2)+1+"").padStart(3,0)}位`)
         }else if(data[idx][idx1][idx2]===2){
             seledList.delete(`${idx}${idx1}${idx2}`)
             data[idx][idx1][idx2] = 0
@@ -91,8 +91,9 @@ class LampDetail extends React.Component{
         })
     }
     handleSureSelectClick(){
-        this.props.updateOrder({position:[...this.state.seledList],num:this.state.seledList.size})
-        this.props.onClose()
+        const value = {position:[...this.state.seledList],num:this.state.seledList.size}
+        this.props.updateOrder(value)
+        this.props.onClose(value)
     }
 
     render(){

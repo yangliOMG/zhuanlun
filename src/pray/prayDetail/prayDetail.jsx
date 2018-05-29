@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar,Icon, WhiteSpace ,Card } from 'antd-mobile'
+import { WhiteSpace ,Card } from 'antd-mobile'
 import {connect} from 'react-redux'
 
 // import {Redirect} from 'react-router-dom'
@@ -31,11 +31,6 @@ class PrayDetail extends React.Component{
     render(){
         return (
             <div>
-                <NavBar 
-                    icon={<Icon type="left" />} 
-                    mode='dard' 
-                    onLeftClick={()=>this.props.history.push("/myPraylist")}
-                    >供灯详情</NavBar>
                 <Card>
                     <Card.Body>
                         <div style={{ textAlign: "center" }}>{this.state.obj.title}佛灯祈福供奉</div>

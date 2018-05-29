@@ -12,7 +12,7 @@ import { Toast } from 'antd-mobile';
  * @param {当前页} page 
  */
 export function comparePath(lastPath,page){
-    let relationship = 'son'
+    let relationship = 'father'
     if(page.father && page.father.length>0){
         relationship = page.father.includes(lastPath) ? 'father' : relationship
     }

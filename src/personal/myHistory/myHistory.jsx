@@ -44,7 +44,7 @@ class MyHistory extends React.Component{
                           }}>{v.time}</header>
                         )}
                       </Sticky>
-                      <Card full onClick={()=>this.props.history.push(`/${v.type}/${v.id}`)}>
+                      <Card full onClick={()=>this.props.history.push(`/${v.type}#${v.id}`)}>
                           <Card.Body>
                               <div style={{display:'flex'}}>
                                   <div style={{flex:'1 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>

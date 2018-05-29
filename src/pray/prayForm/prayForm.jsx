@@ -8,13 +8,14 @@ import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 import Template from '../../pray/template/template.jsx'
 
 import {updateOrder} from '../../redux/order.redux'
-import Order from '../../service/order-service.jsx'
+// import Order from '../../service/order-service.jsx'
 import {showToast } from '../../util'
+import {webchatPay } from './wechatPay.js'
 
 
 import './prayForm.css'
 
-const _order = new Order()
+// const _order = new Order()
 @connect(
     state=>state,
     {updateOrder}
@@ -70,22 +71,25 @@ class PrayForm extends React.Component{
         if(order.time===""){
             return showToast('请选择时长')
         }
-        _order.createOrder(order).then(res=>{
-            console.log(res)
-            this.props.updateOrder(order)
-            this.props.history.push('/prayDetail/123')
-        })
+        webchatPay(this.state.price)
+        
+        // _order.createOrder(order).then(res=>{
+            // console.log(res)
+            // this.props.updateOrder(order)
+            // this.props.history.push('/prayDetail#123')
+        // })
     }
 
     showModal(key,e){
         e.preventDefault(); // 修复 Android 上点击穿透
         this.setState({
-          [key]: true,
+            [key]: true,
         });
     }
-    onClose = key => () => {
+    onClose = key => (value) => {
         this.setState({
-          [key]: false,
+            [key]: false,
+            ...value
         });
     }
 
@@ -164,20 +168,16 @@ class PrayForm extends React.Component{
 
                 <Modal 
                     visible={this.state.modal2}
-                    onClose={this.onClose('modal2')}
                     transitionName ='slide-right'
                     maskTransitionName  ='slide-right'
                     >
-
                     <LampDetail onClose={this.onClose('modal2')} />
                 </Modal>
                 <Modal 
                     visible={this.state.modal1}
-                    onClose={this.onClose('modal1')}
                     transitionName ='slide-right'
                     maskTransitionName  ='slide-right'
                     >
-
                     <Template onClose={this.onClose('modal1')} />
                 </Modal>
             </div>

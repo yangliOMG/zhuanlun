@@ -2,6 +2,7 @@ import React from 'react'
 import { List, WhiteSpace ,Card} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
+import axios from "axios";
 
 
 // import {update} from '../../redux/user.redux'
@@ -19,6 +20,11 @@ class PersonalCenter extends React.Component{
                 headimg:"http://thirdwx.qlogo.cn/mmopen/UxyatowS8jTGP5wYSAOqSibd8U1piahP0VmO1sTSqhhNOLAYfUJeY3slPWbIkTD3kjaRDUg5qZOLhtn08MDH1pgicVfKFp2cVm0/132",
             },
         }
+    }
+    componentDidMount(){
+        // axios.get(`/temple/allList.do`).then(res=>{
+        //     console.log(res)
+        // })
     }
 
     render(){

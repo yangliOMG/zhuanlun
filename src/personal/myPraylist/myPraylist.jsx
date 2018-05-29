@@ -1,5 +1,5 @@
 import React from 'react'
-import { WhiteSpace, Card,  NoticeBar, NavBar, Icon} from 'antd-mobile'
+import { WhiteSpace, Card,  NoticeBar } from 'antd-mobile'
 import {connect} from 'react-redux'
 
 
@@ -44,13 +44,8 @@ class MyPraylist extends React.Component{
     render(){
         return (
             <div>
-                <NavBar 
-                    icon={<Icon type="left" />} 
-                    mode='dard' 
-                    onLeftClick={()=>this.props.history.push('/personalCenter')}
-                    >我的祈福</NavBar>
                 {this.state.praylist.map((v,idx)=>
-                    <div key={v.id} onClick={()=>this.props.history.push(`/prayDetail/${v.id}`)}>
+                    <div key={v.id} onClick={()=>this.props.history.push(`/prayDetail#${v.id}`)}>
                         <NoticeBar marqueeProps={{ loop: true }}>
                             {v.template}
                         </NoticeBar>

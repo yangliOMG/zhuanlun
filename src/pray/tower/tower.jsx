@@ -1,11 +1,15 @@
 import React from 'react'
-import { NavBar,Icon, Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
+import {  Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
-// import {Redirect} from 'react-router-dom'
 
 // import {update} from '../../redux/user.redux'
+import {showToast } from '../../util'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
+import Tem from '../../service/temple-service.jsx'
+
+const _temple = new Tem()
+const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 
 @connect(
     state=>state.user,
@@ -15,35 +19,37 @@ class Tower extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            obj :
-                {
-                    img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg',
-                    title:'飞来峰1号祈福塔',
-                    id:'ta123',
-                    des: '灵隐寺飞来峰1号祈福塔简介',
-                },
+            obj : {},
             care:false
         }
+    }
+    componentWillMount(){
+        const id = this.props.location.hash.replace("#","")
+        _temple.getTowerById(id).then(res=>{
+            if(res.status === 200){
+                this.setState({
+                    obj: res.data,
+                })
+                document.getElementById("navbar").getElementsByClassName("am-navbar-title")[0].innerHTML 
+                    = `${res.data.name} ${res.data.tname}`
+            }
+        })
     }
     handleClick(){
         this.setState({
             care:!this.state.care
         })
+        showToast(!this.state.care?'已收藏':'取消收藏')
     }
 
     render(){
         const obj = this.state.obj;
         return (
             <div>
-                {/* <NavBar 
-                    icon={<Icon type="left" />} 
-                    mode='dard' 
-                    onLeftClick={()=>this.props.history.goBack()}
-                    >{obj.title}</NavBar>
-                <PrayNavbar /> */}
+                <PrayNavbar /> 
                 <WhiteSpace />
                 <div style={{ textAlign: 'center',position:'relative' }}>
-                    <img style={{ maxHeight: '260px' }} src={obj.img} alt="" />
+                    <img style={{ maxHeight: '260px' }} src={obj.ico||defaultTowImg} alt="" />
                     <div style={{ margin: '10px' }}>
                         已供灯数199，总灯数200
                     </div>

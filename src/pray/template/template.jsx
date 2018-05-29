@@ -4,7 +4,10 @@ import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 
 import {updateOrder} from '../../redux/order.redux'
+import Order from '../../service/order-service.jsx'
+
 import './template.css'
+const _order = new Order()
 
 @connect(
     state=>state.user,
@@ -14,11 +17,26 @@ class Template extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            keyword:'',
-            type:''
+            type:'',
+            templateList:[]
         }
     }
+    componentDidMount(){
+        this.ajaxTemplateList()
+    }
+    ajaxTemplateList(type=1,content=''){
+        _order.getTemplateList({type,content}).then(res=>{
+            if(res.status === 200){
+                this.setState({
+                    templateList: res.data
+                })
+            }
+        })
+    }
 
+    handleSearchBarChange(v){
+        this.ajaxTemplateList(1,v)
+    }
     handleChoose(type){
         this.setState({
             type
@@ -26,13 +44,13 @@ class Template extends React.Component{
     }
     handleClick(e){
         this.props.updateOrder({template:e.target.innerHTML})
-        this.props.onClose()
+        this.props.onClose({template:e.target.innerHTML})
     }
     render(){
+        
         const typeList = [{type:'1',name:'福寿'},{type:'2',name:'福禄'},{type:'3',name:'健康'},
                         {type:'4',name:'财富'},{type:'5',name:'姻缘'},{type:'6',name:'考试'}]
-        const templateList = [{id:'1',text:'美满家庭，鸾凤和鸣'},{id:'2',text:'大吉大利，晚上吃鸡'},{id:'3',text:'年年今日,岁岁今朝'},
-                            {id:'4',text:'百事可乐,万事芬达'},{id:'5',text:'愿与同僚,共分此乐'},{id:'6',text:'早生贵子，丁财两旺'}]                
+        const templateList = this.state.templateList             
         return (
             <div>
                 <NavBar 
@@ -42,7 +60,7 @@ class Template extends React.Component{
                     >祈福语</NavBar>
                 <SearchBar
                     placeholder="关键字搜索"
-                    onChange={v=>this.setState({ keyword: v })}
+                    onChange={v=>this.handleSearchBarChange( v )}
                 />
                 <WingBlank size="lg">
                     <div className="board">
@@ -58,7 +76,7 @@ class Template extends React.Component{
                     {templateList.map((v,idx)=>
                         <a className="row" key={v.id}
                             onClick={(e)=>this.handleClick(e)}
-                        >{v.text}</a>
+                        >{v.content}</a>
                     )}
                 </WingBlank>
 

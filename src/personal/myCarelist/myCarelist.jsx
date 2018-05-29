@@ -40,7 +40,7 @@ class MyCarelist extends React.Component{
                 {this.state.carelist.map((v,idx)=>
                     <div key={v.id}>
                         <WhiteSpace/>   
-                        <Card onClick={()=>this.props.history.push(`/${v.type}/${v.id}`)}>
+                        <Card onClick={()=>this.props.history.push(`/${v.type}#${v.id}`)}>
                             <Card.Body>
                                 <div style={{display:'flex'}}>
                                     <div style={{flex:'1 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>

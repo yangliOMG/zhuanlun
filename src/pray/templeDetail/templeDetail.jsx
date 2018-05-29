@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar,Icon, Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
+import { Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
@@ -34,11 +34,6 @@ class TempleDetail extends React.Component{
         const obj = this.state.obj
         return (
             <div>
-                <NavBar 
-                    icon={<Icon type="left" />} 
-                    mode='dard' 
-                    onLeftClick={()=>this.props.history.goBack()}
-                    >寺院详情</NavBar>
                 <WingBlank size="sm">
                     <Card>
                         <Card.Body>
