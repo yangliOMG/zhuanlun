@@ -11,11 +11,13 @@ import {updateOrder} from '../../redux/order.redux'
 // import Order from '../../service/order-service.jsx'
 import {showToast } from '../../util'
 import {webchatPay } from './wechatPay.js'
+import Tem from '../../service/temple-service.jsx'
 
 
 import './prayForm.css'
+const _temple = new Tem()
+const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 
-// const _order = new Order()
 @connect(
     state=>state,
     {updateOrder}
@@ -24,12 +26,7 @@ class PrayForm extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            obj :{
-                img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg',
-                title:'飞来峰1号祈福塔',
-                id:'ta123',
-                des: '灵隐寺飞来峰1号祈福塔简介',
-            },
+            obj :{},
             num: this.props.order.num,
             price:{
                 day:980,
@@ -44,6 +41,16 @@ class PrayForm extends React.Component{
             modal2: false,
             modal1: false,
         }
+    }
+    componentWillMount(){
+        const id = this.props.location.hash.replace("#","")
+        _temple.getTowerById(id).then(res=>{
+            if(res.status === 200){
+                this.setState({
+                    obj: res.data,
+                })
+            }
+        })
     }
 
     handleNumChange(num){
@@ -107,16 +114,16 @@ class PrayForm extends React.Component{
                 <List>
                     <WhiteSpace />
                     <div style={{ textAlign: 'center',position:'relative' }}>
-                        <img style={{ maxHeight: '120px' }} src={obj.img} alt="" />
+                        <img style={{ maxHeight: '120px' }} src={obj.ico||defaultTowImg} alt="" />
                         <WhiteSpace />
-                        <div>{obj.title}</div>
+                        <div>{obj.name} {obj.tname}</div>
                         <WhiteSpace />
                     </div>
                 </List>
                 <List>
                     <Item 
                         extra={<Stepper style={{ width: '100%', minWidth: '100px' }} 
-                                        showNumber max={10} min={1} 
+                                        showNumber max={10} min={1}
                                         value={this.state.num}
                                         onChange={(v) =>this.handleNumChange(v)}
                                 />}

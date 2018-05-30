@@ -18,7 +18,6 @@ class Listview extends React.Component {
         super(props);
         this.state = {
           refreshing: false,
-          down: true,
           height: document.documentElement.clientHeight,
           data: [],
         };
@@ -56,19 +55,22 @@ class Listview extends React.Component {
                         height: this.state.height,
                         overflow: 'auto',
                     }}
-                    indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
-                    direction={ 'up'}
+                    indicator='上拉可以刷新'
+                    direction='up'
                     refreshing={this.state.refreshing}
                     onRefresh={this.onRefresh}
                 >
                     {this.props.templeData.map((obj,idx) => (
                         <div key={obj.id} style={{ padding: '0 15px',borderBottom: '10px solid #efeff4',background:'#fff' }} onClick={()=>this.handleClick(obj.id)}>
                             <div style={{  display: 'flex', padding: '15px 0' }}>
-                                <img style={{ height: '120px', marginRight: '15px' }} src={obj.img} alt="" />
+                                <img style={{ height: '120px', marginRight: '15px' }} src={obj.ico} alt="" />
                                 <div style={{ lineHeight: 1 }}>
                                     <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.name}</div>
                                     <div className="text-overflow6">{obj.tag}</div>
-                                    <div><span>{obj.sect}</span><span style={{ marginLeft: 20 }}>{obj.province}</span></div>
+                                    <div>
+                                        <span>{obj.sect}</span>
+                                        <span style={{ marginLeft: 20 }}>{obj.province}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

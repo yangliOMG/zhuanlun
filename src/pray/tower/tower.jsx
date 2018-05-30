@@ -68,7 +68,7 @@ class Tower extends React.Component{
                     <WhiteSpace />
                     <Button 
                         type="primary" 
-                        onClick={()=>this.props.history.push(`/prayForm`)}
+                        onClick={()=>this.props.history.push(`/prayForm#${obj.id}`)}
                         >我要祈福</Button>
                 </WingBlank>
                 <WhiteSpace size="lg" />

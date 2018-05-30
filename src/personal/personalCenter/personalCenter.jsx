@@ -25,6 +25,7 @@ class PersonalCenter extends React.Component{
         // axios.get(`/temple/allList.do`).then(res=>{
         //     console.log(res)
         // })
+        
     }
 
     render(){

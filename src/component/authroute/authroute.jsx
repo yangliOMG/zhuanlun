@@ -1,35 +1,30 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom'     ///!!!!!
+import {withRouter} from 'react-router-dom'      
 import axios from 'axios'
 import {connect} from 'react-redux'
 
-import {loadData} from '../../redux/user.redux'
+// import {loadData} from '../../redux/user.redux'
 
-@withRouter///!!!!!
+@withRouter 
 @connect(
     null,
-    {loadData}
+    // {loadData}
 )
 class AuthRoute extends React.Component{
-    // constructor(props){
-    //     super(props);
-    // }
     componentDidMount(){
-        const publicList = ['/login','/register']
-        const pathname = this.props.location.pathname;
-        if(publicList.indexOf(pathname)>-1){
-            return null
-        }
-        axios.get('/user/info')
-            .then(res=>{
-                if(res.status===200){
-                    if(res.data.code===0){
-                        this.props.loadData(res.data.data)  //redux加载用户信息数据
-                    }else{
-                        this.props.history.push('/login');///!!!!!
-                    }
-                }
-            })
+        var appid = 'wxdd7621ca87eaf933',
+            appsecret = 'e90dfba2353f9d1ee56fa5c2a0a35cda',
+            RedicetURI = window.location.href,
+            URL = `https://open.weixin.qq.com/connect/oauth2/authorize?
+                    appid=APPID&redirect_uri=RedicetURI&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
+        
+        axios.get(URL,{
+            headers:{
+                'Access-Control-Allow-Origin':'*'
+            }
+        }).then(res=>{
+            console.log(res)
+        })
     }
     render(){
         return (

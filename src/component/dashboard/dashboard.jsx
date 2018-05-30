@@ -55,9 +55,9 @@ class Dashboard extends React.Component{
         const {pathname}  = this.props.location
         const navList = [
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
-            {path:'/temple',title:'temple',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/tower']},
+            {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/tower']},
             {path:'/templeDetail',title:'寺院详情',component:TempleDetail,father:['/temple'],son:[]},
-            {path:'/tower',title:'tower',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/prayForm']},
+            {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/prayForm']},
             {path:'/prayForm',title:'祈福供灯',component:PrayForm,father:['/tower'],son:['/template','/lampDetail']},
             {path:'/template',title:'祈福语',component:Template,father:['/prayForm'],son:[]},
             {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/prayForm'],son:[]},
