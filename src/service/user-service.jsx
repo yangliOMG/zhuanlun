@@ -2,8 +2,11 @@ import axios from "axios";
 
 class User{
 
-    getUserInfo(){
-        return axios.get(`/temple/allList.do`)
+    getUserInfo(code){
+        return axios.get(`/login/login.do`,{params: {
+            code
+          }})
+
     }
 
 }

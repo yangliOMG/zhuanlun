@@ -1,9 +1,12 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'      
-import axios from 'axios'
 import {connect} from 'react-redux'
 
 // import {loadData} from '../../redux/user.redux'
+import { getQueryString, setStorage, getStorage } from '../../util'
+import User from '../../service/user-service.jsx'
+
+const _user = new User()
 
 @withRouter 
 @connect(
@@ -12,19 +15,20 @@ import {connect} from 'react-redux'
 )
 class AuthRoute extends React.Component{
     componentDidMount(){
-        var appid = 'wxdd7621ca87eaf933',
-            appsecret = 'e90dfba2353f9d1ee56fa5c2a0a35cda',
-            RedicetURI = window.location.href,
-            URL = `https://open.weixin.qq.com/connect/oauth2/authorize?
-                    appid=APPID&redirect_uri=RedicetURI&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
-        
-        axios.get(URL,{
-            headers:{
-                'Access-Control-Allow-Origin':'*'
-            }
-        }).then(res=>{
-            console.log(res)
-        })
+        const code = getQueryString("code")
+        const user = getStorage('user')
+        if(code){
+            _user.getUserInfo(code).then(res=>{
+                if(res.status === 200){
+                    setStorage('user',{openid:res.data.openid, nick:res.data.nick, headImgURL:res.data.headImgURL})
+                }
+            })
+        }else if(user === ''|| !user.openid){
+            var appid = 'wxf707fc6da6cf1a2f',
+                RedicetURI = window.location.href,
+                uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${RedicetURI}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
+            window.location.href = uri;
+        }
     }
     render(){
         return (

@@ -44,13 +44,15 @@ class PrayForm extends React.Component{
     }
     componentWillMount(){
         const id = this.props.location.hash.replace("#","")
-        _temple.getTowerById(id).then(res=>{
-            if(res.status === 200){
-                this.setState({
-                    obj: res.data,
-                })
-            }
-        })
+        if(id){
+            _temple.getTowerById(id).then(res=>{
+                if(res.status === 200){
+                    this.setState({
+                        obj: res.data,
+                    })
+                }
+            })
+        }
     }
 
     handleNumChange(num){
@@ -78,7 +80,7 @@ class PrayForm extends React.Component{
         if(order.time===""){
             return showToast('请选择时长')
         }
-        webchatPay(this.state.price)
+        webchatPay(order.total)
         
         // _order.createOrder(order).then(res=>{
             // console.log(res)

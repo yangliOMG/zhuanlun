@@ -3,6 +3,7 @@ import {Button} from 'antd-mobile'
 import {connect} from 'react-redux'
 
 // import {update} from '../../redux/user.redux'
+// import AuthRoute from '../../component/authroute/authroute.jsx';
 
 @connect(
     state=>state.user,
@@ -21,6 +22,7 @@ class Shouye extends React.Component{
     render(){
         return (
             <div>
+                {/* <AuthRoute></AuthRoute> */}
                 <div>
                     <p>供灯的功德</p>
                     <p>在《大藏经》中，对供灯的功德介绍得很详细，有部经叫《佛为首迦长者说业报差别经》，里面宣讲了供灯的十种功德：</p>

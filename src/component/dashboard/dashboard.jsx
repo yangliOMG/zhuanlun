@@ -57,12 +57,12 @@ class Dashboard extends React.Component{
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
             {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/tower']},
             {path:'/templeDetail',title:'寺院详情',component:TempleDetail,father:['/temple'],son:[]},
-            {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/prayForm']},
-            {path:'/prayForm',title:'祈福供灯',component:PrayForm,father:['/tower'],son:['/template','/lampDetail']},
-            {path:'/template',title:'祈福语',component:Template,father:['/prayForm'],son:[]},
-            {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/prayForm'],son:[]},
+            {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/jpgmall/prayForm']},
+            {path:'/jpgmall/prayForm',title:'祈福供灯',component:PrayForm,father:['/tower'],son:['/template','/lampDetail']},
+            {path:'/template',title:'祈福语',component:Template,father:['/jpgmall/prayForm'],son:[]},
+            {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/jpgmall/prayForm'],son:[]},
 
-            {path:'/prayDetail',title:'供灯详情',component:PrayDetail,father:['/prayForm','/myPraylist'],son:[]},
+            {path:'/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist'],son:[]},
 
             {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist']},
             {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/prayDetail']},

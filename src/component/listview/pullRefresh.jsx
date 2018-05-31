@@ -29,6 +29,7 @@ class Listview extends React.Component {
             height: hei,
             data: genData(),
         }), 0);
+
     }
 
     onRefresh = () => {
@@ -62,7 +63,7 @@ class Listview extends React.Component {
                 >
                     {this.props.templeData.map((obj,idx) => (
                         <div key={obj.id} style={{ padding: '0 15px',borderBottom: '10px solid #efeff4',background:'#fff' }} onClick={()=>this.handleClick(obj.id)}>
-                            <div style={{  display: 'flex', padding: '15px 0' }}>
+                            <div style={{  display: 'flex', padding: '15px 0', pointerEvents: 'none' }}>
                                 <img style={{ height: '120px', marginRight: '15px' }} src={obj.ico} alt="" />
                                 <div style={{ lineHeight: 1 }}>
                                     <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.name}</div>

@@ -2,10 +2,19 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-05-25 14:28:04
+ * @Last Modified time: 2018-05-31 15:22:50
  */
 import { Toast } from 'antd-mobile';
 
+/**
+ * 获取url参数
+ * @param {参数key} name 
+ */
+export function getQueryString(name){
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
 /**
  * 比较页面父子关系
  * @param {历史页} lastPath 
@@ -43,10 +52,12 @@ export function setStorage(name,data){
 export function getStorage(name){
     let data = window.localStorage.getItem(name);
     let dataType = typeof data;
-    if(typeof data === 'object'){
-        return JSON.parse(data)
-    }else if(['number','string','boolean'].includes(dataType)){
-        return data
+    if(['number','string','boolean'].includes(dataType)){
+        try {  
+            return JSON.parse(data)||""
+        } catch(e) {  
+            return data||""
+        }  
     }else{
         return "";
     }

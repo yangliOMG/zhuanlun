@@ -2,8 +2,8 @@ import React from 'react'
 import { List, WhiteSpace ,Card} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
-import axios from "axios";
 
+import { getStorage } from '../../util'
 
 // import {update} from '../../redux/user.redux'
 import "./personalCenter.css"
@@ -16,20 +16,26 @@ class PersonalCenter extends React.Component{
         super(props);
         this.state = {
             user : {
-                nickname: "小明",
-                headimg:"http://thirdwx.qlogo.cn/mmopen/UxyatowS8jTGP5wYSAOqSibd8U1piahP0VmO1sTSqhhNOLAYfUJeY3slPWbIkTD3kjaRDUg5qZOLhtn08MDH1pgicVfKFp2cVm0/132",
+                nick: "登录",
+                headImgURL:"",
+                openid:''
             },
         }
     }
     componentDidMount(){
-        // axios.get(`/temple/allList.do`).then(res=>{
-        //     console.log(res)
-        // })
-        
+        const user = getStorage('user')
+        if(user!==''){
+            setTimeout(() => {
+                this.setState({
+                    user
+                })
+            }, 1000);
+        }
     }
 
     render(){
         const Item = List.Item
+        const headImgURL = this.state.user.headImgURL
         const namelist = [
                 {title:"我的祈福",path:'/myPraylist',fontname:'heart',color:'red'},
                 {title:"我的收藏",path:'/myCarelist',fontname:'star',color:'orange'},
@@ -43,11 +49,11 @@ class PersonalCenter extends React.Component{
                             <tbody>
                                 <tr>
                                     <td><div className="headImgDiv">
-                                        <img height="60" width="60" src={this.state.user.headimg} alt="" />
+                                        <img id="img" height="60" width="60" src={headImgURL||require("./default_photo.jpg")} alt="" />
                                     </div></td>
                                 </tr>
                                 <tr>
-                                    <td><div style={{textAlign:"center", color:"white"}} >{this.state.user.nickname}</div></td>
+                                    <td><div style={{textAlign:"center", color:"white"}} >{this.state.user.nick}</div></td>
                                 </tr>
                             </tbody>
                         </table>                    
