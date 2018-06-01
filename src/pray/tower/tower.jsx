@@ -3,7 +3,8 @@ import {  Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
-// import {update} from '../../redux/user.redux'
+import { newOrder} from '../../redux/order.redux'
+
 import {showToast } from '../../util'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
 import Tem from '../../service/temple-service.jsx'
@@ -12,8 +13,8 @@ const _temple = new Tem()
 const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 
 @connect(
-    state=>state.user,
-    // {update}
+    state=>state,
+    {newOrder}
 )
 class Tower extends React.Component{
     constructor(props){
@@ -40,6 +41,10 @@ class Tower extends React.Component{
             care:!this.state.care
         })
         showToast(!this.state.care?'已收藏':'取消收藏')
+    }
+    handleClickPray(id){
+        this.props.newOrder()
+        this.props.history.push(`/jpgmall/prayForm#${id}`)
     }
 
     render(){
@@ -68,7 +73,7 @@ class Tower extends React.Component{
                     <WhiteSpace />
                     <Button 
                         type="primary" 
-                        onClick={()=>this.props.history.push(`/jpgmall/prayForm#${obj.id}`)}
+                        onClick={()=>this.handleClickPray(obj.id)}
                         >我要祈福</Button>
                 </WingBlank>
                 <WhiteSpace size="lg" />

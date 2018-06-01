@@ -7,6 +7,7 @@
 import {combineReducers} from 'redux'
 import {user} from './redux/user.redux.jsx'
 import {order} from './redux/order.redux.jsx'
+import {praydata} from './redux/temple.redux.jsx'
 
 
-export default combineReducers({user,order})
+export default combineReducers({user,order,praydata})

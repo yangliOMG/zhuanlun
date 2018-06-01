@@ -18,19 +18,9 @@ export function order(state=initState, action){
             return state
     }
 }
-
+export function newOrder(){
+    return {type:UPDATEORDER, payload:initState}
+}
 export function updateOrder(data){
     return {type:UPDATEORDER, payload:data}
-}
-
-
-export function getUserList(data){
-    return dispatch=>{
-        // axios.get('/user/list.do?type='+type)
-        // .then(res=>{
-        //     if(res.status===200&&res.data.code===0){
-                // dispatch(getTemplate(data))
-        //     }
-        // })
-    }
 }

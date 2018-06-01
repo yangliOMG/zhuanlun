@@ -24,7 +24,7 @@ class Template extends React.Component{
     componentDidMount(){
         this.ajaxTemplateList()
     }
-    ajaxTemplateList(type=1,content=''){
+    ajaxTemplateList(type=1,content='s'){
         _order.getTemplateList({type,content}).then(res=>{
             if(res.status === 200){
                 this.setState({

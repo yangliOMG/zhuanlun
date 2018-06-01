@@ -3,8 +3,6 @@ import { List, WhiteSpace ,Card} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
-import { getStorage } from '../../util'
-
 // import {update} from '../../redux/user.redux'
 import "./personalCenter.css"
 @connect(
@@ -15,27 +13,11 @@ class PersonalCenter extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            user : {
-                nick: "登录",
-                headImgURL:"",
-                openid:''
-            },
-        }
-    }
-    componentDidMount(){
-        const user = getStorage('user')
-        if(user!==''){
-            setTimeout(() => {
-                this.setState({
-                    user
-                })
-            }, 1000);
         }
     }
 
     render(){
         const Item = List.Item
-        const headImgURL = this.state.user.headImgURL
         const namelist = [
                 {title:"我的祈福",path:'/myPraylist',fontname:'heart',color:'red'},
                 {title:"我的收藏",path:'/myCarelist',fontname:'star',color:'orange'},
@@ -49,11 +31,11 @@ class PersonalCenter extends React.Component{
                             <tbody>
                                 <tr>
                                     <td><div className="headImgDiv">
-                                        <img id="img" height="60" width="60" src={headImgURL||require("./default_photo.jpg")} alt="" />
+                                        <img id="img" height="60" width="60" src={this.props.headImgURL||require("./default_photo.jpg")} alt="" />
                                     </div></td>
                                 </tr>
                                 <tr>
-                                    <td><div style={{textAlign:"center", color:"white"}} >{this.state.user.nick}</div></td>
+                                    <td><div style={{textAlign:"center", color:"white"}} >{this.props.nick||"登录"}</div></td>
                                 </tr>
                             </tbody>
                         </table>                    

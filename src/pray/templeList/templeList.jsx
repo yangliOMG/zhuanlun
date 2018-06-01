@@ -5,20 +5,19 @@ import {connect} from 'react-redux'
 
 import Listview from '../../component/listview/pullRefresh.jsx';
 import Temple from '../../service/temple-service.jsx'
+import {saveTempleList} from '../../redux/temple.redux'
 
 const _temple = new Temple()
 
-// import {update} from '../../redux/user.redux'
 @connect(
-    state=>state.user,
-    // {update}
+    state=>state.praydata,
+    {saveTempleList}
 )
 class TempleList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             pickerVal:'',
-            index:1,
             pickerOpt:[
                 [
                     {label: '浙江',value: '浙江',},
@@ -36,11 +35,20 @@ class TempleList extends React.Component{
                     {label: '事业',value: '事业',},
                 ],
             ],
+            index:1,
             templeList:[]
         }
     }
     componentDidMount(){
-        this.ajaxTempleList({index:this.state.index})
+        if(this.props.templeList.length>0){
+            this.setState({
+                templeList :this.props.templeList,
+                index:Math.ceil(this.props.templeList.length/5)
+            })
+            setTimeout(() => { window.location.href = this.props.anchor }, 500)  //回退定位
+        }else{
+            this.ajaxTempleList({index:this.state.index})
+        }
     }
     async ajaxTempleList({province='',sect='',tag='',name='',index},scrollMore=false){
         let res 
@@ -56,11 +64,12 @@ class TempleList extends React.Component{
         }
         
         if(res.status === 200){
-            if( !scrollMore || res.data.length>this.state.templeList.length){
+            if( !scrollMore || true){
                 this.setState({
                     templeList: res.data,
                     index : ++index
                 })
+                this.props.saveTempleList(res.data)
                 return true
             }else{
                 return false
