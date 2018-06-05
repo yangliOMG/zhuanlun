@@ -25,7 +25,7 @@ class Listview extends React.Component {
         super(props);
         this.state = {
             refreshing: false,
-            height: document.documentElement.clientHeight,
+            height: typeof document !== 'undefined' ? document.documentElement.clientHeight : 300 ,
         //   data: [],
         };
     }
@@ -36,10 +36,6 @@ class Listview extends React.Component {
             height: hei,
             // data: genData(),
         }), 0);
-        document.getElementById("list").getElementsByClassName('am-pull-to-refresh-content')[0].addEventListener("click", function(){
-            var t = this.scrollTop ;  
-            console.log(t)
-        })
     }
 
     onRefresh = () => {
@@ -60,7 +56,7 @@ class Listview extends React.Component {
 
     render() {
         return (
-            <div id="list">
+            <div>
                 <PullToRefresh
                     ref={el => this.ptr = el}
                     style={{

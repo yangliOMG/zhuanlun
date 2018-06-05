@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-05-31 15:22:50
+ * @Last Modified time: 2018-06-05 10:13:38
  */
 import { Toast } from 'antd-mobile';
 
@@ -11,8 +11,11 @@ import { Toast } from 'antd-mobile';
  * @param {参数key} name 
  */
 export function getQueryString(name){
-    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
+    if(typeof window === "undefined"){
+        return true
+    }
+    let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
 /**
@@ -36,6 +39,9 @@ export function comparePath(lastPath,page){
  * @param {value} data 
  */
 export function setStorage(name,data){
+    if(typeof window === "undefined"){
+        return true
+    }
     let dataType = typeof data;
     if(typeof data === 'object'){
         window.localStorage.setItem(name,JSON.stringify(data));
@@ -50,6 +56,9 @@ export function setStorage(name,data){
  * @param {key} name 
  */
 export function getStorage(name){
+    if(typeof window === "undefined"){
+        return true
+    }
     let data = window.localStorage.getItem(name);
     let dataType = typeof data;
     if(['number','string','boolean'].includes(dataType)){

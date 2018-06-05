@@ -76,7 +76,7 @@ class Dashboard extends React.Component{
             let lastPath = getStorage('lastPath')
             let plus = comparePath(lastPath,page) === 'father'? -1:1
             setStorage('lastPath',pathname)
-            const height = document.documentElement.clientHeight -45
+            const height = typeof document !== 'undefined' ? document.documentElement.clientHeight -45 : 300
             return (
                 <div>
                     <NavBar id="navbar" icon={<Icon type="left" />} mode='dard' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar>

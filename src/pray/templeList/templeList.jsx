@@ -65,12 +65,16 @@ class TempleList extends React.Component{
         
         if(res.status === 200){
             if( !scrollMore || true){
-                this.setState({
-                    templeList: res.data,
-                    index : ++index
-                })
-                this.props.saveTempleList(res.data)
-                return true
+                if(res.data instanceof Array){
+                    this.setState({
+                        templeList: res.data,
+                        index : ++index
+                    })
+                    this.props.saveTempleList(res.data)
+                    return true
+                }else{
+                    return false
+                }
             }else{
                 return false
             }
