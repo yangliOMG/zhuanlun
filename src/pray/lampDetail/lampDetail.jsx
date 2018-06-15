@@ -1,4 +1,5 @@
 import React from 'react'
+import {withRouter} from 'react-router-dom'    
 import { Button, NavBar,Icon} from 'antd-mobile'
 import FontAwesome from 'react-fontawesome';
 import {connect} from 'react-redux'
@@ -6,9 +7,13 @@ import {connect} from 'react-redux'
 import TabEx from  './tabEx.jsx'
 import {numberDictionary, recommendAI} from '../../util'
 import {updateOrder} from '../../redux/order.redux'
+import Tem from '../../service/temple-service.jsx'
+
 import './lampDetail.css'
 
+const _temple = new Tem()
 
+@withRouter 
 @connect(
     state=>state.order,
     {updateOrder}
@@ -19,22 +24,22 @@ class LampDetail extends React.Component{
         this.state = {
             data : [
                 [
-                    [0,1,0,1,0,0,0,0,0],
-                    [0,1,0,1,0,0,1,0,0],
-                    [0,1,0,1,0,0,0,0,0],
-                    [0,1,0,1,0,0,0,0,0],
+                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:4,state:1},{id:2,state:0},{id:5,state:1},{id:2,state:0},{id:2,state:0},{id:6,state:1},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:7,state:1},{id:2,state:0},{id:8,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:9,state:1},{id:2,state:0},{id:11,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
                 ],
                 [
-                    [0,0,0,0,0,0,0,0,0],
-                    [0,1,0,1,0,0,0,0,0],
-                    [0,1,0,1,1,1,1,1,0],
-                    [0,1,0,1,0,0,1,0,0],
+                    [{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:12,state:1},{id:2,state:0},{id:13,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:14,state:1},{id:2,state:0},{id:15,state:1},{id:16,state:1},{id:17,state:1},{id:18,state:1},{id:19,state:1},{id:2,state:0}],
+                    [{id:2,state:0},{id:1,state:1},{id:2,state:0},{id:1,state:1},{id:2,state:0},{id:2,state:0},{id:1,state:1},{id:2,state:0},{id:2,state:0}],
                 ],
                 [
-                    [0,1,0,1,0,0,1,0,0],
-                    [0,1,0,1,0,1,0,0,0],
-                    [0,1,0,1,0,0,1,0,0],
-                    [0,1,0,1,1,1,0,1,0],
+                    [{id:2,state:0},{id:21,state:1},{id:2,state:0},{id:22,state:1},{id:2,state:0},{id:2,state:0},{id:23,state:1},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:24,state:1},{id:2,state:0},{id:26,state:1},{id:2,state:0},{id:27,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:2,state:0},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:31,state:1},{id:2,state:0},{id:32,state:1},{id:33,state:1},{id:34,state:1},{id:2,state:0},{id:35,state:1},{id:2,state:0}],
                 ],
             ],
             seledList : new Map(),
@@ -46,11 +51,32 @@ class LampDetail extends React.Component{
 
     componentWillMount(){
         const num = this.props.num , position = this.props.position
-        if(position.length>0){
-            position.forEach((arr,idx)=>{
-                this.seatSelection(...arr[0])})
-        }else if(num && num>0){
-            this.handleRecBtnClick(num)
+        const id = this.props.location.hash.replace("#","")
+        if(id){
+            _temple.getLayoutById(id).then(res=>{
+                let layout = res.data
+                if(res.status === 200){
+                    _temple.getOccupyById(id).then(res=>{
+                        let occupy = res.data
+                        if(res.status === 200){
+                            this.setState({
+                                data: layout.map(arrd=>
+                                    arrd.map(arr=>
+                                        arr.map(id=>({id,state: occupy.includes(id)?1:0}))     //0可选，1不可选，2已选
+                                    )
+                                ),
+                            })
+        
+                            if(position.length>0){
+                                position.forEach((arr,idx)=>{
+                                    this.seatSelection(...arr[0])})
+                            }else if(num && num>0){
+                                this.handleRecBtnClick(num)
+                            }
+                        }
+                    })
+                }
+            })
         }
     }
 
@@ -71,12 +97,12 @@ class LampDetail extends React.Component{
     seatSelection(idx,idx1,idx2){
         let data = this.state.data
         let seledList = this.state.seledList
-        if(data[idx][idx1][idx2]===0){
-            data[idx][idx1][idx2] = 2
-            seledList.set(`${idx}${idx1}${idx2}`,`${Number(idx)+1}面${Number(idx1)+1}层${(Number(idx2)+1+"").padStart(3,0)}位`)
-        }else if(data[idx][idx1][idx2]===2){
+        if(data[idx][idx1][idx2].state===0){
+            data[idx][idx1][idx2].state = 2
+            seledList.set(`${idx}${idx1}${idx2}`,[`${Number(idx)+1}面${Number(idx1)+1}层${(Number(idx2)+1+"").padStart(3,0)}位`,data[idx][idx1][idx2].id])
+        }else if(data[idx][idx1][idx2].state===2){
             seledList.delete(`${idx}${idx1}${idx2}`)
-            data[idx][idx1][idx2] = 0
+            data[idx][idx1][idx2].state = 0
         }
         this.setState({
             data,seledList
@@ -84,7 +110,13 @@ class LampDetail extends React.Component{
         this.turnPage(idx)
     }
     handleSeatDelete(){
-        let data = JSON.parse(JSON.stringify(this.state.data).replace(/2/g,'0'))
+        // let data = this.state.data
+        // data.forEach(arrd=>
+        //     arrd.forEach(arr=>
+        //         arr.forEach(i=>i.state===2?i.state=0:'' )
+        //     )
+        // )
+        let data = JSON.parse(JSON.stringify(this.state.data).replace(/"state":2/g,'"state":0'))
         this.setState({
             data,
             seledList:new Map()
@@ -152,7 +184,7 @@ class LampDetail extends React.Component{
                                 </div>
                                 <div className="nowrap">
                                     {[...this.state.seledList].map((v,idx)=>
-                                        <div className="nameplate" key={v[0]}>{v[1]}</div>
+                                        <div className="nameplate" key={v[0]}>{v[1][0]}</div>
                                     )}
                                 </div>
                             </div>

@@ -29,14 +29,14 @@ class PrayForm extends React.Component{
             obj :{},
             num: this.props.order.num,
             price:{
-                day:980,
-                month:1980,
-                year:19900,
-                all:360000
+                1:980,
+                30:1980,
+                365:19900,
+                [-1]:360000
             },
-            time:this.props.order.time,
+            duration:this.props.order.duration,
             total:0,
-            template:this.props.order.template,
+            blessing:this.props.order.blessing,
             position:this.props.order.position,
             modal2: false,
             modal1: false,
@@ -63,30 +63,29 @@ class PrayForm extends React.Component{
         this.setState({num,position,})
         this.props.updateOrder({num,position})
     }
-    handleTimeBtnClick(time){
-        this.setState({time,}) 
-        this.props.updateOrder({time})
+    handleTimeBtnClick(duration){
+        this.setState({duration}) 
+        this.props.updateOrder({duration})
     }
-    handleTextarea(template){
-        this.setState({template})
-        this.props.updateOrder({template})
+    handleTextarea(blessing){
+        this.setState({blessing})
+        this.props.updateOrder({blessing})
     }
     handlePay(){
-        let order = this.props.order
-        order.total = (this.state.price[this.state.time]||0)* this.state.num
+        let order = {...this.props.order}
+        // order.total = (this.state.price[this.state.duration]||0)* this.state.num
+        order.openTime = (new Date()).getTime()
+        order.type = 1
+        order.adds = order.position.map(i=>i[1][1])
+        order.fid = this.props.location.hash.replace("#","")
         if(order.num !== order.position.length){
             return showToast('请完善供灯位置')
         }
-        if(order.time===""){
+        if(order.duration===""){
             return showToast('请选择时长')
         }
-        webchatPay(order.total)
-        
-        // _order.createOrder(order).then(res=>{
-            // console.log(res)
-            // this.props.updateOrder(order)
-            // this.props.history.push('/prayDetail#123')
-        // })
+        delete order.position
+        webchatPay(order)
     }
 
     showModal(key,e){
@@ -105,11 +104,11 @@ class PrayForm extends React.Component{
 
     render(){
         const obj = this.state.obj
-        const chos = this.state.time
+        const chos = this.state.duration
         const Item = List.Item
         const Brief = Item.Brief
-        const btnList = [{type:'day',name:'1天'},{type:'month',name:'1月'},{type:'year',name:'1年'},{type:'all',name:'长期'}]
-        const total = (this.state.price[this.state.time]||0)* this.state.num
+        const btnList = [{type:'1',name:'1天'},{type:'30',name:'1月'},{type:'365',name:'1年'},{type:'-1',name:'长期'}]
+        const total = (this.state.price[this.state.duration]||0)* this.state.num
         return (
             <div>
                 <PrayNavbar />
@@ -160,7 +159,7 @@ class PrayForm extends React.Component{
                         count={100}
                         autoHeight
                         placeholder={'请输入'}
-                        value={this.state.template}
+                        value={this.state.blessing}
                         >
                     </TextareaItem>
                 </List>

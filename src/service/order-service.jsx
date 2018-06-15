@@ -3,13 +3,15 @@ import {getStorage } from '../util'
 
 class Order{
     createOrder(order){
-        return axios.get('/user/info.do')
+        return axios.get('/pray/create.do',{params: {
+            data:JSON.stringify(order)
+        }})
     }
 
-    getWechatPay(price){
+    getWechatPay(res){
         return axios.get('/wxpay/wechat_paytest.do',{params: {
-            orderNo:Date.parse(new Date()) / 1000 , 
-            price:price,
+            prayId:res.prayId , 
+            price:res.sum,
             openid: getStorage('user').openid
         }})
     }

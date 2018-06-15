@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-06-05 10:13:38
+ * @Last Modified time: 2018-06-15 11:27:13
  */
 import { Toast } from 'antd-mobile';
 
@@ -107,7 +107,7 @@ export function recommendAI(dataArr,num){
             let count = 0 , row = []
             arrrow.forEach((v,idx2) => {
                 let val = 0;
-                if(v===1){
+                if(v.state===1){
                     count = 0
                 }else{
                     val += 10 

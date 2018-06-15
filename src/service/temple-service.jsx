@@ -49,6 +49,18 @@ class Temple{
             id
         }})
     }
+
+    getLayoutById(id){
+        return axios.get(`/facility/layout.do`,{params: {
+            id
+        }})
+    }
+
+    getOccupyById(id){
+        return axios.get(`/facility/occupy.do`,{params: {
+            id
+        }})
+    }
 }
 
 export default Temple

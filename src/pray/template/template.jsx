@@ -43,8 +43,8 @@ class Template extends React.Component{
         })
     }
     handleClick(e){
-        this.props.updateOrder({template:e.target.innerHTML})
-        this.props.onClose({template:e.target.innerHTML})
+        this.props.updateOrder({blessing:e.target.innerHTML})
+        this.props.onClose({blessing:e.target.innerHTML})
     }
     render(){
         

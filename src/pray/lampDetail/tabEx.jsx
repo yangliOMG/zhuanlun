@@ -10,14 +10,10 @@ class TabEx extends React.Component{
   }
   render(){
     
-    const tabs2 = [
-      { title: '1 Tab', sub: '1' },
-      { title: '2 Tab', sub: '2' },
-      { title: '3 Tab', sub: '3' },
-    ];
+    const data = this.props.data
+    const tabs2 = data.map((i,idx)=>({title: idx+1+' Tab', sub: idx+1+''}))
     const tabHeight = document.documentElement.clientHeight -233
     //  <div style={{position:'absolute',top:'-20px',left:'-20px',right:'-20px',bottom:'-20px',background:`url(${require('./tower.png')}) ` }}></div> 
-    const data = this.props.data
       return (
         <Tabs tabs={tabs2} 
           initialPage={Number(this.props.curPage)}
@@ -29,7 +25,7 @@ class TabEx extends React.Component{
                 <div style={{display:'table',  height: '100%', width: '100%', lineHeight:'1', textAlign:'center', position:'relative' }}>
                   {darr.map((arr,idx1)=>
                     <div key={idx1} style={{display:'table-row'}}>
-                      {arr.map((v,idx2)=> <div  key={idx2} style={{display:'table-cell'}}>{v!==0?v!==1?
+                      {arr.map((v,idx2)=> <div  key={idx2} style={{display:'table-cell'}}>{v.state!==0?v.state!==1?
                           <FontAwesome name={'check-square'} style={{color:'#4dbe4e'}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />:
                           <FontAwesome name={'dot-circle-o'} style={{color:'#aaa' }} />:
                           <FontAwesome name={'square-o'} style={{}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />

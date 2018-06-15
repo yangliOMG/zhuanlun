@@ -3,12 +3,11 @@
 const UPDATEORDER = 'UPDATEORDER'
 
 const initState = {
-    template:'',
+    blessing:'',
     num:2,
-    time:'',
+    duration:'',
     position:[],
     total:'',
-    redirectTo:''
 }
 export function order(state=initState, action){
     switch(action.type){
