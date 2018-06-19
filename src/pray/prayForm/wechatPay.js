@@ -18,7 +18,7 @@ export function webchatPay(order){
             onBridgeReady.call(res.data);  
         }
     }).catch(error=>console.log(error))
-    .finally(() => Toast.hide())
+    .finally(() => {Toast.hide()})
 }
     
 function onBridgeReady(){
@@ -38,8 +38,12 @@ function onBridgeReady(){
         function(res){  
             if(res.err_msg === "get_brand_wcpay_request:ok" ) {
                 //使用以下方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。  
-                window.location.href = '/prayDetail#'+prayid
-            }  
+                _order.getWechatPayCallback({prayId:prayid,price:'1'}).finally(() => {
+                    window.location.href = '/prayDetail#'+prayid
+                })
+            }else{
+                alert(res)
+            }
         }  
     )   
 } 

@@ -24,22 +24,13 @@ class LampDetail extends React.Component{
         this.state = {
             data : [
                 [
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:4,state:1},{id:2,state:0},{id:5,state:1},{id:2,state:0},{id:2,state:0},{id:6,state:1},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:7,state:1},{id:2,state:0},{id:8,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:9,state:1},{id:2,state:0},{id:11,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
                 ],
                 [
-                    [{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:12,state:1},{id:2,state:0},{id:13,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:14,state:1},{id:2,state:0},{id:15,state:1},{id:16,state:1},{id:17,state:1},{id:18,state:1},{id:19,state:1},{id:2,state:0}],
-                    [{id:2,state:0},{id:1,state:1},{id:2,state:0},{id:1,state:1},{id:2,state:0},{id:2,state:0},{id:1,state:1},{id:2,state:0},{id:2,state:0}],
+                    [{id:2,state:0},{id:12,state:1},{id:2,state:0},{id:13,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
                 ],
                 [
-                    [{id:2,state:0},{id:21,state:1},{id:2,state:0},{id:22,state:1},{id:2,state:0},{id:2,state:0},{id:23,state:1},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:24,state:1},{id:2,state:0},{id:26,state:1},{id:2,state:0},{id:27,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:2,state:0},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:31,state:1},{id:2,state:0},{id:32,state:1},{id:33,state:1},{id:34,state:1},{id:2,state:0},{id:35,state:1},{id:2,state:0}],
+                    [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
                 ],
             ],
             seledList : new Map(),
@@ -61,9 +52,9 @@ class LampDetail extends React.Component{
                         if(res.status === 200){
                             this.setState({
                                 data: layout.map(arrd=>
-                                    arrd.map(arr=>
-                                        arr.map(id=>({id,state: occupy.includes(id)?1:0}))     //0可选，1不可选，2已选
-                                    )
+                                        arrd.map(arr=>
+                                            arr.map(id=>({id,state: occupy.includes(id)?1:0}))     //0可选，1不可选，2已选
+                                        )
                                 ),
                             })
         
