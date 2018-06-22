@@ -1,10 +1,12 @@
 import React from 'react'
-import { Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
+import { Button, WhiteSpace ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome';
+// import FontAwesome from 'react-fontawesome';
 
 import {showToast } from '../../util'
 import Tem from '../../service/temple-service.jsx'
+
+import './templeDetail.less'
 
 const _temple = new Tem()
 const defaultTemImg = 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=e599da6bbea1cd1111bb7a72d87ba399/a8ec8a13632762d0ea469ae4a4ec08fa513dc674.jpg'
@@ -47,47 +49,30 @@ class TempleDetail extends React.Component{
         const templeMaterial = this.state.templeMaterial
         return (
             <div>
-                <WingBlank size="sm">
-                    <Card>
-                        <Card.Body>
-                            <div style={{position:'relative' }}>
-                                <div style={{ margin: '10px' }}>关于寺院</div>
-                                <FontAwesome 
-                                    onClick={()=>this.handleClick()}
-                                    name={this.state.care?'star':'star-o'} 
-                                    size='2x'
-                                    style={{position:'absolute', top:0, right:10, color:`${this.state.care?'orange':'black'}` }} />
+                <WingBlank size="lg">
+                    <WhiteSpace />
+                    <div className='content radius'>
+                        <div className='title'>关于<span className="c-orange">寺院</span></div>
 
-                                <div style={{ display: 'flex', margin: '10px'}}>
-                                    <img style={{ height: '60px', marginRight: '15px' }} src={temple.ico||defaultTemImg} alt="" />
-                                    <div style={{ lineHeight: 1 }}>
-                                        <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{temple.name}</div>
-                                        <div>
-                                            {templeMaterial.map((v,idx)=>
-                                                v.content
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    {templeMaterial.map((v,idx)=>
-                                        v.content
-                                    )}
-                                </div>
-                                <WhiteSpace />
-                                <img style={{ width: '100%'}} src="https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=4aeb0bc0560fd9f9b41a5d3b4444bf4f/314e251f95cad1c80695d89b783e6709c93d515b.jpg" alt=""/>
-                            </div>
-                        </Card.Body>
-                    </Card>
+                        <div className='name'>
+                            <div className='l'>{temple.name}</div>    
+                            <div className='r'>主持：法师</div>    
+                        </div>
+                        <img style={{width: '100%'}} src={temple.ico||defaultTemImg} alt="" />
+                        <div>
+                            {templeMaterial.map((v,idx)=>
+                                v.content
+                            )}
+                        </div>
+                        <WhiteSpace />
+                    </div>
                 </WingBlank>
                 
                 <WhiteSpace />
-                <WingBlank size="lg">
-                    <Button 
-                        type="primary" 
-                        onClick={()=>this.props.history.goBack()}
-                        >我要祈福</Button>
-                </WingBlank>
+                <Button 
+                    type="warning" className="orangeBtn"
+                    onClick={()=>this.props.history.goBack()}
+                    >我要祈福</Button>
                 <WhiteSpace size="lg" />
                 
             </div>

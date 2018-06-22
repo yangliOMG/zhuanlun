@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Button, WhiteSpace  , Stepper, TextareaItem, Modal} from 'antd-mobile'
+import { List, WhiteSpace  , Stepper, TextareaItem, Modal, WingBlank, InputItem,Popover} from 'antd-mobile'
 import {connect} from 'react-redux'
 
 // import {update} from '../../redux/user.redux'
@@ -15,6 +15,7 @@ import Tem from '../../service/temple-service.jsx'
 
 
 import './prayForm.css'
+import './prayForm.less'
 const _temple = new Tem()
 const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 
@@ -40,6 +41,8 @@ class PrayForm extends React.Component{
             position:this.props.order.position,
             modal2: false,
             modal1: false,
+
+            visible: false,
         }
     }
     componentWillMount(){
@@ -101,6 +104,12 @@ class PrayForm extends React.Component{
         });
     }
 
+    handleVisibleChange = (visible) => {
+        this.setState({
+          visible,
+        })
+    }
+
 
     render(){
         const obj = this.state.obj
@@ -112,65 +121,95 @@ class PrayForm extends React.Component{
         return (
             <div>
                 <PrayNavbar />
-                <List>
-                    <WhiteSpace />
-                    <div style={{ textAlign: 'center',position:'relative' }}>
-                        <img style={{ maxHeight: '120px' }} src={obj.ico||defaultTowImg} alt="" />
-                        <WhiteSpace />
-                        <div>{obj.name} {obj.tname}</div>
-                        <WhiteSpace />
+                <WingBlank size="sm">
+                    <WhiteSpace size="lg" />
+                    <WhiteSpace size="lg" />
+                    <div className='temCard radius'>
+                        <div className='img'>   
+                            <img className='ico' src={obj.ico||defaultTowImg} alt="" />
+                        </div>
+                        <div className='ti'>
+                            <div className='title'>{obj.tname}{obj.name}</div>
+                            <div className='info'>{obj.info}</div>
+                        </div>
                     </div>
-                </List>
-                <List>
-                    <Item 
-                        extra={<Stepper style={{ width: '100%', minWidth: '100px' }} 
-                                        showNumber max={10} min={1}
-                                        value={this.state.num}
-                                        onChange={(v) =>this.handleNumChange(v)}
-                                />}
-                    >供灯数量</Item>
-                    <Item multipleLine
-                    >供灯时长
-                        <Brief>
-                            {btnList.map((v,idx)=>
-                                <Button className="radiobutton" size="small" inline key={v.type}
-                                    type={chos===v.type?'primary':'ghost'}
-                                    onClick={()=>this.handleTimeBtnClick(v.type)}>{v.name}</Button>
-                            )}
-                        </Brief>
-                    </Item>
-                </List>
-                <List>
-                    <Item 
-                        arrow="horizontal" className="def-listitem"
-                        extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[0]:v[0]+',')}
-                        onClick={(e) => this.showModal('modal2', e)}
-                    >供灯位置</Item>
-                </List>
-                <List>
-                    <Item 
-                        arrow="horizontal"
-                        extra={'使用模板'}
-                        onClick={(e) => this.showModal('modal1', e)}
-                    >祈福语</Item>
-                    <TextareaItem 
-                        onChange={v=>this.handleTextarea(v)}
-                        rows={3}
-                        count={100}
-                        autoHeight
-                        placeholder={'请输入'}
-                        value={this.state.blessing}
-                        >
-                    </TextareaItem>
-                </List>
+                    <WhiteSpace size="lg" />
+                    <div className='radius ofhd'>
+                        <List>
+                            <InputItem placeholder="输入名字"
+                            >祈福人：</InputItem>
+                            {/* <Item 
+                                arrow="horizontal"
+                                extra={'使用模板'}
+                                onClick={(e) => this.showModal('modal1', e)}
+                            >祈愿文：</Item> */}
+                            <div className="pos-r">
+                                <TextareaItem className="textarea"
+                                    title="祈愿文："
+                                    onChange={v=>this.handleTextarea(v)}
+                                    rows={3}
+                                    autoHeight
+                                    placeholder={'请输入'}
+                                    value={this.state.blessing}
+                                    >
+                                </TextareaItem>
+                                <Popover mask
+                                    overlayClassName="fortest"
+                                    visible={this.state.visible}
+                                    overlay={[
+                                        (<Item><span className="modeBtn" onClick={()=>this.setState({visible:false})}>健康</span>
+                                            <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span></Item>),
+                                        (<Item><span className="modeBtn" onClick={()=>this.setState({visible:false})}>平安</span>
+                                            <span className="modeBtn" onClick={()=>this.setState({visible:false})}>富贵</span></Item>),
+                                    ]}
+                                    align={{
+                                        overflow: { adjustY: 0, adjustX: 0 },
+                                        offset: [-50, 0],
+                                    }}
+                                    onVisibleChange={(visible)=>this.setState({visible})}
+                                >
+                                    <div className='moremodule'>更多模板</div>
+                                </Popover>
+                            </div>
+                        </List>
+                        <List>
+                            <Item 
+                                extra={<Stepper style={{ width: '100%', minWidth: '100px' }} 
+                                                showNumber max={10} min={1}
+                                                value={this.state.num}
+                                                onChange={(v) =>this.handleNumChange(v)}
+                                        />}
+                            >供灯数量</Item>
+                            <Item multipleLine
+                            >供灯时长
+                                <Brief>
+                                    {btnList.map((v,idx)=>
+                                        <div key={v.type}
+                                            className={`timeBtn ${chos===v.type?'oran':'oran-o'}`}
+                                            onClick={()=>this.handleTimeBtnClick(v.type)}>{v.name}</div>
+                                    )}
+                                </Brief>
+                            </Item>
+                        </List>
+                        <List>
+                            <Item 
+                                arrow="horizontal" className="def-listitem"
+                                extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[0]:v[0]+',')}
+                                onClick={(e) => this.showModal('modal2', e)}
+                            >供灯位置</Item>
+                        </List>
+                        
+                    </div>
+                </WingBlank>
                 
+                <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />
                 
                 <div className='stick-footer'>  
-                    <div style={{flex: '1 1',background:'orange' }} >供灯金额：￥{(total/100).toFixed(2)}</div>
-                    <a className="payBtn" style={{flex: '1 1' }} onClick={()=>{this.handlePay()}}>确认祈福</a>
+                    <div className="total">供灯金额：<span className='c-red'>￥{(total/100).toFixed(2)}</span></div>
+                    <a className="payBtn" onClick={()=>{this.handlePay()}}>确认祈福</a>
                 </div>
 
 

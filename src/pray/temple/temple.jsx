@@ -1,11 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import FontAwesome from 'react-fontawesome';
 // import {Redirect} from 'react-router-dom'
 
-import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
 import Tem from '../../service/temple-service.jsx'
 
-import './gridDefine.css'
+import './gridDefine.less'
 
 const _temple = new Tem()
 const defaultTemImg = 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=e599da6bbea1cd1111bb7a72d87ba399/a8ec8a13632762d0ea469ae4a4ec08fa513dc674.jpg'
@@ -25,14 +25,14 @@ class Temple extends React.Component{
         }
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
-        _temple.getTempleById(id).then(res=>{
+        // const id = this.props.location.hash.replace("#","")
+        _temple.getTempleById(1).then(res=>{
             if(res.status === 200){
                 this.setState({
                     ...res.data,
                     temple : res.data.temple[0]
                 })
-                document.getElementById("navbar").getElementsByClassName("am-navbar-title")[0].innerHTML = this.state.temple.name
+                document.getElementById("pagetitle").innerHTML = this.state.temple.name
             }
         })
     }
@@ -57,20 +57,14 @@ class Temple extends React.Component{
         })
         return (
             <div>
-                <PrayNavbar />
-                <div style={{ padding: '50px 15px 10px',background:`url(${temple.ico||defaultTemImg}) 0 0/100% 100%`,position:'relative',height:'120px' }} 
+                <div className='titlecard radius' style={{ backgroundImage:`url(${temple.ico||defaultTemImg})` }} 
                     onClick={()=>this.handleClick(temple.id)}>
-                    <div style={{position:'absolute',height:'100%',width:'100%', top:0, left:0, background:`rgba(0,0,0,0.5)`}}>
-                        <div style={{ display: 'flex', margin: '60px 10px 10px', color:'white' }}>
-                            <img style={{ height: '60px', marginRight: '15px' }} src={temple.ico||defaultTemImg} alt="" />
-                            <div style={{ lineHeight: 1 }}>
-                                <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{temple.name}（{temple.province+'/'+temple.sect}）</div>
-                                <div className="text-overflow6">
-                                    {templeMaterial.map((v,idx)=>
-                                        v.content
-                                    )}
-                                </div>
-                            </div>
+                    <div className='title'>
+                        <div className='name'>{temple.name}</div>
+                        <div className='content text-overflow'>
+                            {templeMaterial.map((v,idx)=>
+                                v.content
+                            )}
                         </div>
                     </div>
                 </div>
@@ -81,11 +75,14 @@ class Temple extends React.Component{
                                 <div className="d-flexitem" 
                                     key={v.id} 
                                     onClick={()=> this.props.history.push(`/tower#${v.id}`)}>
-                                    <div className="d-flexitem-content">
-                                        <div className="d-flexitem-inner-content">
-                                            <img className="d-flexitem-icon" src={v.ico||defaultTowImg} alt=""/>
-                                            <div className="d-flexitem-text">{v.tname+' '+ v.name}</div>
-                                            <div className="d-flexitem-tips">{new Date(v.produceDate).toLocaleString()}</div>
+                                    <div className="d-content radius">
+                                        <img className="d-img" src={v.ico||defaultTowImg} alt=""/>
+                                        <div className="d-text">
+                                            <div className="d-name">{v.tname+' '+ v.name}</div>
+                                            <div className="d-tips">
+                                                <FontAwesome name={'square-o'} style={{color:'orange' }} />800&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <FontAwesome name={'dot-circle-o'} style={{color:'#eee' }} />224
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -93,20 +90,16 @@ class Temple extends React.Component{
                         </div>
                     )}
                 </div>
-                {/* <div style={{ position: 'fixed', width: '100%', bottom: '0' }}> */}
-                    <div style={{ padding: '10px',background: '#ca8200',borderRadius: '7px', }}>
-                        <div style={{ paddingBottom: '10px',color: '#ffd890' }}>供灯加持文</div>
-                        <div style={{ display: 'flex', color:'white' }}>
-                            <img style={{ height: '60px', marginRight: '15px' }} src="http://img2.imgtn.bdimg.com/it/u=591319322,3930376284&fm=214&gp=0.jpg" alt="" />
-                            <div style={{ lineHeight: 1 }}>
-                                <div>心是一盏灯，佛光来启明</div>
-                                <div>燃尽一切尘，全体大光明</div>
-                                <div>佛前供盏灯，真诚最感通</div>
-                                <div>心佛与众生，齐发大光明</div>
-                            </div>
-                        </div>
+                <div className='botCard radius'>
+                    <img className='img' src="http://img2.imgtn.bdimg.com/it/u=591319322,3930376284&fm=214&gp=0.jpg" alt="" />
+                    <div>
+                        <div className='title'>供灯加持文</div>
+                        <div>心是一盏灯，佛光来启明</div>
+                        <div>燃尽一切尘，全体大光明</div>
+                        <div>佛前供盏灯，真诚最感通</div>
+                        <div>心佛与众生，齐发大光明</div>
                     </div>
-                {/* </div> */}
+                </div>
             </div>
         )
     }

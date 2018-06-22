@@ -29,7 +29,7 @@ class AuthRoute extends React.Component{
             // var appid = 'wxf707fc6da6cf1a2f',
             //     RedicetURI = window.location.href,
             //     uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${RedicetURI}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
-            // window.location.href = uri;
+            //     window.location.href = uri;
         }else{
             this.props.loadData(user)
         }

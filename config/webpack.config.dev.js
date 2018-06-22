@@ -12,6 +12,8 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
+const theme = require('../package.json').theme;
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -157,7 +159,7 @@ module.exports = {
           // In production, we use a plugin to extract that CSS to a file, but
           // in development "style" loader enables hot editing of CSS.
           {
-            test: /\.css$/,
+            test: /\.(css|less)$/,
             use: [
               require.resolve('style-loader'),
               {
@@ -186,6 +188,9 @@ module.exports = {
                   ],
                 },
               },
+              {
+                loader: require.resolve('less-loader'), options: {modifyVars: theme} // compiles Less to CSS
+              }
             ],
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -198,7 +203,7 @@ module.exports = {
             // its runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/, /\.(css|less)$/],
             loader: require.resolve('file-loader'),
             options: {
               name: 'static/media/[name].[hash:8].[ext]',

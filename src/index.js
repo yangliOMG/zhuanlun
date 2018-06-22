@@ -8,6 +8,8 @@ import {BrowserRouter} from 'react-router-dom';
 import App from './app.jsx';
 import reducer from './reducer.jsx'
 import './index.css';
+import './reset.css';
+import './index.less';
 
 
 

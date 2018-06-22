@@ -79,7 +79,7 @@ class Dashboard extends React.Component{
             const height = typeof document !== 'undefined' ? document.documentElement.clientHeight -45 : 300
             return (
                 <div>
-                    <NavBar id="navbar" icon={<Icon type="left" />} mode='dard' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar>
+                    <NavBar id="navbar" icon={<span className="navleft"><Icon type="left" /><span id="pagetitle">{page.title}</span></span>} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}></NavBar>
                     <AnimatedSwitch
                         atEnter={{ opacity: 0, foo: 0 }}
                         atLeave={{ opacity: 0, foo: 2 }}

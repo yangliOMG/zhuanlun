@@ -1,16 +1,14 @@
 import React from 'react'
-import {  Button, WhiteSpace ,Card ,WingBlank} from 'antd-mobile'
+import {  Button, WhiteSpace  ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome';
 
 import { newOrder} from '../../redux/order.redux'
 
 import {showToast } from '../../util'
-import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
 import Tem from '../../service/temple-service.jsx'
-
+import './tower.less'
 const _temple = new Tem()
-const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
+const defaultTowImg = 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=e599da6bbea1cd1111bb7a72d87ba399/a8ec8a13632762d0ea469ae4a4ec08fa513dc674.jpg'
 
 @connect(
     state=>state,
@@ -31,7 +29,7 @@ class Tower extends React.Component{
                 this.setState({
                     obj: res.data,
                 })
-                document.getElementById("navbar").getElementsByClassName("am-navbar-title")[0].innerHTML 
+                document.getElementById("pagetitle").innerHTML 
                     = `${res.data.name} ${res.data.tname}`
             }
         })
@@ -51,28 +49,26 @@ class Tower extends React.Component{
         const obj = this.state.obj;
         return (
             <div>
-                <PrayNavbar /> 
                 <WhiteSpace />
-                <div style={{ textAlign: 'center',position:'relative' }}>
-                    <img style={{ maxHeight: '260px' }} src={obj.ico||defaultTowImg} alt="" />
-                    <div style={{ margin: '10px' }}>
-                        已供灯数199，总灯数200
-                    </div>
-                    <FontAwesome 
-                        onClick={()=>this.handleClick()}
-                        name={this.state.care?'star':'star-o'} 
-                        size='2x'
-                        style={{position:'absolute', top:0, right:10, color:`${this.state.care?'orange':'black'}` }} />
-                </div>
                 <WingBlank size="lg">
-                    <Card>
-                        <Card.Body>
-                            <div  style={{ textAlign: 'center' }}>{obj.des}</div>
-                        </Card.Body>
-                    </Card>
-                    <WhiteSpace />
+                    <div className='towercontent radius'>
+                        <img style={{ width: '100%' }} src={obj.ico||defaultTowImg} alt="" />
+                        <WingBlank size="lg">
+                            <div className='name'>
+                                <div className='l'>已供灯数199</div>    
+                                <div className='r'>总灯数200</div>    
+                            </div>
+                            <div className="string"></div>
+                            <div className="infobox">
+                                <div className="title">{obj.tname} {obj.name}简介</div>
+                                <div className="info">{obj.info}</div>
+                            </div>
+                            <WhiteSpace size="lg" />
+                        </WingBlank>
+                    </div>
+                    <WhiteSpace size="lg" />
                     <Button 
-                        type="primary" 
+                        type="warning" className="orangeBtn"
                         onClick={()=>this.handleClickPray(obj.id)}
                         >我要祈福</Button>
                 </WingBlank>
