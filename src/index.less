@@ -1,4 +1,5 @@
 @base: #f938ab;
+@backgroundColor: #efebe2;
 
 .box-shadow(@style, @c) when (iscolor(@c)) {
   -webkit-box-shadow: @style @c;
@@ -13,5 +14,37 @@
   div { .box-shadow(0 0 5px, 30%) }
 }
 
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: @backgroundColor;
+  font-size: 14px;
+}
+.bodyBackgroundColor{background:@backgroundColor}
+.navleft{position: relative;color:black }
+#pagetitle{
+  position: absolute;
+  width: 260px;
+  top: 2px;
+  text-align: left;
+  line-height: 1.15;
+}
+.am-button-small {
+  font-size: 14px;
+}
+.am-tab-bar{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+}
+
+.pos-r{position: relative;}
+.text-overflow6{height:85px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 6;
+  -webkit-box-orient: vertical; /* autoprefixer: on */
+}
 .radius{border-radius: 9px;box-shadow: 1px 1px 8px #aaa;}
-.orangeBtn{background: linear-gradient(to bottom,#fe9901,#ff6201);}
+.orangeBtn{background: linear-gradient(to bottom,#fe9901,#ff6201);box-shadow: 2px 2px 2px #bbb;}

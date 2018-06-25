@@ -5,7 +5,7 @@ const UPDATEORDER = 'UPDATEORDER'
 const initState = {
     blessing:'',
     num:2,
-    duration:'',
+    duration:30,
     position:[],
     total:'',
 }

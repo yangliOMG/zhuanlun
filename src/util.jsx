@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-06-15 11:27:13
+ * @Last Modified time: 2018-06-25 12:33:31
  */
 import { Toast } from 'antd-mobile';
 
@@ -92,6 +92,14 @@ export function showToast(msg) {
 export function numberDictionary(num){
     let dick = ['一','二','三','四','五','六','七','八','九','十',
                 '十一','十二','十三','十四','十五','十六','十七','十八','十九','二十',]
+    return dick[num] || "超出边界"
+}
+/**
+ * 数字转方向
+ * @param {数字} num 
+ */
+export function directionDictionary(num){
+    let dick = ['北','东北','东','东南','南','西南','西','西北']
     return dick[num] || "超出边界"
 }
 /**

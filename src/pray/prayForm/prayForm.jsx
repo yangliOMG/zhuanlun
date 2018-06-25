@@ -79,7 +79,7 @@ class PrayForm extends React.Component{
         // order.total = (this.state.price[this.state.duration]||0)* this.state.num
         order.openTime = (new Date()).getTime()
         order.type = 1
-        order.adds = order.position.map(i=>i[1][1])
+        order.adds = order.position.map(i=>i[0])
         order.fid = this.props.location.hash.replace("#","")
         if(order.num !== order.position.length){
             return showToast('请完善供灯位置')
@@ -116,7 +116,7 @@ class PrayForm extends React.Component{
         const chos = this.state.duration
         const Item = List.Item
         const Brief = Item.Brief
-        const btnList = [{type:'1',name:'1天'},{type:'30',name:'1月'},{type:'365',name:'1年'},{type:'-1',name:'长期'}]
+        const btnList = [{type:1,name:'1天'},{type:30,name:'1月'},{type:365,name:'1年'},{type:-1,name:'长明'}]
         const total = (this.state.price[this.state.duration]||0)* this.state.num
         return (
             <div>
@@ -158,6 +158,8 @@ class PrayForm extends React.Component{
                                     visible={this.state.visible}
                                     overlay={[
                                         (<Item><span className="modeBtn" onClick={()=>this.setState({visible:false})}>健康</span>
+                                        <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span>
+                                            <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span>
                                             <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span></Item>),
                                         (<Item><span className="modeBtn" onClick={()=>this.setState({visible:false})}>平安</span>
                                             <span className="modeBtn" onClick={()=>this.setState({visible:false})}>富贵</span></Item>),
@@ -194,7 +196,7 @@ class PrayForm extends React.Component{
                         <List>
                             <Item 
                                 arrow="horizontal" className="def-listitem"
-                                extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[0]:v[0]+',')}
+                                extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[1][1]:v[1][1]+',')}
                                 onClick={(e) => this.showModal('modal2', e)}
                             >供灯位置</Item>
                         </List>

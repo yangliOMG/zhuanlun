@@ -21,17 +21,22 @@ class TabEx extends React.Component{
           renderTabBar={false}
         >
           {data.map((darr,idx)=>
-              <div key={idx} style={{  minHeight: `${tabHeight}px`, height:'100%',padding:'10px 0 0 20px', fontSize:'22px' }}>
-                <div style={{display:'table',  height: '100%', width: '100%', lineHeight:'1', textAlign:'center', position:'relative' }}>
+              <div key={idx} className='lampTab' style={{  minHeight: `${tabHeight}px`}}>
+                <div className='rowNum'>
                   {darr.map((arr,idx1)=>
-                    <div key={idx1} style={{display:'table-row'}}>
-                      {arr.map((v,idx2)=> <div  key={idx2} style={{display:'table-cell'}}>{v.state!==0?v.state!==1?
-                          <FontAwesome name={'check-square'} style={{color:'#4dbe4e'}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />:
-                          <FontAwesome name={'dot-circle-o'} style={{color:'#aaa' }} />:
-                          <FontAwesome name={'square-o'} style={{}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />
-                          }</div>
-                      )}
-                    </div>
+                      <div key={idx1} style={{display:'table-row'}}>{idx1+1}</div>
+                  )}
+                </div>
+                <div className='lampPannel'>
+                  {darr.map((arr,idx1)=>
+                      <div key={idx1} style={{display:'table-row'}}>
+                        {arr.map((v,idx2)=> <div  key={idx2} style={{display:'table-cell'}}>{v.state!==0?v.state!==1?
+                            <FontAwesome name={'check-square'} style={{color:'#4dbe4e'}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />:
+                            <FontAwesome name={'dot-circle-o'} style={{color:'#aaa' }} />:
+                            <FontAwesome name={'square-o'} style={{}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />
+                            }</div>
+                        )}
+                      </div>
                   )}
                 </div>
               </div>

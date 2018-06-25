@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, WhiteSpace ,Card} from 'antd-mobile'
+import { List, WhiteSpace ,Card, WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
@@ -21,37 +21,38 @@ class PersonalCenter extends React.Component{
         const namelist = [
                 {title:"我的祈福",path:'/myPraylist',fontname:'heart',color:'red'},
                 {title:"我的收藏",path:'/myCarelist',fontname:'star',color:'orange'},
-                {title:"浏览记录",path:'/myHistory',fontname:'clock-o',color:'grey'},
+                {title:"我的足迹",path:'/myHistory',fontname:'clock-o',color:'grey'},
+                {title:"手机绑定",path:'/myPhone',fontname:'phone',color:'#108ee9'},
+                {title:"意见反馈",path:'/mySuggest',fontname:'commenting',color:'grey'},
             ]
         return (
             <div>
-                <Card style={{background:`url(https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1561316612,2686683880&fm=27&gp=0.jpg) `}}>
-                    <Card.Body>
-                        <table style={{height: "100px", margin:"0 auto"}} >
+                <WhiteSpace/>
+                <WingBlank size="sm" className='radius ofhd'>
+                    <List>
+                        <table style={{height: "120px", margin:"0 auto"}} >
                             <tbody>
                                 <tr>
-                                    <td><div className="headImgDiv">
+                                    <td><div className="headImgDiv mt-15">
                                         <img id="img" height="60" width="60" src={this.props.headImgURL||require("./default_photo.jpg")} alt="" />
                                     </div></td>
                                 </tr>
                                 <tr>
-                                    <td><div style={{textAlign:"center", color:"white"}} >{this.props.nick||"登录"}</div></td>
+                                    <td><div className='text-c f-16'>{this.props.nick||"登录"}</div></td>
                                 </tr>
                             </tbody>
                         </table>                    
-                        
-                    </Card.Body>
-                </Card>
-                <WhiteSpace/>
-                <List>
-                    {namelist.map((v,idx)=>
-                        <Item key={v.path}
-                            arrow="horizontal" 
-                            onClick={() => this.props.history.push(v.path)} 
-                            thumb={<FontAwesome name={v.fontname} style={{ color: v.color }} />}
-                        >{v.title}</Item>
-                    )}
-                </List>
+                    </List>
+                    <List>
+                        {namelist.map((v,idx)=>
+                            <Item key={v.path}
+                                arrow="horizontal" 
+                                onClick={() => this.props.history.push(v.path)} 
+                                thumb={<FontAwesome name={v.fontname} style={{ color: v.color }} />}
+                            >{v.title}</Item>
+                        )}
+                    </List>
+                </WingBlank>
             </div>
         )
     }

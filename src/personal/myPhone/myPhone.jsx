@@ -1,43 +1,15 @@
 import React from 'react'
 import { WhiteSpace, Card,  NoticeBar } from 'antd-mobile'
 import {connect} from 'react-redux'
-
-
-// import {update} from '../../redux/user.redux'
-import  "./myPraylist.css"
+// import  "./myPhone.css"
 
 @connect(
     state=>state.user,
-    // {update}
 )
-class MyPraylist extends React.Component{
+class MyPhone extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            praylist : [
-                {
-                    id:122,
-                    num: 2,
-                    time:"month",
-                    total:390000,
-                    template:"身体健康，万事如意",
-                    position:[["033","1面4层003位"],["023","1面3层003位"]],
-
-                    temple:'灵隐寺 飞来峰 1号塔',
-                    img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526451582347&di=72ff2b8aa694b5d4b92f001c05f487cc&imgtype=0&src=http%3A%2F%2Fimg011.hc360.cn%2Fy4%2FM02%2FD8%2F9C%2FwKhQiFUJxtiEWWepAAAAAJQnTd4876.jpg',
-
-                },{
-                    id:112,
-                    num: 1,
-                    time:"month",
-                    total:190000,
-                    template:"身体健康，万事如意222",
-                    position:[["033","1面4层003位"],["023","1面3层003位"]],
-
-                    temple:'灵隐寺 飞来峰 1号塔',
-                    img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526451582347&di=72ff2b8aa694b5d4b92f001c05f487cc&imgtype=0&src=http%3A%2F%2Fimg011.hc360.cn%2Fy4%2FM02%2FD8%2F9C%2FwKhQiFUJxtiEWWepAAAAAJQnTd4876.jpg',
-                },
-            ]
         }
     }
 
@@ -75,4 +47,4 @@ class MyPraylist extends React.Component{
     }
 }
 
-export default MyPraylist;
+export default MyPhone;

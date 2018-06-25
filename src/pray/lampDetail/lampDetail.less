@@ -1,0 +1,45 @@
+.state-bar{display: flex;padding: 0 32px;
+    height: 30px;line-height: 30px;
+    align-items: stretch;
+    text-align: center;
+}
+.area{position: absolute;left: 0;right: 0;top: 85px;bottom: 115px;overflow: auto;
+    &.b187{bottom: 126px;}
+}
+.fixed-bar{position: fixed;width: 100%;bottom: 0;
+    .field-bar{display: flex;line-height: 30px;align-items: stretch;padding: 5px;text-align: center;
+        .titleCard{border-radius: 25px;background:#d0c5b3;overflow: hidden;
+            .channel-box{display: flex;transition: transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+                .channel{width: 100%;flex-shrink: 0;}
+            }
+        }
+    }
+    .recom-bar{line-height: 30px;padding: 0 10px;height: 75px;text-align: left;}
+    .radiobutton{margin:0 10px 5px 0;display: inline-block;padding: 0px 15px;border-radius: 8px;color:orange;border: 1px solid orange;
+        &:active{color:white;background: orange}
+    }
+    .seled-bar{line-height: 30px;height: 90px;text-align: left;
+        &.showin .seled-div{bottom: 0px}
+        .seled-div{position: absolute;width: 100%;bottom: -48px;transition: all .5s linear;
+            .nowrap{white-space: nowrap;overflow: auto;
+                .nameplate{display: inline-block;padding: 0px 8px;margin: 5px 5px 5px 0;font-size: 12px;color: white;position: relative;}
+                .timecircle{color: grey;position: absolute;right: -4px;top: -4px;}
+            }
+        }
+    }
+}
+
+
+
+
+.lampTab{
+    height:100%;padding:10px 5px;font-size:22px;
+    .rowNum{display:table;height:100%;width: 10%;float: left;background: rgb(208,197,179);color: white;box-shadow: 2px 0px 0px #aaa;border-radius: 36px;margin-right: 3%}
+    .lampPannel{display:table;height:100%;width: 87%;float: left;line-height:1.5;text-align:center;position:relative;background: #fff;
+        box-shadow: 2px 2px 2px #aaa;border-radius: 9px;margin-bottom: 5px;
+    }
+}
+
+
+
+/* .am-tabs-pane-wrap{overflow: hidden;} */

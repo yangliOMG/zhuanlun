@@ -1,7 +1,8 @@
-.am-notice-bar{
-    background-color: black;
-    color: red;
-}
 .am-notice-bar-content{
     margin-left: 15px!important;
+}
+.am-notice-bar {
+    background-color: #eee;
+    color: #ff6201;
+    box-shadow: 2px 2px 2px #bbb;
 }

@@ -1,9 +1,6 @@
 import React from 'react'
 import { NoticeBar} from 'antd-mobile'
 import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome';
-
-// import {Redirect} from 'react-router-dom'
 
 // import {update} from '../../redux/user.redux'
 import './prayNavbar.css'
@@ -23,10 +20,13 @@ class PrayNavbar extends React.Component{
         return (
                 <NoticeBar 
                     mode="link" 
-                    icon={<FontAwesome name='bars' size='lg' style={{color:'green' }} />} 
-                    action={<FontAwesome name='bars' size='lg' style={{color:'green' }} />}
-                    marqueeProps={{ loop: true, style: { padding: '0 10px', fontSize:30 }}}
-                >XXX在灵隐寺为xxx点灯，祝愿他身体健康、万事如意
+                    icon={null} 
+                    action={ <div> </div>     }
+                    marqueeProps={{ loop: true, style: { padding: '0 10px', fontSize:22 }}}
+                >
+                    <span className='mr-20'><span className='c-black'>XXX</span>供灯2盏</span>
+                    <span className='mr-20'><span className='c-black'>XXX</span>供灯3盏</span>
+                    <span className='mr-20'><span className='c-black'>XXX</span>供灯1盏</span>
                 </NoticeBar>
         )
     }
