@@ -1,7 +1,7 @@
 import React from 'react'
-import {  Card } from 'antd-mobile'
+import {  Card, WingBlank, WhiteSpace } from 'antd-mobile'
 import {connect} from 'react-redux'
-import { StickyContainer, Sticky } from 'react-sticky';
+// import { StickyContainer, Sticky } from 'react-sticky';
 
 import "./myHistory.css"
 @connect(
@@ -36,27 +36,33 @@ class MyHistory extends React.Component{
     render(){
         return (
             <div>
-                {this.state.carelist.map((v,idx)=>
-                    <StickyContainer key={v.id}>
-                      <Sticky>
-                        {({style,}) => (
-                          <header style={{...style,zIndex: 3,backgroundColor: '#eee',
-                          }}>{v.time}</header>
-                        )}
-                      </Sticky>
-                      <Card full onClick={()=>this.props.history.push(`/${v.type}#${v.id}`)}>
-                          <Card.Body>
-                              <div style={{display:'flex'}}>
-                                  <div style={{flex:'1 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>
-                                  <div style={{flex:'2 1',padding:'0 5px'}}>
-                                      <div style={{textAlign:'center',fontWeight:'bold'}}>{v.title}</div>
-                                      <div className="text-overflow6">&nbsp;&nbsp;&nbsp;{v.content}</div>
-                                  </div>
-                              </div>
-                          </Card.Body>
-                      </Card>
-                    </StickyContainer>  
-                )}
+                <WingBlank size="lg">
+                    {this.state.carelist.map((v,idx)=>
+                        // <StickyContainer key={v.id}>
+                        //   <Sticky>
+                        //     {({style,}) => (
+                        //       <header style={{...style,zIndex: 3,backgroundColor: '#eee',
+                        //       }}>{v.time}</header>
+                        //     )}
+                        //   </Sticky>
+                        <div key={v.id}>
+                            <WhiteSpace/>  
+                            <Card className='radius ofhd' onClick={()=>this.props.history.push(`/${v.type}#${v.id}`)}>
+                                <Card.Body>
+                                    <div style={{display:'flex'}}>
+                                        <div style={{flex:'7 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>
+                                        <div style={{flex:'8 1',padding:'0 5px'}}>
+                                            <div style={{textAlign:'center',fontWeight:'bold'}}>{v.title}</div>
+                                            <div className="text-overflow6">&nbsp;&nbsp;&nbsp;{v.content}</div>
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </div>                        
+
+                        // </StickyContainer>  
+                    )}
+                </WingBlank>
             </div>
         )
     }

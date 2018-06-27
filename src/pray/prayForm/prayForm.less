@@ -1,25 +1,23 @@
 .temCard{
-    height:60px;padding:10px;display: flex;background: #fff;
-    .img{flex: 2 1;position: relative;
-        .ico{height: 90px;position: absolute;bottom: 0;box-shadow: 3px 3px 0px #aaa;}
+    padding:10px;display: flex;background: #fff;
+    .img{flex: 2 1;
+        .ico{height: 90px;box-shadow: 2px 2px 0px #aaa;border-radius: 9px;}
     }
-    .ti{flex: 3 1;
-        .title{margin-bottom: 3px;font-size: 1.1rem;color:black;}
-        .info{color:#bbb;}
+    .ti{flex: 3 1;padding-left: 5px;
+        .title{margin-bottom: 3px;font-size: 1.06rem;}
     }
 }
 
-.radius textarea{border: 1px solid orange;}
-.moremodule{position: absolute;right: 16px;bottom: 10px;color: orange;}
-.am-icon.am-icon-xxs{color: orange}
-
-.timeBtn{margin: 0 10px 5px 0;display: inline-block;padding: 5px 15px;border-radius: 8px;}
-.oran{color: white;background: linear-gradient(to bottom,#fe9901,#ff6201);}
-.oran-o{color:orange;border: 1px solid orange;}
-
+.radius textarea{border-radius: 10px;font-size: 1rem;padding: 5px;line-height: 19.5px;}
+.moremodule{position: absolute;right: 13px;bottom: 13px;}
 .modeBtn{margin: 0 5px 0px 0;display: inline-block;padding: 0px 8px;border-radius: 8px;color:orange;border: 1px solid orange;
     &:active{color:white;background: orange}
 }
+.timeBtn{margin: 0 6px 5px 0;display: inline-block;padding: 3px 4px;border-radius: 8px;text-align: center;font-size: 0.9rem;line-height: 0.9rem;}
+.am-list-extra{touch-action: none;}
+.def-listitem1.am-list-item .am-list-line .am-list-extra{flex-basis: initial;}
+.def-listitem.am-list-item .am-list-line .am-list-extra{flex-basis: 60%;}
+
 
 
 .stick-footer{z-index: 10;position: fixed;bottom: 0;width: 100%;display: flex;

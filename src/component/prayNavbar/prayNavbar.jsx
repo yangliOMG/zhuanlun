@@ -22,7 +22,7 @@ class PrayNavbar extends React.Component{
                     mode="link" 
                     icon={null} 
                     action={ <div> </div>     }
-                    marqueeProps={{ loop: true, style: { padding: '0 10px', fontSize:22 }}}
+                    marqueeProps={{ loop: true, style: { padding: '0 10px', fontSize:16 }}}
                 >
                     <span className='mr-20'><span className='c-black'>XXX</span>供灯2盏</span>
                     <span className='mr-20'><span className='c-black'>XXX</span>供灯3盏</span>

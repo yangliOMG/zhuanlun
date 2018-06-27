@@ -1,5 +1,12 @@
 @base: #f938ab;
-@backgroundColor: #efebe2;
+@backgroundColor: #ebe8d9;
+
+@greycolor:#999;
+@redcolor:#f03b37;
+@orangebgColor: linear-gradient(to right bottom,#ffa800,#ff6300);
+@yijiwenzi: #333;
+@erjiwenzi: #666666;
+@fuzhuwenzi: #a46735;
 
 .box-shadow(@style, @c) when (iscolor(@c)) {
   -webkit-box-shadow: @style @c;
@@ -19,11 +26,13 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Microsoft YaHei", "微软雅黑";
   background-color: @backgroundColor;
   font-size: 14px;
+  color: #333;
 }
 .bodyBackgroundColor{background:@backgroundColor}
+.info{color:#666;}
 .navleft{position: relative;color:black }
 #pagetitle{
   position: absolute;
@@ -32,19 +41,23 @@ body {
   text-align: left;
   line-height: 1.15;
 }
-.am-button-small {
-  font-size: 14px;
-}
-.am-tab-bar{
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: auto;
-}
+.am-button-small {font-size: 14px;}
+.am-tab-bar{position: fixed;bottom: 0;width: 100%;height: auto;}
 
-.pos-r{position: relative;}
 .text-overflow6{height:85px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 6;
   -webkit-box-orient: vertical; /* autoprefixer: on */
 }
-.radius{border-radius: 9px;box-shadow: 1px 1px 8px #aaa;}
-.orangeBtn{background: linear-gradient(to bottom,#fe9901,#ff6201);box-shadow: 2px 2px 2px #bbb;}
+.radius{border-radius: 9px;box-shadow: 1px 1px 1px #aaa;}
+.orangeBtn{background: @orangebgColor;box-shadow: 1px 1px 1px #bbb;}
+.orangeBg{background: @orangebgColor;}
+
+.oran{color: white;background: @orangebgColor}
+.oran-o{color:@fuzhuwenzi;border: 1px solid @fuzhuwenzi;}
+.c-grey1{color:@greycolor}
+.bg-red1{background:@redcolor}
+
+.radius textarea{border: 1px solid @fuzhuwenzi}
+.moremodule{color: @fuzhuwenzi;}
+.am-icon.am-icon-xxs{color: @fuzhuwenzi;}
+.leftArrow{position: absolute;left: 85px;.c-grey1}
+.rightArrow{position: absolute;right: 85px;.c-grey1}

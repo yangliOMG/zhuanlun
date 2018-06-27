@@ -21,6 +21,8 @@ import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
 import MyPraylist from '../../personal/myPraylist/myPraylist.jsx'
 import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
 import MyHistory from '../../personal/myHistory/myHistory.jsx'
+import MyPhone from '../../personal/myPhone/myPhone.jsx'
+import MySuggest from '../../personal/mySuggest/mySuggest.jsx'
 // import {getMsgList,recvMsg} from '../../redux/chat.redux.jsx'
 
 import {setStorage, getStorage, comparePath} from '../../util'
@@ -64,10 +66,12 @@ class Dashboard extends React.Component{
 
             {path:'/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist'],son:[]},
 
-            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist']},
+            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest']},
             {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/prayDetail']},
             {path:'/myCarelist',title:'我的收藏',component:MyCarelist,father:['/personalCenter'],son:['/temple','/tower']},
             {path:'/myHistory',title:'我的足迹',component:MyHistory,father:['/personalCenter'],son:['/temple','/tower']},
+            {path:'/myPhone',title:'绑定手机号',component:MyPhone,father:['/personalCenter'],son:[]},
+            {path:'/mySuggest',title:'意见反馈',component:MySuggest,father:['/personalCenter'],son:[]},
 
         ]
         const page = navList.find(v=>v.path===pathname)
@@ -79,7 +83,8 @@ class Dashboard extends React.Component{
             const height = typeof document !== 'undefined' ? document.documentElement.clientHeight -45 : 300
             return (
                 <div>
-                    <NavBar id="navbar" icon={<span className="navleft"><Icon type="left" /><span id="pagetitle">{page.title}</span></span>} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}></NavBar>
+                    {/* <NavBar id="navbar" icon={<span className="navleft"><Icon type="left" /><span id="pagetitle">{page.title}</span></span>} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}></NavBar> */}
+                    <NavBar id="navbar" icon={<Icon type="left" style={{color:'black'}} />} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar>
                     <AnimatedSwitch
                         atEnter={{ opacity: 0, foo: 0 }}
                         atLeave={{ opacity: 0, foo: 2 }}

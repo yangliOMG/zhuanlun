@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, WhiteSpace ,Card, WingBlank} from 'antd-mobile'
+import { List, WhiteSpace , WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 

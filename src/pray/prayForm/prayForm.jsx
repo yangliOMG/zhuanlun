@@ -57,6 +57,15 @@ class PrayForm extends React.Component{
             })
         }
     }
+    // componentDidMount(){
+    //     let _this = this
+    //     window.addEventListener("popstate", (e)=>{  //监听回退按钮
+    //         console.log(_this)
+    //         _this.setState({
+    //             modal2: false
+    //         });
+    //     }, false); 
+    // }
 
     handleNumChange(num){
         let position = this.state.position
@@ -92,12 +101,14 @@ class PrayForm extends React.Component{
     }
 
     showModal(key,e){
+        // window.history.pushState({title: "title",url: "#detail"}, "title", "#detail");
         e.preventDefault(); // 修复 Android 上点击穿透
         this.setState({
             [key]: true,
         });
     }
     onClose = key => (value) => {
+        this.props.history.goBack()
         this.setState({
             [key]: false,
             ...value
@@ -121,8 +132,7 @@ class PrayForm extends React.Component{
         return (
             <div>
                 <PrayNavbar />
-                <WingBlank size="sm">
-                    <WhiteSpace size="lg" />
+                <WingBlank size="lg">
                     <WhiteSpace size="lg" />
                     <div className='temCard radius'>
                         <div className='img'>   
@@ -133,11 +143,11 @@ class PrayForm extends React.Component{
                             <div className='info'>{obj.info}</div>
                         </div>
                     </div>
-                    <WhiteSpace size="lg" />
+                    <WhiteSpace size="sm" />
                     <div className='radius ofhd'>
                         <List>
                             <InputItem placeholder="输入名字"
-                            >祈福人：</InputItem>
+                            >祈愿人：</InputItem>
                             {/* <Item 
                                 arrow="horizontal"
                                 extra={'使用模板'}
@@ -173,9 +183,7 @@ class PrayForm extends React.Component{
                                     <div className='moremodule'>更多模板</div>
                                 </Popover>
                             </div>
-                        </List>
-                        <List>
-                            <Item 
+                            <Item  className="def-listitem1"
                                 extra={<Stepper style={{ width: '100%', minWidth: '100px' }} 
                                                 showNumber max={10} min={1}
                                                 value={this.state.num}
@@ -184,16 +192,16 @@ class PrayForm extends React.Component{
                             >供灯数量</Item>
                             <Item multipleLine
                             >供灯时长
-                                <Brief>
+                                <Brief style={{display:'flex'}}>
                                     {btnList.map((v,idx)=>
-                                        <div key={v.type}
-                                            className={`timeBtn ${chos===v.type?'oran':'oran-o'}`}
-                                            onClick={()=>this.handleTimeBtnClick(v.type)}>{v.name}</div>
+                                        <div key={v.type} style={{flex:'1 1'}}>
+                                            <div className={`timeBtn ${chos===v.type?'oran':'oran-o'}`}
+                                                onClick={()=>this.handleTimeBtnClick(v.type)}>
+                                                <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>
+                                        </div>
                                     )}
                                 </Brief>
                             </Item>
-                        </List>
-                        <List>
                             <Item 
                                 arrow="horizontal" className="def-listitem"
                                 extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[1][1]:v[1][1]+',')}

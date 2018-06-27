@@ -1,6 +1,8 @@
 import React from 'react'
-import FontAwesome from 'react-fontawesome';
 import { Tabs } from 'antd-mobile';
+
+import { cengConvert} from '../../util'
+
 
 class TabEx extends React.Component{
   constructor(props){
@@ -24,16 +26,16 @@ class TabEx extends React.Component{
               <div key={idx} className='lampTab' style={{  minHeight: `${tabHeight}px`}}>
                 <div className='rowNum'>
                   {darr.map((arr,idx1)=>
-                      <div key={idx1} style={{display:'table-row'}}>{idx1+1}</div>
+                      <div key={idx1} style={{display:'table-row'}}>{cengConvert(idx1,darr.length)}</div>
                   )}
                 </div>
                 <div className='lampPannel'>
                   {darr.map((arr,idx1)=>
                       <div key={idx1} style={{display:'table-row'}}>
-                        {arr.map((v,idx2)=> <div  key={idx2} style={{display:'table-cell'}}>{v.state!==0?v.state!==1?
-                            <FontAwesome name={'check-square'} style={{color:'#4dbe4e'}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />:
-                            <FontAwesome name={'dot-circle-o'} style={{color:'#aaa' }} />:
-                            <FontAwesome name={'square-o'} style={{}} onClick={()=>this.props.seatSelection(idx,idx1,idx2)} />
+                        {arr.map((v,idx2)=> <div key={idx2} style={{display:'table-cell'}}>{v.state!==0?v.state!==1?
+                            <span className={`lampIcon l-red mini`} onClick={()=>this.props.seatSelection(idx,idx1,idx2)}></span>:
+                            <span className={`lampIcon l-gong-mini mini`}></span>:
+                            <span className={`lampIcon l-grey mini`} onClick={()=>this.props.seatSelection(idx,idx1,idx2)}></span>
                             }</div>
                         )}
                       </div>

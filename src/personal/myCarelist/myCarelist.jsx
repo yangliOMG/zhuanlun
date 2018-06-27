@@ -36,23 +36,23 @@ class MyCarelist extends React.Component{
     render(){
         return (
             <div>
-                <WingBlank>
-                {this.state.carelist.map((v,idx)=>
-                    <div key={v.id}>
-                        <WhiteSpace/>   
-                        <Card onClick={()=>this.props.history.push(`/${v.type}#${v.id}`)}>
-                            <Card.Body>
-                                <div style={{display:'flex'}}>
-                                    <div style={{flex:'1 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>
-                                    <div style={{flex:'2 1',padding:'0 5px'}}>
-                                        <div style={{textAlign:'center',fontWeight:'bold'}}>{v.title}</div>
-                                        <div className="text-overflow6">&nbsp;&nbsp;&nbsp;{v.content}</div>
+                <WingBlank size="lg">
+                    {this.state.carelist.map((v,idx)=>
+                        <div key={v.id}>
+                            <WhiteSpace/>   
+                            <Card className='radius ofhd' onClick={()=>this.props.history.push(`/${v.type}#${v.id}`)}>
+                                <Card.Body>
+                                    <div style={{display:'flex'}}>
+                                        <div style={{flex:'7 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>
+                                        <div style={{flex:'8 1',padding:'0 5px'}}>
+                                            <div style={{textAlign:'center',fontWeight:'bold'}}>{v.title}</div>
+                                            <div className="text-overflow6">&nbsp;&nbsp;&nbsp;{v.content}</div>
+                                        </div>
                                     </div>
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    </div>                        
-                )}
+                                </Card.Body>
+                            </Card>
+                        </div>                        
+                    )}
                 </WingBlank>
             </div>
         )
