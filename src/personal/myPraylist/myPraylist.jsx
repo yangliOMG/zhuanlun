@@ -52,11 +52,13 @@ class MyPraylist extends React.Component{
                                 <div className='prayHead orangeBg'>{v.template}</div>
                                 <Card.Body>
                                     <div className='prayTitle'>
-                                        <div style={{flex:'1 1'}}><img src={v.img} alt="" style={{width:'100%'}} /></div>
-                                        <div style={{flex:'2 1',padding:'0 5px'}}>
+                                        <div className='imgBlock'><img src={v.img} alt="" style={{width:'100%'}} /></div>
+                                        <div className='titBlock'>
                                             <div style={{paddingBottom:'5px'}}>{v.temple}</div>
                                             {v.position.map((pos,idx2)=>
-                                                <div key={idx2} className='spand'>{pos[1]}</div>
+                                                <div key={idx2} className='spand'>
+                                                    <span className={`lampIcon l-shan tini`}></span>{pos[1]}
+                                                </div>
                                             )}
                                         </div>
                                     </div>

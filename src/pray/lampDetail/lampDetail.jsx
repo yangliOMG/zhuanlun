@@ -21,45 +21,45 @@ class LampDetail extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            // data : [
-            //     [
-            //         [{id:1,state:0},{id:2,state:0},{id:3,state:0},{id:4,state:0},{id:5,state:0},{id:6,state:0},{id:7,state:0},{id:8,state:0}],
-            //     ],
-            //     [
-            //         [{id:22,state:0},{id:12,state:0},{id:23,state:0},{id:24,state:0},{id:25,state:0},{id:26,state:0},{id:27,state:0},{id:9,state:0}],
-            //     ],
-            //     [
-            //         [{id:40,state:0},{id:42,state:0},{id:43,state:0},{id:44,state:0},{id:45,state:0},{id:46,state:0},{id:47,state:0},{id:0,state:0}],
-            //     ],
-            // ],
+            data : [
+                [
+                    [{id:1,state:0},{id:2,state:0},{id:3,state:0},{id:4,state:0},{id:5,state:0},{id:6,state:0},{id:7,state:0},{id:8,state:0}],
+                ],
+                [
+                    [{id:22,state:0},{id:12,state:0},{id:23,state:0},{id:24,state:0},{id:25,state:0},{id:26,state:0},{id:27,state:0},{id:9,state:0}],
+                ],
+                [
+                    [{id:40,state:0},{id:42,state:0},{id:43,state:0},{id:44,state:0},{id:45,state:0},{id:46,state:0},{id:47,state:0},{id:0,state:0}],
+                ],
+            ],
             seledList : new Map(),
             curPage:0,
             lastPageHide:true,
             nextPageHide:false,
-            data : [
-                [
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:1,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                    [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                ],
-                [
-                    [{id:2,state:0},{id:12,state:1},{id:2,state:0},{id:13,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
-                ],
-                [
-                    [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
-                    [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
-                ],
-            ],
+            // data : [
+            //     [
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:1,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //     ],
+            //     [
+            //         [{id:2,state:0},{id:12,state:1},{id:2,state:0},{id:13,state:1},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
+            //     ],
+            //     [
+            //         [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
+            //         [{id:2,state:0},{id:282,state:1},{id:2,state:0},{id:29,state:1},{id:3,state:1},{id:2,state:0},{id:2,state:0}],
+            //     ],
+            // ],
         }
     }
 
@@ -67,30 +67,29 @@ class LampDetail extends React.Component{
         const num = this.props.num , position = this.props.position
         const id = this.props.location.hash.replace("#","")
         if(id){
-            // _temple.getLayoutById(id).then(res=>{
-            //     let layout = res.data
-            //     if(res.status === 200){
-            //         _temple.getOccupyById(id).then(res=>{
-            //             let occupy = res.data
-            //             if(res.status === 200){
-            //                 this.setState({
-            //                     data: layout.map(arrd=>
-            //                             arrd.map(arr=>
-            //                                 arr.map(id=>({id,state: occupy.includes(id)?1:0}))     //0可选，1不可选，2已选
-            //                             )
-            //                     ),
-            //                 })
-        
+            _temple.getLayoutById(id).then(res=>{
+                let layout = res.data
+                if(res.status === 200){
+                    _temple.getOccupyById(id).then(res=>{
+                        let occupy = res.data
+                        if(res.status === 200){
+                            this.setState({
+                                data: layout.map(arrd=>
+                                        arrd.map(arr=>
+                                            arr.map(id=>({id,state: occupy.includes(id)?1:0}))     //0可选，1不可选，2已选
+                                        )
+                                ),
+                            })
                             if(position.length>0){
                                 position.forEach((arr,idx)=>{
                                     this.seatSelection(...arr[1][2].split(','))})
                             }else if(num && num>0){
                                 this.handleRecBtnClick(num)
                             }
-            //             }
-            //         })
-            //     }
-            // })
+                        }
+                    })
+                }
+            })
         }
     }
 

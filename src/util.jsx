@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-06-27 12:16:33
+ * @Last Modified time: 2018-06-28 13:57:40
  */
 import { Toast } from 'antd-mobile';
 
@@ -101,6 +101,12 @@ export function numberDictionary(num){
 export function directionDictionary(num){
     let dick = ['北','东北','东','东南','南','西南','西','西北']
     return dick[num] || "超出边界"
+}
+/**
+ * 数字转时间长度
+ */
+export function duringDictionary(){
+    return [{type:1,name:'1天'},{type:30,name:'1月'},{type:365,name:'1年'},{type:-1,name:'长明'}]
 }
 /**
  * 数字反向表示层数

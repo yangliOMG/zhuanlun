@@ -27,8 +27,16 @@ class Order{
         }})
     }
 
+
+
     getTemplateList({type,content}){
         return axios.get(`/template/info.do?type=${type}&content=${content}`)
+    }
+
+    getRandomTemplateByType(type){
+        return axios.get('/template/random.do',{params: {
+            type
+        }})
     }
 }
 

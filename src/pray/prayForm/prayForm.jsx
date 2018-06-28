@@ -5,18 +5,20 @@ import {connect} from 'react-redux'
 // import {update} from '../../redux/user.redux'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
-import Template from '../../pray/template/template.jsx'
+// import Template from '../../pray/template/template.jsx'
 
 import {updateOrder} from '../../redux/order.redux'
 // import Order from '../../service/order-service.jsx'
-import {showToast } from '../../util'
+import {showToast,duringDictionary } from '../../util'
 import {webchatPay } from './wechatPay.js'
 import Tem from '../../service/temple-service.jsx'
+import Order from '../../service/order-service.jsx'
 
 
 import './prayForm.css'
 import './prayForm.less'
 const _temple = new Tem()
+const _order = new Order()
 const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 
 @connect(
@@ -35,6 +37,7 @@ class PrayForm extends React.Component{
                 365:19900,
                 [-1]:360000
             },
+            unick:'',
             duration:this.props.order.duration,
             total:0,
             blessing:this.props.order.blessing,
@@ -66,7 +69,17 @@ class PrayForm extends React.Component{
     //         });
     //     }, false); 
     // }
-
+    handleTemplateType(type){
+        _order.getRandomTemplateByType(type).then(res=>{
+            this.setState({visible:false})
+            if(res.status === 200&& res.data.content){
+                this.handleTextarea(res.data.content)
+            }else{
+                showToast('暂无该类模板');
+            }
+        })
+        
+    }
     handleNumChange(num){
         let position = this.state.position
         if( num < position.length){
@@ -79,6 +92,9 @@ class PrayForm extends React.Component{
         this.setState({duration}) 
         this.props.updateOrder({duration})
     }
+    handleInput(unick){
+        this.setState({unick})
+    }
     handleTextarea(blessing){
         this.setState({blessing})
         this.props.updateOrder({blessing})
@@ -86,6 +102,8 @@ class PrayForm extends React.Component{
     handlePay(){
         let order = {...this.props.order}
         // order.total = (this.state.price[this.state.duration]||0)* this.state.num
+        order.blessing = order.blessing.replace(/{{prayer}}/g,this.state.unick||'')
+        order.unick = this.state.unick
         order.openTime = (new Date()).getTime()
         order.type = 1
         order.adds = order.position.map(i=>i[0])
@@ -108,27 +126,26 @@ class PrayForm extends React.Component{
         });
     }
     onClose = key => (value) => {
-        this.props.history.goBack()
-        this.setState({
-            [key]: false,
-            ...value
-        });
+        // this.props.history.goBack()
+        this.setState({[key]: false,...value});
     }
 
     handleVisibleChange = (visible) => {
-        this.setState({
-          visible,
-        })
+        this.setState({visible})
     }
 
 
     render(){
         const obj = this.state.obj
-        const chos = this.state.duration
+        //module
         const Item = List.Item
         const Brief = Item.Brief
-        const btnList = [{type:1,name:'1天'},{type:30,name:'1月'},{type:365,name:'1年'},{type:-1,name:'长明'}]
+        //computed
+        const btnList = Object.keys(this.state.price).map(val=>
+                            duringDictionary().find(v=>v.type+''===val)
+                        )
         const total = (this.state.price[this.state.duration]||0)* this.state.num
+        const prayArticle = this.state.blessing.replace(/{{prayer}}/g,this.state.unick||'')
         return (
             <div>
                 <PrayNavbar />
@@ -147,6 +164,8 @@ class PrayForm extends React.Component{
                     <div className='radius ofhd'>
                         <List>
                             <InputItem placeholder="输入名字"
+                                value={this.state.unick}
+                                onChange={v=>this.handleInput(v)}
                             >祈愿人：</InputItem>
                             {/* <Item 
                                 arrow="horizontal"
@@ -154,29 +173,23 @@ class PrayForm extends React.Component{
                                 onClick={(e) => this.showModal('modal1', e)}
                             >祈愿文：</Item> */}
                             <div className="pos-r">
-                                <TextareaItem className="textarea"
-                                    title="祈愿文："
+                                <TextareaItem className="textarea" title="祈愿文："
                                     onChange={v=>this.handleTextarea(v)}
-                                    rows={3}
-                                    autoHeight
-                                    placeholder={'请输入'}
-                                    value={this.state.blessing}
+                                    rows={3} autoHeight placeholder={'请输入'}
+                                    value={prayArticle}
                                     >
                                 </TextareaItem>
-                                <Popover mask
-                                    overlayClassName="fortest"
-                                    visible={this.state.visible}
+                                <Popover mask overlayClassName="fortest" visible={this.state.visible}
                                     overlay={[
-                                        (<Item><span className="modeBtn" onClick={()=>this.setState({visible:false})}>健康</span>
-                                        <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span>
-                                            <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span>
-                                            <span className="modeBtn" onClick={()=>this.setState({visible:false})}>长寿</span></Item>),
-                                        (<Item><span className="modeBtn" onClick={()=>this.setState({visible:false})}>平安</span>
-                                            <span className="modeBtn" onClick={()=>this.setState({visible:false})}>富贵</span></Item>),
+                                        (<Item>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('0')}>健康</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('1')}>长寿</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('2')}>平安</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('3')}>富贵</span>
+                                        </Item>),
                                     ]}
-                                    align={{
-                                        overflow: { adjustY: 0, adjustX: 0 },
-                                        offset: [-50, 0],
+                                    align={{    
+                                        points:['br', 'tr'],//https://github.com/yiminghe/dom-align
                                     }}
                                     onVisibleChange={(visible)=>this.setState({visible})}
                                 >
@@ -190,20 +203,18 @@ class PrayForm extends React.Component{
                                                 onChange={(v) =>this.handleNumChange(v)}
                                         />}
                             >供灯数量</Item>
-                            <Item multipleLine
-                            >供灯时长
+                            <Item multipleLine >供灯时长
                                 <Brief style={{display:'flex'}}>
                                     {btnList.map((v,idx)=>
                                         <div key={v.type} style={{flex:'1 1'}}>
-                                            <div className={`timeBtn ${chos===v.type?'oran':'oran-o'}`}
+                                            <div className={`timeBtn ${this.state.duration===v.type?'oran':'oran-o'}`}
                                                 onClick={()=>this.handleTimeBtnClick(v.type)}>
                                                 <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>
                                         </div>
                                     )}
                                 </Brief>
                             </Item>
-                            <Item 
-                                arrow="horizontal" className="def-listitem"
+                            <Item arrow="horizontal" className="def-listitem"
                                 extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[1][1]:v[1][1]+',')}
                                 onClick={(e) => this.showModal('modal2', e)}
                             >供灯位置</Item>
@@ -223,20 +234,18 @@ class PrayForm extends React.Component{
                 </div>
 
 
-                <Modal 
-                    visible={this.state.modal2}
+                <Modal visible={this.state.modal2}
                     transitionName ='slide-right'
                     maskTransitionName  ='slide-right'
                     >
                     <LampDetail onClose={this.onClose('modal2')} />
                 </Modal>
-                <Modal 
-                    visible={this.state.modal1}
+                {/* <Modal visible={this.state.modal1}
                     transitionName ='slide-right'
                     maskTransitionName  ='slide-right'
                     >
                     <Template onClose={this.onClose('modal1')} />
-                </Modal>
+                </Modal> */}
             </div>
         )
     }
