@@ -1,9 +1,7 @@
 import React from 'react'
-import { WhiteSpace ,WingBlank, List ,Button,InputItem,TextareaItem,DatePicker,Picker } from 'antd-mobile'
+import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker,Modal } from 'antd-mobile'
 import {connect} from 'react-redux'
-import { district, provinceLite } from 'antd-mobile-demo-data'
-import dis from './area'
-import { cvux  } from 'city-data'
+import District from './area'
 import {duringDictionary } from '../../util'
 import Popup from '../../component/userMesTable/userMesTable.jsx'
 
@@ -11,10 +9,6 @@ import Order from '../../service/order-service.jsx'
 import './prayDetail.less'
 
 const _order = new Order()
-console.log(district)
-console.log(provinceLite)
-console.log(dis)
-console.log(cvux)
 @connect(
     state=>state.user,
 )
@@ -60,24 +54,27 @@ class PrayDetail extends React.Component{
         // }
     }
     componentDidMount(){
-        // const content = '上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代'+
-        //     '别人升表者，可以写当事人名，也可以写委托人名'
-        // const style = {background: 'linear-gradient(to right bottom,#ffa800,#ff6300)',color: 'white',borderRadius:'27px',height: '34px',lineHeight: '34px'}
-        // Modal.alert('填写完整信息，获得升疏(表)', content, [
-        //     { text: '取消', onPress: () => {},style:{...style,background:'#999'} },
-        //     { text: '确认', onPress: () => console.log('ok'),style:{...style,marginLeft:'10px'} },
-        // ],'android')
+        const content = '上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代'+
+            '别人升表者，可以写当事人名，也可以写委托人名'
+        const style = {background: 'linear-gradient(to right bottom,#ffa800,#ff6300)',color: 'white',borderRadius:'27px',height: '34px',lineHeight: '34px'}
+        Modal.alert('填写完整信息，获得升疏(表)', content, [
+            { text: '取消', onPress: () => {},style:{...style,background:'#999'} },
+            { text: '确认', onPress: () => this.handleInput('messageModal',true),style:{...style,marginLeft:'10px'} },
+        ],'android')
     }
 
     showModal = key => (e) => {
         e.preventDefault(); // 修复 Android 上点击穿透
-        this.setState({[key]: true});
+        this.setState({[key]: true})
     }
     onClose = key => () => {
-        this.setState({[key]: false});
+        this.setState({[key]: false})
     }
     handleInput(key,value){
-        this.setState({[key]: value});
+        this.setState({[key]: value})
+    }
+    handleSubMes(){
+        this.onClose('messageModal')()
     }
 
     render(){
@@ -109,15 +106,9 @@ class PrayDetail extends React.Component{
                     </div>
                 </WingBlank>
                 <WhiteSpace/>
-                <Button onClick={this.showModal('messageModal')}>basic</Button>
 
 
-            {/* name:'',
-            tel:'',
-            sex:'',
-            birthday:'',
-            addr:'',
-            blessing:'' */}
+
                 <Popup messageModal={this.state.messageModal} shutdown={this.onClose('messageModal')}>
                     <div className='messageModal'>
                         <List>
@@ -136,23 +127,19 @@ class PrayDetail extends React.Component{
                                     <input type="radio" name="radio" value="女" id="female" onChange={v=>this.handleInput('sex','女')}/>女
                                 </label>
                             </List.Item>
-                            <DatePicker mode="date" title="生日" extra="福佑联系人生日" value={this.state.birthday} minDate={new Date(1900,1,1)}
-                                onChange={birthday => this.setState({ birthday })}
+                            <DatePicker mode="date" title="生日" extra="福佑联系人生日" value={this.state.birthday} 
+                                minDate={new Date(1900,1,1)} maxDate={new Date()} onChange={birthday => this.setState({ birthday })}
                                 >
                                 <List.Item arrow="horizontal">生日：</List.Item>
                             </DatePicker>
-                            <List.Item arrow="horizontal" onClick={(e) => console.log(e)}
-                            >地址：<span className='c-bbb'>{this.state.addr||'所在地区'}</span></List.Item>
-                            <Picker extra="请选择(可选)"
-                                data={cvux}
-                                title="Areas"
-                                // {...getFieldProps('district', {
-                                //     initialValue: ['340000', '341500', '341502'],
-                                // })}
-                                onOk={e => console.log('ok', e)}
-                                onDismiss={e => console.log('dismiss', e)}
+                            <Picker extra="所在地区"
+                                data={District}
+                                title="地址选择"
+                                value={this.state.addr}
+                                onOk={addr => this.setState({ addr })}
+                                onChange={addr => this.setState({ addr })}
                                 >
-                                <List.Item arrow="horizontal">地址</List.Item>
+                                <List.Item arrow="horizontal">地址：</List.Item>
                             </Picker>
                             <TextareaItem className="textarea" title="祈愿："
                                 onChange={v=>this.handleInput('blessing',v)}
@@ -160,6 +147,10 @@ class PrayDetail extends React.Component{
                                 >
                             </TextareaItem>
                         </List>
+                        <div className='btnArea'>
+                            <div style={{flex:'1 1'}}><div className='bg-grey1 anniu' onClick={this.onClose('messageModal')}>取消</div></div>
+                            <div style={{flex:'1 1'}}><div className='orangeBg anniu' onClick={()=>this.handleSubMes()}>确认</div></div>
+                        </div>
                     </div>
                 </Popup>
                 

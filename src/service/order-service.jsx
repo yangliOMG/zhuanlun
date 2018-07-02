@@ -7,7 +7,11 @@ class Order{
             data:JSON.stringify(order)
         }})
     }
-
+    getOrderList(){
+        return axios.get('/pray/list.do',{params: {
+            openid: getStorage('user').openid,
+        }})
+    }
     
 
     getWechatPay(res){

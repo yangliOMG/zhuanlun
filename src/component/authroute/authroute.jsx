@@ -7,7 +7,7 @@ import { getQueryString, setStorage, getStorage } from '../../util'
 import User from '../../service/user-service.jsx'
 
 const _user = new User()
-const isMoblieMode = false
+const isMoblieMode = true
 
 @withRouter 
 @connect(
@@ -21,7 +21,7 @@ class AuthRoute extends React.Component{
         if(code){
             _user.getUserInfo(code).then(res=>{
                 if(res.status === 200){
-                    const userinfo = {openid:res.data.openid, nick:res.data.nick, headImgURL:res.data.headImgURL}
+                    const userinfo = {id:res.data.id, openid:res.data.openid, nick:res.data.nick, headImgURL:res.data.headImgURL}
                     setStorage('user', userinfo )
                     this.props.loadData(userinfo)
                 }
@@ -35,7 +35,7 @@ class AuthRoute extends React.Component{
             }else{
                 _user.getUserInfo().then(res=>{
                     if(res.status === 200){
-                        const userinfo = {openid:res.data.openid, nick:res.data.nick, headImgURL:res.data.headImgURL}
+                        const userinfo = {id:res.data.id, openid:res.data.openid, nick:res.data.nick, headImgURL:res.data.headImgURL}
                         setStorage('user', userinfo )
                         this.props.loadData(userinfo)
                     }

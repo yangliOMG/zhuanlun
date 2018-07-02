@@ -60,7 +60,8 @@ class PrayForm extends React.Component{
             })
         }
     }
-    // componentDidMount(){
+    componentDidMount(){
+        document.getElementById('stepper').getElementsByClassName('am-stepper-input')[0].setAttribute('disabled',true)
     //     let _this = this
     //     window.addEventListener("popstate", (e)=>{  //监听回退按钮
     //         console.log(_this)
@@ -68,7 +69,7 @@ class PrayForm extends React.Component{
     //             modal2: false
     //         });
     //     }, false); 
-    // }
+    }
     handleTemplateType(type){
         _order.getRandomTemplateByType(type).then(res=>{
             this.setState({visible:false})
@@ -196,9 +197,9 @@ class PrayForm extends React.Component{
                                     <div className='moremodule'>更多模板</div>
                                 </Popover>
                             </div>
-                            <Item  className="def-listitem1"
-                                extra={<Stepper style={{ width: '100%', minWidth: '100px' }} 
-                                                showNumber max={10} min={1}
+                            <Item  className="def-listitem1" id='stepper'
+                                extra={<Stepper style={{ width: '100%', minWidth: '100px' }}
+                                                showNumber max={100} min={1}
                                                 value={this.state.num}
                                                 onChange={(v) =>this.handleNumChange(v)}
                                         />}

@@ -15,7 +15,6 @@ import PrayDetail from '../../pray/prayDetail/prayDetail.jsx'
 
 
 import Temple from '../../pray/temple/temple.jsx'
-import Tower from '../../pray/tower/tower.jsx'
 
 import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
 import MyPraylist from '../../personal/myPraylist/myPraylist.jsx'
@@ -23,13 +22,11 @@ import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
 import MyHistory from '../../personal/myHistory/myHistory.jsx'
 import MyPhone from '../../personal/myPhone/myPhone.jsx'
 import MySuggest from '../../personal/mySuggest/mySuggest.jsx'
-// import {getMsgList,recvMsg} from '../../redux/chat.redux.jsx'
 
 import {setStorage, getStorage, comparePath} from '../../util'
 
 @connect(
     state=>state,
-    // {getMsgList,recvMsg}
 )
 class Dashboard extends React.Component{
     constructor(props){
@@ -57,10 +54,10 @@ class Dashboard extends React.Component{
         const {pathname}  = this.props.location
         const navList = [
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
-            {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/tower']},
+            {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/jpgmall/prayForm']},
             {path:'/templeDetail',title:'寺院详情',component:TempleDetail,father:['/temple'],son:[]},
-            {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/jpgmall/prayForm']},
-            {path:'/jpgmall/prayForm',title:'祈福供灯',component:PrayForm,father:['/tower'],son:['/template','/lampDetail']},
+            // {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/jpgmall/prayForm']},
+            {path:'/jpgmall/prayForm',title:'祈福供灯',component:PrayForm,father:['/temple'],son:['/template','/lampDetail']},
             {path:'/template',title:'祈福语',component:Template,father:['/jpgmall/prayForm'],son:[]},
             {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/jpgmall/prayForm'],son:[]},
 

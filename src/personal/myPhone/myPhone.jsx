@@ -113,7 +113,7 @@ class MyPhone extends React.Component{
                     <div className={`${this.state.flag&&'hidden'}`}>
                         <List className='radius phonePannel'>
                             <div className='bordbot'>
-                                <input type="text" className="inputBot" placeholder="输入手机号" 
+                                <input type="text" className="inputBot" placeholder="输入您的手机号" 
                                     onChange={(event)=>this.handleChange(event,'inputphone')} value={this.state.inputphone}  />
                             </div>
                             <table>

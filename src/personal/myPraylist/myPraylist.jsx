@@ -2,10 +2,10 @@ import React from 'react'
 import { WhiteSpace, Card, WingBlank } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-
+import Order from '../../service/order-service.jsx'
 // import {update} from '../../redux/user.redux'
 import  "./myPraylist.less"
-
+const _order = new Order()
 @connect(
     state=>state.user,
     // {update}
@@ -41,6 +41,18 @@ class MyPraylist extends React.Component{
         }
     }
 
+    componentWillMount(){
+        _order.getOrderList().then(res=>{
+            if(res.status === 200){
+                console.log(res.data)
+                // this.setState({
+                //     ...res.data,
+                //     temple : res.data.temple[0]
+                // })
+            }
+        })
+    }
+
     render(){
         return (
             <div>
@@ -57,7 +69,7 @@ class MyPraylist extends React.Component{
                                             <div style={{paddingBottom:'5px'}}>{v.temple}</div>
                                             {v.position.map((pos,idx2)=>
                                                 <div key={idx2} className='spand'>
-                                                    <span className={`lampIcon l-shan tini`}></span>{pos[1]}
+                                                    <span className='lampIcon l-shan tini'></span>{pos[1]}
                                                 </div>
                                             )}
                                         </div>

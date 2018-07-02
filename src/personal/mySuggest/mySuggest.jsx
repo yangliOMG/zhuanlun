@@ -39,10 +39,10 @@ class MyPhone extends React.Component{
         return (
             <div>
                 <WhiteSpace/>
-                <WingBlank size="sm">
-                    <List>
+                <WingBlank size="lg">
+                    <List className='suggestArea'>
                         <TextareaItem
-                            placeholder='我的意见是...'
+                            placeholder='您留下的每一个文字都将有助于我们改善产品，非常期待您的意见反馈！'
                             rows={5}
                             count={100}
                             onChange={(val)=>this.handleChange(val)}

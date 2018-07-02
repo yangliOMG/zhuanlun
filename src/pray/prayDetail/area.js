@@ -1,4 +1,4 @@
-export default {
+const data = {
     'province_list': {
       '110000': '北京市',
       '120000': '天津市',
@@ -3604,3 +3604,24 @@ export default {
       '820201': '离岛'
     }
 }
+
+let child = []
+for(let [k,v] of Object.entries(data.province_list) ){
+    var num = (k+'').substr(0,2)
+    var child1 = []
+    for(let [k1,v1] of Object.entries(data.city_list) ){
+        var num1 = (k1+'').substr(0,4)
+        if((k1+'').substr(0,2)===num){
+            var child2 = []
+            for(let [k2,v2] of Object.entries(data.county_list) ){
+                if((k2+'').substr(0,4)===num1){
+                    child2.push({value:k2+'',label:v2,children:[]})
+                }
+            }
+            child1.push({value:k1+'',label:v1,children:child2})
+        }
+    }
+    child.push({value:k+'',label:v,children:child1})
+}
+
+export default child
