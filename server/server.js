@@ -17,20 +17,37 @@ import { renderToNodeStream } from 'react-dom/server'
 import staticPath from '../build/asset-manifest.json'
 
 assethook({
-    extensions: ['png'],
+    extensions: ['jpg', 'png', 'gif'],
     limit: 9000
+})
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!assethook",assethook)
+const lessParser = require('postcss-less').parse;
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!lessParser",lessParser)
+// Css require hook
+require('css-modules-require-hook')({
+    extensions: ['.less'],
+    camelCase: true,
+    processorOpts: { parser: lessParser },
+    generateScopedName: '[name]-[local]-[hash:5]'
 });
 
 const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
+// const lessMiddleware = require('less-middleware')
 const proxyPath = 'http://localhost:8000'
 
 app.use(cookieParser())
 app.use(bodyParser.json())
 
 
-app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}));
+app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}))
+
+// app.use(lessMiddleware('/less', {
+//     dest: '/css',
+//     pathRoot: path.join(__dirname, 'build')
+// }))
+// app.use(express.static(path.join(__dirname, 'build')))
 
 app.use(function (req, res, next) {   //不是/static(静态资源)，都映射到index.html
     if ( req.url.startsWith('/static')||req.url.endsWith('.ico')) {
@@ -41,6 +58,9 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
     ))
     let context = {}
     const obj = {
+        '/gongde': '供灯功德',
+        '/haochu': '供灯好处',
+        '/yuanqi': '缘起',
         '/templeList': '寺院列表',
         '/temple': '寺院',
         '/tower': '祈福塔',

@@ -29,8 +29,8 @@ class Tower extends React.Component{
                 this.setState({
                     obj: res.data,
                 })
-                document.getElementById("navbar").getElementsByClassName('am-navbar-title')[0].innerHTML 
-                    = `${res.data.name} ${res.data.tname}`
+                // document.getElementById("navbar").getElementsByClassName('am-navbar-title')[0].innerHTML 
+                //     = `${res.data.name} ${res.data.tname}`
             }
         })
     }

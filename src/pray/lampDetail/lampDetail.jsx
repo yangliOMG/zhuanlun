@@ -1,6 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'    
-import { Button, NavBar,Icon} from 'antd-mobile'
+import { Button } from 'antd-mobile'
 import FontAwesome from 'react-fontawesome';
 import {connect} from 'react-redux'
 import TabEx from  './tabEx.jsx'
@@ -153,9 +153,9 @@ class LampDetail extends React.Component{
         const data = this.state.data
         return (
             <div className ='bodyBackgroundColor max-h' style={{overflow:"hidden"}}>
-                <NavBar icon={<Icon type="left" style={{color:'black'}} />} mode='light' 
+                {/* <NavBar icon={<Icon type="left" style={{color:'black'}} />} mode='light' 
                     onLeftClick={()=>this.props.onClose()}
-                    >选择灯位</NavBar>
+                    >选择灯位</NavBar> */}
                 <div className='state-bar'>  
                     {[['l-gong','已供灯位',800],['l-red','已选灯位',2],['l-grey','可供灯位',222]].map((v,idx)=>
                         <div className='lie' key={v[0]}>

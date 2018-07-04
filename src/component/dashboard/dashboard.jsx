@@ -1,11 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {NavBar,Icon} from 'antd-mobile'
+// import {NavBar,Icon} from 'antd-mobile'
 import { Route, Redirect} from 'react-router-dom' 
 // import QueueAnim from 'rc-queue-anim';
 import { AnimatedSwitch } from 'react-router-transition';
 
 
+import Gongde from '../../pray/introduce/gongde.jsx'
+import Haochu from '../../pray/introduce/haochu.jsx'
+import Yuanqi from '../../pray/introduce/yuanqi.jsx'
 import TempleList from '../../pray/templeList/templeList.jsx'
 import PrayForm from '../../pray/prayForm/prayForm.jsx'
 import TempleDetail from '../../pray/templeDetail/templeDetail.jsx'
@@ -53,6 +56,10 @@ class Dashboard extends React.Component{
     render(){
         const {pathname}  = this.props.location
         const navList = [
+            {path:'/gongde',title:'供灯功德',component:Gongde,father:['/shouye'],son:['/temple']},
+            {path:'/haochu',title:'供灯好处',component:Haochu,father:['/shouye'],son:['/temple']},
+            {path:'/yuanqi',title:'缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
+
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
             {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/jpgmall/prayForm']},
             {path:'/templeDetail',title:'寺院详情',component:TempleDetail,father:['/temple'],son:[]},
@@ -72,16 +79,20 @@ class Dashboard extends React.Component{
 
         ]
         const page = navList.find(v=>v.path===pathname)
-
+        
         if(page){
             let lastPath = getStorage('lastPath')
             let plus = comparePath(lastPath,page) === 'father'? -1:1
             setStorage('lastPath',pathname)
-            const height = typeof document !== 'undefined' ? document.documentElement.clientHeight -45 : 300
+            let height = 300
+            if(typeof document !== 'undefined'){
+                height = document.documentElement.clientHeight
+                document.title = page.title
+            }
             return (
                 <div>
                     {/* <NavBar id="navbar" icon={<span className="navleft"><Icon type="left" /><span id="pagetitle">{page.title}</span></span>} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}></NavBar> */}
-                    <NavBar id="navbar" icon={<Icon type="left" style={{color:'black'}} />} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar>
+                    {/* <NavBar id="navbar" icon={<Icon type="left" style={{color:'black'}} />} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar> */}
                     <AnimatedSwitch
                         atEnter={{ opacity: 0, foo: 0 }}
                         atLeave={{ opacity: 0, foo: 2 }}
@@ -109,7 +120,7 @@ class Dashboard extends React.Component{
                 </div>
             )
         }else{
-            return <Redirect to='/shouye'></Redirect>
+            return <Redirect to='/temple'></Redirect>
         }
     }
 }

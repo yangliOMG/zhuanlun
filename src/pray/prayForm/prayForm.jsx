@@ -20,7 +20,6 @@ import './prayForm.less'
 const _temple = new Tem()
 const _order = new Order()
 const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
-
 @connect(
     state=>state,
     {updateOrder}
@@ -51,14 +50,19 @@ class PrayForm extends React.Component{
     componentWillMount(){
         const id = this.props.location.hash.replace("#","")
         if(id){
-            _temple.getTowerById(id).then(res=>{
+            _temple.getTowerAndPriceById(id).then(res=>{
                 if(res.status === 200){
+                    let price = {}
+                    res.data.price.forEach(v=>price[v.duration]=v.price)
                     this.setState({
-                        obj: res.data,
+                        obj: res.data.facility,
+                        price
                     })
+
                 }
             })
         }
+
     }
     componentDidMount(){
         document.getElementById('stepper').getElementsByClassName('am-stepper-input')[0].setAttribute('disabled',true)

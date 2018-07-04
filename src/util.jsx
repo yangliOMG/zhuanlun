@@ -2,10 +2,9 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-06-28 13:57:40
+ * @Last Modified time: 2018-07-04 13:54:36
  */
 import { Toast } from 'antd-mobile';
-
 /**
  * 获取url参数
  * @param {参数key} name 
@@ -119,6 +118,37 @@ export function cengConvert(idx,lenth){
     } catch (error) {
         return 'X'
     }
+}
+/**
+ * 时间转汉字
+ * @param {日期} Date 
+ */
+export function dateDictionary(date){
+    try {
+        let year = date.getFullYear(),
+            month = date.getMonth()+1,
+            day = date.getDate(),
+            dayStr = year+'年'+month+'月'+day+'日',
+            dd = ''
+        dayStr.split('').forEach(d=>{
+            switch(d){
+                case '0':dd += '零';break
+                case '1':dd += '一';break
+                case '2':dd += '二';break
+                case '3':dd += '三';break
+                case '4':dd += '四';break
+                case '5':dd += '五';break
+                case '6':dd += '六';break
+                case '7':dd += '七';break
+                case '8':dd += '八';break
+                case '9':dd += '九';break
+                default:dd += d;break
+            }
+        })
+        return dd
+    } catch (error) {
+        return ''
+    }
     
 }
 /**
@@ -159,12 +189,46 @@ export function recommendAI(dataArr,num){
     })
     return [...bestPos.values()]
 }
-
-export function getRedirectPath({type,avatar}){
-    let url = (type==='boss')?'/boss':'/genius'
-    if(!avatar){
-        url += 'info'
+/**
+ * 计算时长
+ * @param {起始日期} date 
+ * @param {结束日期} date 
+ */
+export function timeLongCount(begin,end){
+    try {
+        let a = new Date(begin).getTime(),
+            b = new Date(end).getTime(),  
+            c = new Date().getTime()
+        let date3 = b<c? b-a : c-a
+        //计算出相差天数
+        let days=Math.floor(date3/(24*3600*1000))
+        //计算出小时数
+        let leave1=date3%(24*3600*1000)//计算天数后剩余的毫秒数
+        let hours=Math.floor(leave1/(3600*1000))
+        //计算相差分钟数
+        let leave2=leave1%(3600*1000)//计算小时数后剩余的毫秒数
+        let minutes=Math.floor(leave2/(60*1000))
+        //计算相差秒数
+        let leave3=leave2%(60*1000)//计算分钟数后剩余的毫秒数
+        let seconds=Math.round(leave3/1000)
+        let html = days+"天"+hours+"小时"+minutes+"分钟"+seconds+"秒"
+	    if(days<=0&&hours<=0&&minutes<=0)
+	    	html = seconds+"秒";
+	    else if(days<=0&&hours<=0)
+	    	html = minutes+"分钟"+seconds+"秒";
+	    else if(days<=0)
+	    	html = hours+"小时"+minutes+"分钟"+seconds+"秒";
+        return html
+    } catch (error) {
+        return '0'
     }
-    return url
 }
-
+/**
+ * 数组求和 
+ * @param {数组} arr 
+ */
+export function ArraySum(arr){
+	let a = 0
+    arr.forEach(el=>a +=Number(el))
+	return a
+}

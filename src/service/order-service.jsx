@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axios"
 import {getStorage } from '../util'
 
 class Order{
@@ -12,6 +12,21 @@ class Order{
             openid: getStorage('user').openid,
         }})
     }
+
+
+    createBlissMan(blissMan){
+        return axios.post('/blissMan/img.do',
+            blissMan,
+            { responseType: 'arraybuffer' }
+        )
+        // return axios({
+        //     method: 'post',
+        //     headers: { 'content-type': 'application/json;charset=UTF-8' },
+        //     responseType: 'arraybuffer',
+        //     data: blissMan,
+        //     url:'/blissMan/img.do',
+        // });
+    }
     
 
     getWechatPay(res){
@@ -22,7 +37,6 @@ class Order{
             tid: res.tid,
         }})
     }
-
     getWechatPayCallback(res){
         return axios.get('/wxpay/updatePrayType.do',{params: {
             prayId:res.prayId , 
@@ -36,7 +50,6 @@ class Order{
     getTemplateList({type,content}){
         return axios.get(`/template/info.do?type=${type}&content=${content}`)
     }
-
     getRandomTemplateByType(type){
         return axios.get('/template/random.do',{params: {
             type

@@ -32,7 +32,8 @@ class Temple extends React.Component{
                     temple : res.data.temple[0]
                 })
                 // document.getElementById("pagetitle").innerHTML = this.state.temple.name
-                document.getElementById("navbar").getElementsByClassName('am-navbar-title')[0].innerHTML = this.state.temple.name
+                // document.getElementById("navbar").getElementsByClassName('am-navbar-title')[0].innerHTML = this.state.temple.name
+                document.title = this.state.temple.name
             }
         })
     }

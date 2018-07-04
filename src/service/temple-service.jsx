@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios from "./axios"
+
 
 class Temple{
 
@@ -46,6 +47,11 @@ class Temple{
     
     getTowerById(id){
         return axios.get(`/facility/info.do`,{params: {
+            id
+        }})
+    }
+    getTowerAndPriceById(id){
+        return axios.get(`/facility/info1.do`,{params: {
             id
         }})
     }
