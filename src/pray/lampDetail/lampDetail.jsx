@@ -1,6 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'    
-import { Button } from 'antd-mobile'
+import { Button, Toast } from 'antd-mobile'
 import FontAwesome from 'react-fontawesome';
 import {connect} from 'react-redux'
 import TabEx from  './tabEx.jsx'
@@ -22,20 +22,12 @@ class LampDetail extends React.Component{
         super(props);
         this.state = {
             data : [
-                [
-                    [{id:1,state:0},{id:2,state:0},{id:3,state:0},{id:4,state:0},{id:5,state:0},{id:6,state:0},{id:7,state:0},{id:8,state:0}],
-                ],
-                [
-                    [{id:22,state:0},{id:12,state:0},{id:23,state:0},{id:24,state:0},{id:25,state:0},{id:26,state:0},{id:27,state:0},{id:9,state:0}],
-                ],
-                [
-                    [{id:40,state:0},{id:42,state:0},{id:43,state:0},{id:44,state:0},{id:45,state:0},{id:46,state:0},{id:47,state:0},{id:0,state:0}],
-                ],
             ],
             seledList : new Map(),
             curPage:0,
             lastPageHide:true,
             nextPageHide:false,
+            activeArrow:false,
             // data : [
             //     [
             //         [{id:1,state:1},{id:2,state:1},{id:2,state:0},{id:3,state:1},{id:1,state:0},{id:2,state:0},{id:2,state:0},{id:2,state:0}],
@@ -67,18 +59,25 @@ class LampDetail extends React.Component{
         const num = this.props.num , position = this.props.position
         const id = this.props.location.hash.replace("#","")
         if(id){
+            Toast.loading('加载中...',0)
             _temple.getLayoutById(id).then(res=>{
                 let layout = res.data
                 if(res.status === 200){
                     _temple.getOccupyById(id).then(res=>{
                         let occupy = res.data
                         if(res.status === 200){
+                            let total = 0
                             this.setState({
                                 data: layout.map(arrd=>
                                         arrd.map(arr=>
-                                            arr.map(id=>({id,state: occupy.includes(id)?1:0}))     //0可选，1不可选，2已选
+                                            arr.map(id=>{
+                                                total++;
+                                                return {id,state: occupy.includes(id)?1:0}
+                                            })     //0可选，1不可选，2已选
                                         )
                                 ),
+                                total,
+                                occupy:occupy.length
                             })
                             if(position.length>0){
                                 position.forEach((arr,idx)=>{
@@ -87,12 +86,43 @@ class LampDetail extends React.Component{
                                 this.handleRecBtnClick(num)
                             }
                         }
+                        Toast.hide()
                     })
                 }
             })
         }
     }
-
+    scrollToBottom() {
+        setTimeout(() => {//滚动到页底
+            const $div = document.getElementById('area').getElementsByClassName('am-tabs-pane-wrap-active')[0]||document  
+            const $span = $div.getElementsByClassName('l-red')[0]
+            if($span){
+                
+                $div.scrollTop = $span.offsetTop
+            }else if($div){
+                $div.scrollTop = $div.scrollHeight - $div.offsetHeight
+            }
+        }, 200);
+    }
+    //  ↓↓↓↓↓↓单页应用（SPA）前端javascript如何阻止按下返回键页面回退↓↓↓↓↓↓
+    componentDidMount() {
+        this.addEventHandler()
+    }
+    componentWillUnmount() {
+        this.removeEventHandler()
+    }
+    addEventHandler() {
+        window.addEventListener('popstate', this.closePopstate, false)
+        window.history.pushState({}, '')
+    }
+    removeEventHandler() {
+        window.removeEventListener('popstate', this.closePopstate, false)
+    }
+    closePopstate = (e) => {
+        window.removeEventListener('popstate', this.closePopstate, false)
+        this.props.onClose()
+    }
+    //  ↑↑↑单页应用（SPA）前端javascript如何阻止按下返回键页面回退↑↑↑↑
     handleRecBtnClick(num){
         let data = this.state.data
         let recArrIdx = recommendAI(data,num)
@@ -103,6 +133,9 @@ class LampDetail extends React.Component{
         curPage = Number(curPage)
         const lastPageHide = curPage===0
         const nextPageHide = this.state.data.length===(curPage+1)
+        if(this.state.curPage!==curPage){
+            this.scrollToBottom()
+        }
         this.setState({
             curPage,lastPageHide,nextPageHide
         })
@@ -115,7 +148,7 @@ class LampDetail extends React.Component{
         if(lampdata.state===0){
             lampdata.state = 2
             seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${(Number(idx2)+1+"").padStart(3,0)}位`,
-                `${['N','EN','E','SE','S','WS','W','WN'][idx]}${cengConvert(idx1,len)}${idx2+1}`,
+                `${['S','WS','W','WN','N','EN','E','SE'][idx]}${cengConvert(idx1,len)}${idx2+1}`,
                 `${idx},${idx1},${idx2}`])
         }else if(lampdata.state===2){
             seledList.delete(lampdata.id)
@@ -145,10 +178,20 @@ class LampDetail extends React.Component{
         const value = {position:[...this.state.seledList],num:this.state.seledList.size}
         this.props.updateOrder(value)
         this.props.onClose(value)
+        this.props.history.goBack()
+    }
+
+    handleArrowClick(type){
+        let curPage = this.state.curPage
+        this.setState({activeArrow:type})
+        setTimeout(() => {
+            this.setState({activeArrow:false})
+        }, 250)
+         type==='left' ? this.turnPage(--curPage) : this.turnPage(++curPage)
     }
 
     render(){
-        const selednum = this.state.seledList.size
+        const selednum = this.state.seledList.size, occupy = this.state.occupy||0, can = this.state.total-occupy-selednum||0
         const btnList = [{type:1,name:'1盏'},{type:2,name:'2盏'},{type:3,name:'3盏'},{type:4,name:'4盏'}]
         const data = this.state.data
         return (
@@ -157,13 +200,13 @@ class LampDetail extends React.Component{
                     onLeftClick={()=>this.props.onClose()}
                     >选择灯位</NavBar> */}
                 <div className='state-bar'>  
-                    {[['l-gong','已供灯位',800],['l-red','已选灯位',2],['l-grey','可供灯位',222]].map((v,idx)=>
+                    {[['l-gong','已供灯位',occupy],['l-red','已选灯位',selednum],['l-grey','可供灯位',can]].map((v,idx)=>
                         <div className='lie' key={v[0]}>
                             <span className={`lampIcon ${v[0]}`}></span><div className='name'>{v[1]}<p>{v[2]}</p></div>
                         </div>
                     )}
                 </div>
-                <div className={`area ${selednum===0?'':'b187'}`}>
+                <div id='area' className={`area ${selednum===0?'':'b187'}`}>
                     <TabEx data={data} curPage={this.state.curPage}
                         turnPage={(idx)=>this.turnPage(idx)} 
                         seatSelection={(idx,idx1,idx2)=>this.seatSelection(idx,idx1,idx2)}
@@ -171,7 +214,7 @@ class LampDetail extends React.Component{
                 </div>
                 <div className="fixed-bar">
                     <div className='field-bar'>
-                        <div className='leftArrow' >
+                        <div className={`leftArrow c-grey1 ${this.state.activeArrow}`} onClick={()=>this.handleArrowClick('left')}>
                             <FontAwesome name={'chevron-left'} className={`${this.state.lastPageHide&&'hidden'}`} />
                         </div>
                         <div style={{flex: '12 1'}} className="titleCard">
@@ -181,7 +224,7 @@ class LampDetail extends React.Component{
                                 )}
                             </div>
                         </div>
-                        <div className='rightArrow'>
+                        <div className={`rightArrow c-grey1 ${this.state.activeArrow}`} onClick={()=>this.handleArrowClick('right')}>
                             <FontAwesome name={'chevron-right'} className={`${this.state.nextPageHide&&'hidden'}`} />
                         </div>
                     </div>

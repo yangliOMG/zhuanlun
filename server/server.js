@@ -20,16 +20,6 @@ assethook({
     extensions: ['jpg', 'png', 'gif'],
     limit: 9000
 })
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!assethook",assethook)
-const lessParser = require('postcss-less').parse;
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!lessParser",lessParser)
-// Css require hook
-require('css-modules-require-hook')({
-    extensions: ['.less'],
-    camelCase: true,
-    processorOpts: { parser: lessParser },
-    generateScopedName: '[name]-[local]-[hash:5]'
-});
 
 const app = express()
 const server = require('http').Server(app)
@@ -43,14 +33,8 @@ app.use(bodyParser.json())
 
 app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}))
 
-// app.use(lessMiddleware('/less', {
-//     dest: '/css',
-//     pathRoot: path.join(__dirname, 'build')
-// }))
-// app.use(express.static(path.join(__dirname, 'build')))
-
 app.use(function (req, res, next) {   //不是/static(静态资源)，都映射到index.html
-    if ( req.url.startsWith('/static')||req.url.endsWith('.ico')) {
+    if ( req.url.startsWith('/static')||req.url.startsWith('/foli')||req.url.endsWith('.ico')) {
         return next()
     }
     const store = createStore(reducer, compose(
@@ -107,6 +91,6 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
 })
 app.use('/', express.static(path.resolve('build')))
 
-server.listen(9093, function () {
+server.listen(8080, function () {
     console.log('node app start at port 9093')
 })

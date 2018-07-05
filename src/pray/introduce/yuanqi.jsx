@@ -17,7 +17,9 @@ class TempleDetail extends React.Component{
                     <WhiteSpace />
                     <div className='radius ofhd'>
                         <div className='gongdeTitle orangeBg'>福佑灯塔的缘起</div>
-
+                        <div className='gongdeImgBlock'>
+                            <img width='100%' src={require('./yuanqi.jpg')} alt=""/>
+                        </div>
                         <div className='gongdeContent'>
                                 <p className='c-fuzhu b'>福佑灯塔由转轮藏衍变而来。</p>
                                 <p className='duanluo'>转轮藏,是一种源于传统佛教建筑形式的法器,是汉传佛教历史发展中重要的代表文物之一。

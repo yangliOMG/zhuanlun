@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 
 import {loadData} from '../../redux/user.redux'
-import { getQueryString, setStorage, getStorage } from '../../util'
+import { getQueryString,  getStorage } from '../../util'
 import User from '../../service/user-service.jsx'
 
 const _user = new User()

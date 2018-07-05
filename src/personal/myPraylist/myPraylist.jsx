@@ -2,7 +2,7 @@ import React from 'react'
 import { WhiteSpace, Card, WingBlank } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,ArraySum } from '../../util'
+import {timeLongCount,duringDictionary,directionDictionary,cengConvert } from '../../util'
 import Order from '../../service/order-service.jsx'
 import {savePrayList} from '../../redux/pray.redux'
 import  "./myPraylist.less"
@@ -41,26 +41,33 @@ class MyPraylist extends React.Component{
                                 <div className='prayHead orangeBg'>{v.blessing}</div>
                                 <Card.Body>
                                     <div className='prayTitle'>
-                                        <div className='imgBlock'><img src={v.tico} alt="" style={{width:'100%'}} /></div>
+                                        <div className='imgBlock'><img src={require('./fo.png')||v.tico} alt="" style={{width:'100%'}} /></div>
                                         <div className='titBlock'>
                                             <div style={{paddingBottom:'5px'}}>{v.tname} {v.fname}</div>
                                             {v.dengwei.map((val,idx2)=>
                                                 <div key={idx2} className='spand'>
-                                                    <span className='lampIcon l-shan tini'></span>{val.side}面{val.row}行{val.col}列
+                                                    <span className='lampIcon l-shan tini'></span>
+                                                    {directionDictionary(val.side-1)}{cengConvert(val.row-1,15)}层{(Number(val.col)+"").padStart(2,0)}位
                                                 </div>
                                             )}
                                         </div>
                                     </div>
                                     <div>供灯时长：{duringDictionary().find(x=>x.type===v.duration).name}</div>
-                                    <div>供灯周期：{new Date(v.createTime).toLocaleString()}-{new Date(v.closeTime).toLocaleString()}</div>
-                                    <div>已供时间：{timeLongCount(v.createTime,v.closeTime)}</div>
-                                    <div>供灯金额：{(ArraySum(v.dengwei.map(x=>x.money))/100).toFixed(2) }元</div>
+                                    { v.payStatus===2?
+                                        <div><div>供灯周期：{new Date(v.payTime).toLocaleString()}-{new Date(v.closeTime).toLocaleString()}</div>
+                                        <div>已供时间：{timeLongCount(v.payTime,v.closeTime)}</div>
+                                        <div>供灯金额：{(v.sum/100).toFixed(2) }元</div></div>
+                                            :
+                                        <div>支付状态：<span className='c-red b'>未支付</span></div>
+                                    }
+                                    
                                 </Card.Body>
                                 <Card.Footer content="" extra={<div>查看详情 > </div>} />
                             </Card>
                             <WhiteSpace/>
                         </div>
                     )}
+                    <div className={`emptyList ${this.state.praylist.length===0?'':'hidden'}`}>祈福列表为空</div>
                 </WingBlank>
             </div>
         )

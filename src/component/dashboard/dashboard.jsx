@@ -68,9 +68,9 @@ class Dashboard extends React.Component{
             {path:'/template',title:'祈福语',component:Template,father:['/jpgmall/prayForm'],son:[]},
             {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/jpgmall/prayForm'],son:[]},
 
-            {path:'/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist'],son:[]},
+            {path:'/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist','/personalCenter'],son:[]},
 
-            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest']},
+            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest','/prayDetail']},
             {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/prayDetail']},
             {path:'/myCarelist',title:'我的收藏',component:MyCarelist,father:['/personalCenter'],son:['/temple','/tower']},
             {path:'/myHistory',title:'我的足迹',component:MyHistory,father:['/personalCenter'],son:['/temple','/tower']},

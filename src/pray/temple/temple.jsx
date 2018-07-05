@@ -31,8 +31,6 @@ class Temple extends React.Component{
                     ...res.data,
                     temple : res.data.temple[0]
                 })
-                // document.getElementById("pagetitle").innerHTML = this.state.temple.name
-                // document.getElementById("navbar").getElementsByClassName('am-navbar-title')[0].innerHTML = this.state.temple.name
                 document.title = this.state.temple.name
             }
         })
@@ -95,13 +93,13 @@ class Temple extends React.Component{
                     )}
                 </div>
                 <div className='botCard c-erji radius'>
-                    <img className='img' src="http://img2.imgtn.bdimg.com/it/u=591319322,3930376284&fm=214&gp=0.jpg" alt="" />
+                    <img className='img' src={require('./foqian.png')} alt="" />
                     <div>
                         <div className='title'>佛前供灯祈福</div>
                         <div>1.供灯两盏：福慧双增 大吉大利</div>
                         <div>2.供灯四盏：四平八稳 富运吉祥</div>
                         <div>3.供灯六盏：六六大顺 事事如意</div>
-                        <div>4.供灯九盏：九九归一 完事吉祥</div>
+                        <div>4.供灯九盏：九九归一 万事吉祥</div>
                     </div>
                 </div>
             </div>

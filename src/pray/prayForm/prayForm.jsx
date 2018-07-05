@@ -19,6 +19,7 @@ import './prayForm.css'
 import './prayForm.less'
 const _temple = new Tem()
 const _order = new Order()
+
 const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 @connect(
     state=>state,
@@ -42,7 +43,6 @@ class PrayForm extends React.Component{
             blessing:this.props.order.blessing,
             position:this.props.order.position,
             modal2: false,
-            modal1: false,
 
             visible: false,
         }
@@ -66,14 +66,8 @@ class PrayForm extends React.Component{
     }
     componentDidMount(){
         document.getElementById('stepper').getElementsByClassName('am-stepper-input')[0].setAttribute('disabled',true)
-    //     let _this = this
-    //     window.addEventListener("popstate", (e)=>{  //监听回退按钮
-    //         console.log(_this)
-    //         _this.setState({
-    //             modal2: false
-    //         });
-    //     }, false); 
     }
+    
     handleTemplateType(type){
         _order.getRandomTemplateByType(type).then(res=>{
             this.setState({visible:false})
@@ -124,14 +118,12 @@ class PrayForm extends React.Component{
     }
 
     showModal(key,e){
-        // window.history.pushState({title: "title",url: "#detail"}, "title", "#detail");
         e.preventDefault(); // 修复 Android 上点击穿透
         this.setState({
             [key]: true,
         });
     }
     onClose = key => (value) => {
-        // this.props.history.goBack()
         this.setState({[key]: false,...value});
     }
 
@@ -191,6 +183,10 @@ class PrayForm extends React.Component{
                                             <span className="modeBtn" onClick={()=>this.handleTemplateType('1')}>长寿</span>
                                             <span className="modeBtn" onClick={()=>this.handleTemplateType('2')}>平安</span>
                                             <span className="modeBtn" onClick={()=>this.handleTemplateType('3')}>富贵</span>
+                                        </Item>),(<Item>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('4')}>事业</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('5')}>姻缘</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('6')}>学业</span>
                                         </Item>),
                                     ]}
                                     align={{    
@@ -245,12 +241,6 @@ class PrayForm extends React.Component{
                     >
                     <LampDetail onClose={this.onClose('modal2')} />
                 </Modal>
-                {/* <Modal visible={this.state.modal1}
-                    transitionName ='slide-right'
-                    maskTransitionName  ='slide-right'
-                    >
-                    <Template onClose={this.onClose('modal1')} />
-                </Modal> */}
             </div>
         )
     }

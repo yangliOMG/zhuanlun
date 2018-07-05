@@ -1,8 +1,8 @@
 import React from 'react'
-import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker,Modal, Toast } from 'antd-mobile'
+import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker,Modal, Toast, Button } from 'antd-mobile'
 import {connect} from 'react-redux'
 import District from './area'
-import {duringDictionary, dateDictionary, showToast } from '../../util'
+import {duringDictionary, dateDictionary, showToast, directionDictionary, cengConvert } from '../../util'
 import Popup from '../../component/userMesTable/userMesTable.jsx'
 
 import Order from '../../service/order-service.jsx'
@@ -29,7 +29,6 @@ class PrayDetail extends React.Component{
                 createTime:'',
             },
             obj : {
-                img: 'http://img.mp.sohu.com/upload/20170510/c8503d3f105d43baa3c8db15a08deb7c_th.png',
                 id:'qwer',
             },
             messageModal: false,
@@ -47,18 +46,27 @@ class PrayDetail extends React.Component{
         const id = this.props.location.hash.replace("#","")
         let order = this.props.prayList.find(v=>v.id===id)
         if(order){
-            this.setState({order : order})
-            if(order.blissStatus!==2){
-                const content = '上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代'+
-                    '别人升表者，可以写当事人名，也可以写委托人名'
-                const style = {background: 'linear-gradient(to right bottom,#ffa800,#ff6300)',color: 'white',borderRadius:'27px',height: '34px',lineHeight: '34px'}
-                Modal.alert('填写完整信息，获得升疏(表)', content, [
-                    { text: '取消', onPress: () => {},style:{...style,background:'#999'} },
-                    { text: '确认', onPress: () => this.handleInput('messageModal',true),style:{...style,marginLeft:'10px'} },
-                ],'android')
-            }
+            this.messageInit(order)
         }else{
-            this.props.history.goBack()
+            _order.getOrderByid(id).then(res=>{
+                if(res.status === 200){
+                    this.messageInit(res.data)
+                }else{
+                    this.props.history.push('/myPraylist')
+                }
+            })
+        }
+    }
+    messageInit(order){
+        this.setState({order : order})
+        if(order.blissStatus===2){
+            const content = '上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代'+
+                '别人升表者，可以写当事人名，也可以写委托人名'
+            const style = {background: 'linear-gradient(to right bottom,#ffa800,#ff6300)',color: 'white',borderRadius:'27px',height: '34px',lineHeight: '34px'}
+            Modal.alert('填写完整信息，获得升疏(表)', content, [
+                { text: '取消', onPress: () => {},style:{...style,background:'#999'} },
+                { text: '确认', onPress: () => this.handleInput('messageModal',true),style:{...style,marginLeft:'10px'} },
+            ],'android')
         }
     }
 
@@ -111,16 +119,22 @@ class PrayDetail extends React.Component{
                 <WhiteSpace/>
                 <WingBlank size="lg">
                     <div className='prayDetail'>
-                        <img width='100%' src={this.state.obj.img} alt=""/>
+                        <img width='100%' src={require(this.state.order.payStatus===2?'./fohou.png':'./fohou1.png')} alt=""/>
                         <div className='prayText'>
                             <div className='c-black1 art'>
-                                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {this.state.order.payStatus===2?
+                                    <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     {this.state.order.unick}在{this.state.order.tname} {this.state.order.fname}点亮了{this.state.order.dengwei.length}盏佛灯</div>    
-                                <div>祝愿：{this.state.order.blessing}</div>    
+                                    <div className={`${this.state.order.blessing?'':'hidden'}`}>祝愿：{this.state.order.blessing}</div></div>
+                                        :
+                                    <div className='notpay'>未支付</div>
+                                }
+
                             </div>
                             <div className='inf'>
                                 <div className='leftBlock c-erji'>
-                                    <p>供灯位置：{this.state.order.dengwei.map(val=>`${val.side}面${val.row}行${val.col}列 `)}</p>
+                                    <p>供灯位置：{this.state.order.dengwei.map(val=>
+                                        `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,15)}层${(Number(val.col)+"").padStart(2,0)}位、`)}</p>
                                     <p>供灯时长：{during}</p>
                                     <p>创建时间：{new Date(this.state.order.createTime).toLocaleString()}</p>
                                 </div>
@@ -130,6 +144,10 @@ class PrayDetail extends React.Component{
                             </div>                       
                         </div>  
                     </div>
+                    <WhiteSpace/>
+                    <Button type="warning" className="orangeBtn"
+                        onClick={()=>this.props.history.push('/myPraylist')}
+                    >返回</Button>
                 </WingBlank>
                 <WhiteSpace/>
 

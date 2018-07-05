@@ -13,6 +13,7 @@
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
     "babel-plugin-import": "^1.7.0",
+    "babel-plugin-transform-require-ignore": "^0.1.1",
     "babel-preset-react-app": "^3.1.1",
     "babel-runtime": "6.26.0",
     "body-parser": "^1.18.2",
@@ -122,8 +123,8 @@
     ]
   },
   "theme": {
-      "brand-primary": "red",
-      "color-text-base":  "#333"
+    "brand-primary": "red",
+    "color-text-base": "#333"
   },
   "eslintConfig": {
     "extends": "react-app",

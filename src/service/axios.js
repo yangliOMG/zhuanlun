@@ -12,7 +12,7 @@ axios.defaults.timeout = 100000
      // 在这里你可以判断后台返回数据携带的请求码
      if(response.data.returnCode === 3005 || response.data.returnCode === '3005'){
         // 3005未登录
-        showToast(response.data.data)
+        showToast('重新登录中。。。')
         removeStorage('user')
         window.location.reload() 
     }else if (response.status === 200 || response.status === '200') {

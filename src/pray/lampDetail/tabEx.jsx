@@ -18,7 +18,7 @@ class TabEx extends React.Component{
     //  <div style={{position:'absolute',top:'-20px',left:'-20px',right:'-20px',bottom:'-20px',background:`url(${require('./tower.png')}) ` }}></div> 
       return (
         <Tabs tabs={tabs2} 
-          initialPage={Number(this.props.curPage)}
+          initialPage={this.props.curPage} page={this.props.curPage}
           onChange={(tab,idx)=>this.props.turnPage(idx)}
           renderTabBar={false}
         >

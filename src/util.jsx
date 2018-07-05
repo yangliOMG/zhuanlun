@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-07-04 13:54:36
+ * @Last Modified time: 2018-07-05 11:59:35
  */
 import { Toast } from 'antd-mobile';
 /**
@@ -98,7 +98,7 @@ export function numberDictionary(num){
  * @param {数字} num 
  */
 export function directionDictionary(num){
-    let dick = ['北','东北','东','东南','南','西南','西','西北']
+    let dick = ['南','西南','西','西北','北','东北','东','东南']
     return dick[num] || "超出边界"
 }
 /**

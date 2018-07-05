@@ -64,3 +64,22 @@ axios.interceptors.response.use(response => {
     }
 })
 ```
+* 单页应用（SPA）前端javascript如何阻止按下返回键页面回退
+```
+componentDidMount() {
+      this.addEventHandler();
+}
+componentWillUnmount() {
+      this.removeEventHandler();
+}
+addEventHandler() {
+      window.addEventListener('popstate', this.closePopstate, false);
+      window.history.pushState({}, '')
+}
+removeEventHandler() {
+      window.removeEventListener('popstate', this.closePopstate, false);
+}
+closePopstate = (e) => {
+      window.removeEventListener('popstate', this.closePopstate, false);
+}
+```

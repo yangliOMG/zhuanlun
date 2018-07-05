@@ -8,8 +8,11 @@ class Order{
         }})
     }
     getOrderList(){
-        return axios.get('/pray/list.do',{params: {
-            openid: getStorage('user').openid,
+        return axios.get('/pray/list.do')
+    }
+    getOrderByid(id){
+        return axios.get('/pray/items.do',{params: {
+            id
         }})
     }
 
