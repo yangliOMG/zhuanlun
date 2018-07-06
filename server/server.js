@@ -91,6 +91,6 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
 })
 app.use('/', express.static(path.resolve('build')))
 
-server.listen(8080, function () {
+server.listen(8081, function () {
     console.log('node app start at port 9093')
 })

@@ -7,8 +7,6 @@ import Tem from '../../service/temple-service.jsx'
 import './gridDefine.less'
 
 const _temple = new Tem()
-const defaultTemImg = 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=e599da6bbea1cd1111bb7a72d87ba399/a8ec8a13632762d0ea469ae4a4ec08fa513dc674.jpg'
-const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526451582347&di=72ff2b8aa694b5d4b92f001c05f487cc&imgtype=0&src=http%3A%2F%2Fimg011.hc360.cn%2Fy4%2FM02%2FD8%2F9C%2FwKhQiFUJxtiEWWepAAAAAJQnTd4876.jpg'
 
 @connect(
     state=>state,
@@ -60,7 +58,7 @@ class Temple extends React.Component{
         })
         return (
             <div>
-                <div className='titlecard radius' style={{ backgroundImage:`url(${temple.ico||defaultTemImg})` }} 
+                <div className='titlecard radius' style={{ backgroundImage:`url(${temple.ico||require('./linyinsi.jpg')})` }} 
                     onClick={()=>this.handleClick(temple.id)}>
                     <div className='title'>
                         <div className='name'>{temple.name}</div>
@@ -78,7 +76,7 @@ class Temple extends React.Component{
                                 <div className="d-flexitem" key={v.id} 
                                     onClick={()=> this.handleClickPray(v.id)}>
                                     <div className="d-content radius">
-                                        <img className="d-img" src={v.ico||defaultTowImg} alt=""/>
+                                        <img className="d-img" src={v.ico||require('./tower.png')} alt=""/>
                                         <div className="d-text">
                                             <div className="d-name">{v.tname+' '+ v.name}</div>
                                             <div className="d-tips">

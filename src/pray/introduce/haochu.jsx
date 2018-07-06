@@ -16,7 +16,7 @@ class TempleDetail extends React.Component{
                 <WingBlank size="lg">
                     <WhiteSpace />
                     <div className='radius ofhd'>
-                        <div className='gongdeTitle orangeBg'>佛前供灯的功德益</div>
+                        <div className='gongdeTitle orangeBg'>佛前供灯的意义</div>
 
                         <div className='gongdeContent'>
                             供灯意义：

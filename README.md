@@ -16,6 +16,11 @@ location ~*.do$ {
 location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
       proxy_pass http://localhost:8000;          //nginx代理静态页面，图片、接口代理
 }
+location ^~ /static/ {              //在nginx上运行，static/media下的图片在默认情况是找不着的。所以要加这个路径配置，里面的东西并不必须
+      gzip_static on;               //压缩
+      expires max;                  //缓存最久
+      add_header Cache-Control public;    //    可以被任何缓存区缓存
+}
 location / {
       try_files $uri $uri/ /index.html;         //如果不存在着内部重定向到index.html
 }
@@ -83,3 +88,4 @@ closePopstate = (e) => {
       window.removeEventListener('popstate', this.closePopstate, false);
 }
 ```
+* react的按需加载   ./dashboard/asyncComponent.js

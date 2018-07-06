@@ -20,7 +20,6 @@ import './prayForm.less'
 const _temple = new Tem()
 const _order = new Order()
 
-const defaultTowImg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526464293949&di=1cf8a781791ec773f4faaff41ccb3dc8&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F2fdda3cc7cd98d10015049ac2b3fb80e7aec90a2.jpg'
 @connect(
     state=>state,
     {updateOrder}
@@ -107,7 +106,7 @@ class PrayForm extends React.Component{
         order.type = 1
         order.adds = order.position.map(i=>i[0])
         order.fid = this.props.location.hash.replace("#","")
-        if(order.num !== order.position.length){
+        if((order.num !== order.position.length)||(order.adds.length<=0)){
             return showToast('请完善供灯位置')
         }
         if(order.duration===""){
@@ -150,7 +149,7 @@ class PrayForm extends React.Component{
                     <WhiteSpace size="lg" />
                     <div className='temCard radius'>
                         <div className='img'>   
-                            <img className='ico' src={obj.ico||defaultTowImg} alt="" />
+                            <img className='ico' src={obj.ico} alt="" />
                         </div>
                         <div className='ti'>
                             <div className='title'>{obj.tname}{obj.name}</div>
@@ -230,7 +229,7 @@ class PrayForm extends React.Component{
                 <WhiteSpace size="lg" />
                 
                 <div className='stick-footer'>  
-                    <div className="total">供灯金额：<span className='c-red'>￥{(total/100).toFixed(2)}</span></div>
+                    <div className="total">供灯功德：<span className='c-red'>￥{(total/100).toFixed(2)}</span></div>
                     <a className="payBtn" onClick={()=>{this.handlePay()}}>确认祈福</a>
                 </div>
 

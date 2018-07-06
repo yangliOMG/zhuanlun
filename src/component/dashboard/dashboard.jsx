@@ -1,32 +1,49 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import {NavBar,Icon} from 'antd-mobile'
 import { Route, Redirect} from 'react-router-dom' 
 // import QueueAnim from 'rc-queue-anim';
 import { AnimatedSwitch } from 'react-router-transition';
 
+// import Gongde from '../../pray/introduce/gongde.jsx'
+// import Haochu from '../../pray/introduce/haochu.jsx'
+// import Yuanqi from '../../pray/introduce/yuanqi.jsx'
+// import TempleList from '../../pray/templeList/templeList.jsx'
+// import PrayForm from '../../pray/prayForm/prayForm.jsx'
+// import TempleDetail from '../../pray/templeDetail/templeDetail.jsx'
+// import Template from '../../pray/template/template.jsx'
+// import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
+// import PrayDetail from '../../pray/prayDetail/prayDetail.jsx'
 
-import Gongde from '../../pray/introduce/gongde.jsx'
-import Haochu from '../../pray/introduce/haochu.jsx'
-import Yuanqi from '../../pray/introduce/yuanqi.jsx'
-import TempleList from '../../pray/templeList/templeList.jsx'
-import PrayForm from '../../pray/prayForm/prayForm.jsx'
-import TempleDetail from '../../pray/templeDetail/templeDetail.jsx'
-import Template from '../../pray/template/template.jsx'
-import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
-import PrayDetail from '../../pray/prayDetail/prayDetail.jsx'
 
+// import Temple from '../../pray/temple/temple.jsx'
 
-import Temple from '../../pray/temple/temple.jsx'
-
-import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
-import MyPraylist from '../../personal/myPraylist/myPraylist.jsx'
-import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
-import MyHistory from '../../personal/myHistory/myHistory.jsx'
-import MyPhone from '../../personal/myPhone/myPhone.jsx'
-import MySuggest from '../../personal/mySuggest/mySuggest.jsx'
+// import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
+// import MyPraylist from '../../personal/myPraylist/myPraylist.jsx'
+// import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
+// import MyHistory from '../../personal/myHistory/myHistory.jsx'
+// import MyPhone from '../../personal/myPhone/myPhone.jsx'
+// import MySuggest from '../../personal/mySuggest/mySuggest.jsx'
 
 import {setStorage, getStorage, comparePath} from '../../util'
+import asyncComponent from './AsyncComponent'
+
+const Gongde = asyncComponent(() => import("../../pray/introduce/gongde.jsx"))
+const Haochu = asyncComponent(() => import("../../pray/introduce/haochu.jsx"))
+const Yuanqi = asyncComponent(() => import("../../pray/introduce/yuanqi.jsx"))
+const TempleList = asyncComponent(() => import("../../pray/prayForm/prayForm.jsx"))
+const PrayForm = asyncComponent(() => import("../../pray/prayForm/prayForm.jsx"))
+const TempleDetail = asyncComponent(() => import("../../pray/templeDetail/templeDetail.jsx"))
+const Template = asyncComponent(() => import("../../pray/template/template.jsx"))
+const LampDetail = asyncComponent(() => import("../../pray/lampDetail/lampDetail.jsx"))
+const PrayDetail = asyncComponent(() => import("../../pray/prayDetail/prayDetail.jsx"))
+const Temple = asyncComponent(() => import("../../pray/temple/temple.jsx"))
+
+const PersonalCenter = asyncComponent(() => import("../../personal/personalCenter/personalCenter.jsx"))
+const MyPraylist = asyncComponent(() => import("../../personal/myPraylist/myPraylist.jsx"))
+const MyCarelist = asyncComponent(() => import("../../personal/myCarelist/myCarelist.jsx"))
+const MyHistory = asyncComponent(() => import("../../personal/myHistory/myHistory.jsx"))
+const MyPhone = asyncComponent(() => import("../../personal/myPhone/myPhone.jsx"))
+const MySuggest = asyncComponent(() => import("../../personal/mySuggest/mySuggest.jsx"))
 
 @connect(
     state=>state,
@@ -57,7 +74,7 @@ class Dashboard extends React.Component{
         const {pathname}  = this.props.location
         const navList = [
             {path:'/gongde',title:'供灯功德',component:Gongde,father:['/shouye'],son:['/temple']},
-            {path:'/haochu',title:'供灯好处',component:Haochu,father:['/shouye'],son:['/temple']},
+            {path:'/haochu',title:'供灯意义',component:Haochu,father:['/shouye'],son:['/temple']},
             {path:'/yuanqi',title:'缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
 
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},

@@ -56,7 +56,7 @@ class MyPraylist extends React.Component{
                                     { v.payStatus===2?
                                         <div><div>供灯周期：{new Date(v.payTime).toLocaleString()}-{new Date(v.closeTime).toLocaleString()}</div>
                                         <div>已供时间：{timeLongCount(v.payTime,v.closeTime)}</div>
-                                        <div>供灯金额：{(v.sum/100).toFixed(2) }元</div></div>
+                                        <div>供灯功德：{(v.sum/100).toFixed(2) }元</div></div>
                                             :
                                         <div>支付状态：<span className='c-red b'>未支付</span></div>
                                     }

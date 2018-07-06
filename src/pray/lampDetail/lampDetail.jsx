@@ -145,10 +145,11 @@ class LampDetail extends React.Component{
         let seledList = this.state.seledList
         let lampdata = data[idx][idx1][idx2]
         let len = data[idx].length
+
         if(lampdata.state===0){
             lampdata.state = 2
             seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${(Number(idx2)+1+"").padStart(3,0)}位`,
-                `${['S','WS','W','WN','N','EN','E','SE'][idx]}${cengConvert(idx1,len)}${idx2+1}`,
+                `${['S','WS','W','WN','N','EN','E','SE'][idx]}${cengConvert(idx1,len)}${Number(idx2)+1}`,
                 `${idx},${idx1},${idx2}`])
         }else if(lampdata.state===2){
             seledList.delete(lampdata.id)
@@ -229,23 +230,23 @@ class LampDetail extends React.Component{
                         </div>
                     </div>
                     <div className={`recom-bar ${selednum!==0&&'hidden'}`}>  
-                        <div>推荐灯位</div>
+                        <div className='ilshow' style={{flex:'4 1'}}>推荐灯位</div>
                         {btnList.map((v,idx)=>
                             <div className="radiobutton" key={v.type} onClick={()=>this.handleRecBtnClick(v.type)}>{v.name}</div>
                         )}
                     </div>
-                    <div className={`seled-bar ${selednum===0?'hidden':'showin'}`}>  
-                        <div className="seled-div">
-                            <div style={{padding: '0 5px' }}>
-                                <div className="nowrap">
-                                    {[...this.state.seledList].map((v,idx)=>
-                                        <div className="nameplate bg-red1 radius" key={v[0]}>{v[1][0]}
-                                            <FontAwesome name={'times-circle'} className='timecircle' size='lg'
-                                                onClick={()=>this.handleSeatDelete(v[0])}/>
-                                        </div>
-                                    )}
+                    <div className={`pos-bar ${selednum===0&&'hidden'}`}>
+                        <div className="nowrap">
+                            {[...this.state.seledList].map((v,idx)=>
+                                <div className="nameplate bg-red1 radius" key={v[0]}>{v[1][0]}
+                                    <FontAwesome name={'times-circle'} className='timecircle' size='lg'
+                                        onClick={()=>this.handleSeatDelete(v[0])}/>
                                 </div>
-                            </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className={`seled-bar`}>  
+                        <div className="seled-div">
                             <Button type="warning" onClick={()=>this.handleSureSelectClick()}
                                 >{selednum!==0?('已选'+selednum+'个 '):''}确认选位</Button>
                         </div>

@@ -31,6 +31,7 @@ class PrayDetail extends React.Component{
             obj : {
                 id:'qwer',
             },
+            show:false,
             messageModal: false,
             name:'',
             phone:'',
@@ -59,7 +60,7 @@ class PrayDetail extends React.Component{
     }
     messageInit(order){
         this.setState({order : order})
-        if(order.blissStatus===2){
+        if(order.payStatus===2&&order.blissStatus===2){
             const content = '上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代'+
                 '别人升表者，可以写当事人名，也可以写委托人名'
             const style = {background: 'linear-gradient(to right bottom,#ffa800,#ff6300)',color: 'white',borderRadius:'27px',height: '34px',lineHeight: '34px'}
@@ -67,6 +68,12 @@ class PrayDetail extends React.Component{
                 { text: '取消', onPress: () => {},style:{...style,background:'#999'} },
                 { text: '确认', onPress: () => this.handleInput('messageModal',true),style:{...style,marginLeft:'10px'} },
             ],'android')
+        }else if(order.payStatus!==2){
+            _order.getWechatPayCallback({prayId:order.id,price:'1'}).then(res=>{
+                if(res.status===200&&res.data.trade_state==='SUCCESS'){
+                    this.setState({order:{...this.state.order,payStatus:2}})
+                }
+            })
         }
     }
 
@@ -112,31 +119,33 @@ class PrayDetail extends React.Component{
     }
 
     render(){
+        const order = this.state.order
         //computed
-        const during = duringDictionary().find(v=>v.type===this.state.order.duration).name
+        const during = duringDictionary().find(v=>v.type===order.duration).name
         return (
             <div>
                 <WhiteSpace/>
                 <WingBlank size="lg">
                     <div className='prayDetail'>
-                        <img width='100%' src={require(this.state.order.payStatus===2?'./fohou.png':'./fohou1.png')} alt=""/>
+                        <img width='100%' src={require(order.payStatus===2?'./fohou.png':'./fohou1.png')} alt=""/>
                         <div className='prayText'>
                             <div className='c-black1 art'>
-                                {this.state.order.payStatus===2?
+                                {order.payStatus===2?
                                     <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    {this.state.order.unick}在{this.state.order.tname} {this.state.order.fname}点亮了{this.state.order.dengwei.length}盏佛灯</div>    
-                                    <div className={`${this.state.order.blessing?'':'hidden'}`}>祝愿：{this.state.order.blessing}</div></div>
+                                    {order.unick}在{order.tname} {order.fname}点亮了{order.dengwei.length}盏佛灯</div>    
+                                    <div className={`${order.blessing?'':'hidden'}`}>祝愿：{order.blessing}</div></div>
                                         :
-                                    <div className='notpay'>未支付</div>
+                                    <div className='notpay'>未支付 <span>{(order.sum/100).toFixed(2) }元</span></div>
                                 }
 
                             </div>
                             <div className='inf'>
                                 <div className='leftBlock c-erji'>
-                                    <p>供灯位置：{this.state.order.dengwei.map(val=>
+                                    <p className={this.state.show?'':'text-overflow2'} onClick={()=>this.setState({show:!this.state.show})}>
+                                        供灯位置：{order.dengwei.map(val=>
                                         `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,15)}层${(Number(val.col)+"").padStart(2,0)}位、`)}</p>
                                     <p>供灯时长：{during}</p>
-                                    <p>创建时间：{new Date(this.state.order.createTime).toLocaleString()}</p>
+                                    <p>创建时间：{new Date(order.createTime).toLocaleString()}</p>
                                 </div>
                                 <div className='rightBlock'>
                                     <img width='100%' src={require('./qrcode.jpg')} alt=""/>
