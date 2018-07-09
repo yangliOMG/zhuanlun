@@ -137,7 +137,7 @@ class Dashboard extends React.Component{
                 </div>
             )
         }else{
-            return <Redirect to='/temple'></Redirect>
+            return <Redirect to='/shouye'></Redirect>
         }
     }
 }

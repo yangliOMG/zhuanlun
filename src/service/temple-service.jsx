@@ -55,16 +55,31 @@ class Temple{
             id
         }})
     }
-
     getLayoutById(id){
         return axios.get(`/facility/layout.do`,{params: {
             id
         }})
     }
-
     getOccupyById(id){
         return axios.get(`/facility/occupy.do`,{params: {
             id
+        }})
+    }
+    getRandomPosition(id,num){
+        return axios.get(`/facility/random.do`,{params: {
+            id,num
+        }})
+    }
+
+    
+    getHistoryListByType(type){
+        return axios.get(`/history/my.do`,{params: {
+            type
+        }})
+    }
+    getHistoryByType(type){
+        return axios.get(`/history/recent.do`,{params: {
+            type
         }})
     }
 }

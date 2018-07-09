@@ -2,12 +2,14 @@ import React from 'react'
 import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker,Modal, Toast, Button } from 'antd-mobile'
 import {connect} from 'react-redux'
 import District from './area'
-import {duringDictionary, dateDictionary, showToast, directionDictionary, cengConvert } from '../../util'
+import {duringDictionary, dateDictionary, showToast, directionDictionary, cengConvert, timeFormat } from '../../util'
 import Popup from '../../component/userMesTable/userMesTable.jsx'
 
 import Order from '../../service/order-service.jsx'
 import './prayDetail.less'
 
+// import asyncComponent from '../../component/dashboard/AsyncComponent'
+// const District = asyncComponent(() => import("./area"))
 const _order = new Order()
 @connect(
     state=>state.prayList,
@@ -114,6 +116,7 @@ class PrayDetail extends React.Component{
         }
         this.setState({burning: true})
         setTimeout(() => {
+            this.setState({src: ''})
             showToast('焚化完成')
         }, 8000);
     }
@@ -122,6 +125,7 @@ class PrayDetail extends React.Component{
         const order = this.state.order
         //computed
         const during = duringDictionary().find(v=>v.type===order.duration).name
+
         return (
             <div>
                 <WhiteSpace/>
@@ -145,7 +149,7 @@ class PrayDetail extends React.Component{
                                         供灯位置：{order.dengwei.map(val=>
                                         `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,15)}层${(Number(val.col)+"").padStart(2,0)}位、`)}</p>
                                     <p>供灯时长：{during}</p>
-                                    <p>创建时间：{new Date(order.createTime).toLocaleString()}</p>
+                                    <p>创建时间：{timeFormat(order.createTime).toLocaleString()}</p>
                                 </div>
                                 <div className='rightBlock'>
                                     <img width='100%' src={require('./qrcode.jpg')} alt=""/>
@@ -185,7 +189,7 @@ class PrayDetail extends React.Component{
                                 >
                                 <List.Item arrow="horizontal">生日：</List.Item>
                             </DatePicker>
-                            <Picker extra="所在地区"
+                            <Picker extra="所在地区" cols={2}
                                 data={District}
                                 title="地址选择"
                                 value={this.state.address}

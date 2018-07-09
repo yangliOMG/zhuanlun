@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-07-05 11:59:35
+ * @Last Modified time: 2018-07-09 19:46:37
  */
 import { Toast } from 'antd-mobile';
 /**
@@ -81,8 +81,8 @@ export function removeStorage(name){
  * 弹出框
  * @param {内容} msg 
  */
-export function showToast(msg) {
-    Toast.info(msg, 1);
+export function showToast(msg,duration=1) {
+    Toast.info(msg, duration);
 }
 /**
  * 数字转汉字
@@ -97,15 +97,16 @@ export function numberDictionary(num){
  * 数字转方向
  * @param {数字} num 
  */
-export function directionDictionary(num){
-    let dick = ['南','西南','西','西北','北','东北','东','东南']
-    return dick[num] || "超出边界"
+export function directionDictionary(num,type=0){
+    let dick = [['南','东南','东','东北','北','西北','西','西南'],
+                ['S','SE','E','EN','N','WN','W','WS']]
+    return dick[type][num] || "超出边界"
 }
 /**
  * 数字转时间长度
  */
 export function duringDictionary(){
-    return [{type:1,name:'1天'},{type:30,name:'1月'},{type:365,name:'1年'},{type:-1,name:'长明'}]
+    return [{type:1,name:'1天'},{type:30,name:'1月'},{type:365,name:'1年'},{type:7200,name:'长明'}]
 }
 /**
  * 数字反向表示层数
@@ -190,14 +191,25 @@ export function recommendAI(dataArr,num){
     return [...bestPos.values()]
 }
 /**
+ * 时间ios兼容转换
+ * @param {日期} date 
+ */
+export function timeFormat(date){
+    try {
+        return new Date(date.replace(/(\+\d{2})(\d{2})$/, "$1:$2"))
+    } catch (error) {
+        return '0'
+    }
+}
+/**
  * 计算时长
  * @param {起始日期} date 
  * @param {结束日期} date 
  */
 export function timeLongCount(begin,end){
     try {
-        let a = new Date(begin).getTime(),
-            b = new Date(end).getTime(),  
+        let a = new Date(timeFormat(begin)).getTime(),
+            b = new Date(timeFormat(end)).getTime(),  
             c = new Date().getTime()
         let date3 = b<c? b-a : c-a
         //计算出相差天数

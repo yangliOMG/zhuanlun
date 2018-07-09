@@ -2,7 +2,7 @@ import React from 'react'
 import { List, WhiteSpace , WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
-import { removeStorage } from '../../util'
+import { removeStorage,getStorage } from '../../util'
 // import {update} from '../../redux/user.redux'
 import "./personalCenter.css"
 @connect(
@@ -25,6 +25,8 @@ class PersonalCenter extends React.Component{
                 {title:"手机绑定",path:'/myPhone',fontname:'phone',color:'#108ee9'},
                 {title:"意见反馈",path:'/mySuggest',fontname:'commenting',color:'grey'},
             ]
+        const headImg = this.props.headImgURL || getStorage('user').headImgURL
+        const nick = this.props.nick || getStorage('user').nick
         return (
             <div>
                 <WhiteSpace/>
@@ -34,11 +36,11 @@ class PersonalCenter extends React.Component{
                             <tbody>
                                 <tr>
                                     <td><div className="headImgDiv mt-15" onClick={()=>{removeStorage('user');alert('清除缓存')}}>
-                                        <img id="img" height="60" width="60" src={this.props.headImgURL||require("./default_photo.jpg")} alt="" />
+                                        <img id="img" height="60" width="60" src={headImg||require("./default_photo.jpg")} alt="" />
                                     </div></td>
                                 </tr>
                                 <tr>
-                                    <td><div className='text-c f-16'>{this.props.nick||"登录"}</div></td>
+                                    <td><div className='text-c f-16'>{nick||"登录"}</div></td>
                                 </tr>
                             </tbody>
                         </table>                    

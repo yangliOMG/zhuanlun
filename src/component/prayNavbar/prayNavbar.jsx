@@ -1,10 +1,11 @@
 import React from 'react'
 import { NoticeBar} from 'antd-mobile'
 import {connect} from 'react-redux'
-
+import Order from '../../service/order-service.jsx'
 // import {update} from '../../redux/user.redux'
 import './prayNavbar.css'
 
+const _order = new Order()
 @connect(
     state=>state.user,
     // {update}
@@ -13,7 +14,16 @@ class PrayNavbar extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            data:[]
         }
+    }
+    componentWillMount(){
+        _order.getTopMes().then(res=>{
+            if(res.status === 200){
+                const data = res.data.data
+                this.setState({data})
+            }
+        })
     }
 
     render(){
@@ -21,12 +31,14 @@ class PrayNavbar extends React.Component{
                 <NoticeBar 
                     mode="link" 
                     icon={null} 
-                    action={ <div> </div>     }
+                    action={ <div> </div>}
                     marqueeProps={{ loop: true, style: { padding: '0 10px', fontSize:16 }}}
                 >
-                    <span className='mr-20'><span className='c-black'>XXX</span>供灯2盏</span>
-                    <span className='mr-20'><span className='c-black'>XXX</span>供灯3盏</span>
-                    <span className='mr-20'><span className='c-black'>XXX</span>供灯1盏</span>
+                    {
+                        this.state.data.map((v,idx)=>
+                            <span key={idx} className='mr-30'><span className='c-black'>{v.prayman}</span>供灯{v.lednums}盏</span>
+                        )
+                    }
                 </NoticeBar>
         )
     }

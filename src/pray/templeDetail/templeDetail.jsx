@@ -9,7 +9,6 @@ import Tem from '../../service/temple-service.jsx'
 import './templeDetail.less'
 
 const _temple = new Tem()
-const defaultTemImg = 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=e599da6bbea1cd1111bb7a72d87ba399/a8ec8a13632762d0ea469ae4a4ec08fa513dc674.jpg'
 
 @connect(
     state=>state.user,
@@ -47,6 +46,7 @@ class TempleDetail extends React.Component{
     render(){
         const temple = this.state.temple
         const templeMaterial = this.state.templeMaterial
+        const zhuchi = templeMaterial.find(v=>v.name==='主持')
         return (
             <div>
                 <WingBlank size="lg">
@@ -56,12 +56,14 @@ class TempleDetail extends React.Component{
 
                         <div className='name'>
                             <div className='l'>{temple.name}</div>    
-                            <div className='r'>主持：法师</div>    
+                            {zhuchi?
+                                <div className={`r`}>主持：{zhuchi.content}</div>:''
+                            }
                         </div>
-                        <img style={{width: '100%'}} src={temple.ico||defaultTemImg} alt="" />
+                        <img style={{width: '100%'}} src={temple.ico} alt="" />
                         <div>
-                            {templeMaterial.map((v,idx)=>
-                                v.content
+                            {templeMaterial.filter(v=>v.name!=='主持').map((v,idx)=>
+                                <p key={idx}>{v.content}</p>
                             )}
                         </div>
                         <WhiteSpace />

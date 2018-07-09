@@ -89,3 +89,18 @@ closePopstate = (e) => {
 }
 ```
 * react的按需加载   ./dashboard/asyncComponent.js
+* 点击图片放大-》在图片的父节点上的事件中，添加
+```
+e.preventDefault()
+```
+* 时间ios的兼容格式写法
+```
+date = 2018-07-06T11:54:43.000+0000  //不识别
+date.replace(/(\+\d{2})(\d{2})$/, "$1:$2")
+date = 2018-07-06T11:54:43.000+00:00      //ios识别
+```
+* less的background兼容写法
+```
+background: url(/static/media/background.bc45e995.png) 0 0 / 100% 100%; //铺满
+background:url('./images/background.png') 0 0~"/" 100% 100%;
+```

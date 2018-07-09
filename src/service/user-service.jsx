@@ -45,11 +45,10 @@ class User{
         }})
     }
 
-    submitSuggest(value){
-        return axios.get(`/login/login.do`,{params: {
-            suggest:value,
-            openid: getStorage('user').openid,
-        }})
+    submitSuggest(content){
+        return axios.post(`/back/save.do`,{
+            content
+        })
     }
 
 }

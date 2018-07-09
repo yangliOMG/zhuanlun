@@ -2,7 +2,7 @@ import React from 'react'
 import { WhiteSpace, Card, WingBlank } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,directionDictionary,cengConvert } from '../../util'
+import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat } from '../../util'
 import Order from '../../service/order-service.jsx'
 import {savePrayList} from '../../redux/pray.redux'
 import  "./myPraylist.less"
@@ -54,7 +54,7 @@ class MyPraylist extends React.Component{
                                     </div>
                                     <div>供灯时长：{duringDictionary().find(x=>x.type===v.duration).name}</div>
                                     { v.payStatus===2?
-                                        <div><div>供灯周期：{new Date(v.payTime).toLocaleString()}-{new Date(v.closeTime).toLocaleString()}</div>
+                                        <div><div>供灯周期：{timeFormat(v.payTime).toLocaleString()}-{timeFormat(v.closeTime).toLocaleString()}</div>
                                         <div>已供时间：{timeLongCount(v.payTime,v.closeTime)}</div>
                                         <div>供灯功德：{(v.sum/100).toFixed(2) }元</div></div>
                                             :

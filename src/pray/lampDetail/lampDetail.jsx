@@ -21,11 +21,10 @@ class LampDetail extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            data : [
-            ],
+            data : [[],[],[]],
             seledList : new Map(),
             curPage:0,
-            lastPageHide:true,
+            lastPageHide:false,
             nextPageHide:false,
             activeArrow:false,
             // data : [
@@ -131,13 +130,14 @@ class LampDetail extends React.Component{
     
     turnPage(curPage){
         curPage = Number(curPage)
-        const lastPageHide = curPage===0
-        const nextPageHide = this.state.data.length===(curPage+1)
+        // const lastPageHide = curPage===0
+        // const nextPageHide = this.state.data.length===(curPage+1)
         if(this.state.curPage!==curPage){
             this.scrollToBottom()
         }
         this.setState({
-            curPage,lastPageHide,nextPageHide
+            curPage,
+            // lastPageHide,nextPageHide
         })
     }
     seatSelection(idx,idx1,idx2){
@@ -149,7 +149,7 @@ class LampDetail extends React.Component{
         if(lampdata.state===0){
             lampdata.state = 2
             seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${(Number(idx2)+1+"").padStart(3,0)}位`,
-                `${['S','WS','W','WN','N','EN','E','SE'][idx]}${cengConvert(idx1,len)}${Number(idx2)+1}`,
+                `${directionDictionary(idx,1)}${cengConvert(idx1,len)}${Number(idx2)+1}`,
                 `${idx},${idx1},${idx2}`])
         }else if(lampdata.state===2){
             seledList.delete(lampdata.id)
@@ -188,7 +188,7 @@ class LampDetail extends React.Component{
         setTimeout(() => {
             this.setState({activeArrow:false})
         }, 250)
-         type==='left' ? this.turnPage(--curPage) : this.turnPage(++curPage)
+         type==='left' ? this.turnPage(curPage===0?7:--curPage) : this.turnPage(curPage===7?0:++curPage)
     }
 
     render(){

@@ -21,14 +21,17 @@ class MyPhone extends React.Component{
 
     handleSubmitSuggest(){
         Toast.loading('加载中...',0)
-        _user.submitSuggest(this.state.value).then(data=>{
-            if(data.status===1){
+        _user.submitSuggest(this.state.value).then(res=>{
+            if(res.status===200){
                 showToast('提交成功！')
-                setTimeout(()=>this.props.history.goBack(), 500)
+                setTimeout(()=>{
+                    this.props.history.goBack()
+                    Toast.hide()
+                }, 500)
             }else{
-                showToast(data.result)
+                showToast(res.result)
             }
-            Toast.hide()
+            
         })
     }
     handleChange(value){

@@ -15,6 +15,11 @@ class Order{
             id
         }})
     }
+    getTopMes(){
+        return axios.get('/pray/top.do',{params: {
+            top:5
+        }})
+    }
 
 
     createBlissMan(blissMan){
@@ -56,6 +61,11 @@ class Order{
     getRandomTemplateByType(type){
         return axios.get('/template/random.do',{params: {
             type
+        }})
+    }
+    getTextScan(content){
+        return axios.get('/template/textScan.do',{params: {
+            content
         }})
     }
 }

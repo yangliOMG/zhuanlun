@@ -22,9 +22,11 @@ class Temple extends React.Component{
         }
     }
     componentWillMount(){
-        // const id = this.props.location.hash.replace("#","")
-        _temple.getTempleById(1).then(res=>{
-            if(res.status === 200){
+        const id = this.props.location.hash.replace("#","")
+        _temple.getHistoryByType(0)
+        .then(res=>_temple.getTempleById(id||res.data.oid||1))
+        .then(res=>{
+            if(res.status === 200&&res.data.temple.length>0){
                 this.setState({
                     ...res.data,
                     temple : res.data.temple[0]
@@ -37,7 +39,8 @@ class Temple extends React.Component{
     handleClick(id){
         this.props.history.push(`/templeDetail#${id}`)
     }
-    handleClickPray(id){
+    handleClickPray(id,e){
+        e.preventDefault()
         this.props.newOrder()
         this.props.history.push(`/jpgmall/prayForm#${id}`)
     }
@@ -63,7 +66,7 @@ class Temple extends React.Component{
                     <div className='title'>
                         <div className='name'>{temple.name}</div>
                         <div className='c-erji pd-5 text-overflow'>
-                            {templeMaterial.map((v,idx)=>
+                            {templeMaterial.filter(v=>v.name!=='主持').map((v,idx)=>
                                 v.content
                             )}
                         </div>
@@ -74,7 +77,7 @@ class Temple extends React.Component{
                         <div className="d-flexbox" key={idx}>
                             {row.map((v,idx)=>
                                 <div className="d-flexitem" key={v.id} 
-                                    onClick={()=> this.handleClickPray(v.id)}>
+                                    onClick={(e)=> this.handleClickPray(v.id,e)}>
                                     <div className="d-content radius">
                                         <img className="d-img" src={v.ico||require('./tower.png')} alt=""/>
                                         <div className="d-text">

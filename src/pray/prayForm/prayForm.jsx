@@ -9,7 +9,7 @@ import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 
 import {updateOrder} from '../../redux/order.redux'
 // import Order from '../../service/order-service.jsx'
-import {showToast,duringDictionary } from '../../util'
+import {showToast,duringDictionary,getStorage,directionDictionary,cengConvert } from '../../util'
 import {webchatPay } from './wechatPay.js'
 import Tem from '../../service/temple-service.jsx'
 import Order from '../../service/order-service.jsx'
@@ -34,15 +34,16 @@ class PrayForm extends React.Component{
                 1:980,
                 30:1980,
                 365:19900,
-                [-1]:360000
+                7200:360000
             },
-            unick:'',
+            unick:getStorage('user').nick,
             duration:this.props.order.duration,
             total:0,
             blessing:this.props.order.blessing,
             position:this.props.order.position,
-            modal2: false,
 
+            textScan:true,
+            modal2: false,
             visible: false,
         }
     }
@@ -57,11 +58,22 @@ class PrayForm extends React.Component{
                         obj: res.data.facility,
                         price
                     })
-
+                }
+            })
+            _temple.getRandomPosition(id,this.state.num).then(res=>{
+                if(res.status === 200){
+                    let position = res.data.data.map(v=>([
+                        v.address,
+                        [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Number(v.col)+"").padStart(3,0)}位`,
+                            `${directionDictionary(v.side-1,1)}${cengConvert(v.row-1,15)}${v.col}`,
+                            `${v.side-1},${v.row-1},${v.col-1}`]]))
+                    this.setState({
+                        position,
+                    })
+                    this.props.updateOrder({position})
                 }
             })
         }
-
     }
     componentDidMount(){
         document.getElementById('stepper').getElementsByClassName('am-stepper-input')[0].setAttribute('disabled',true)
@@ -72,8 +84,9 @@ class PrayForm extends React.Component{
             this.setState({visible:false})
             if(res.status === 200&& res.data.content){
                 this.handleTextarea(res.data.content)
+                this.handleBlurTextScan()
             }else{
-                showToast('暂无该类模板');
+                showToast('暂无该类模板')
             }
         })
         
@@ -97,11 +110,38 @@ class PrayForm extends React.Component{
         this.setState({blessing})
         this.props.updateOrder({blessing})
     }
+    handleBlurTextScan(){
+        let blessing = this.state.blessing.replace(/{{prayer}}/g,this.state.unick||'')
+        if(blessing!==''){
+            _order.getTextScan(blessing).then(res=>{
+                if(res.status === 200&& res.data.suggestion==='pass'){
+                    this.setState({textScan:true})
+                }else{
+                    this.setState({textScan:false})
+                    if(res.status === 200){
+                        const dic = {
+                            spam:'含垃圾信息',
+                            ad:'广告',
+                            politics:'涉政',
+                            terrorism:'暴恐',
+                            abuse:'辱骂',
+                            porn:'色情',
+                            flood:'灌水',
+                            contraband:'违禁',
+                            meaningless:'无意义'}
+                        showToast('祈愿文内容违规，违规原因：'+dic[res.data.label],3)
+                    }
+                }
+            })
+        }else{
+            this.setState({textScan:true})
+        }
+    }
     handlePay(){
         let order = {...this.props.order}
         // order.total = (this.state.price[this.state.duration]||0)* this.state.num
         order.blessing = order.blessing.replace(/{{prayer}}/g,this.state.unick||'')
-        order.unick = this.state.unick
+        order.prayman = this.state.unick
         order.openTime = (new Date()).getTime()
         order.type = 1
         order.adds = order.position.map(i=>i[0])
@@ -111,6 +151,9 @@ class PrayForm extends React.Component{
         }
         if(order.duration===""){
             return showToast('请选择时长')
+        }
+        if(this.state.textScan===false){
+            return showToast('祈愿文内容违规')
         }
         delete order.position
         webchatPay(order)
@@ -171,6 +214,7 @@ class PrayForm extends React.Component{
                             <div className="pos-r">
                                 <TextareaItem className="textarea" title="祈愿文："
                                     onChange={v=>this.handleTextarea(v)}
+                                    onBlur={()=>this.handleBlurTextScan()}
                                     rows={3} autoHeight placeholder={'请输入'}
                                     value={prayArticle}
                                     >
