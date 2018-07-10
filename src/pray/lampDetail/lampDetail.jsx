@@ -148,8 +148,8 @@ class LampDetail extends React.Component{
 
         if(lampdata.state===0){
             lampdata.state = 2
-            seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${(Number(idx2)+1+"").padStart(3,0)}位`,
-                `${directionDictionary(idx,1)}${cengConvert(idx1,len)}${Number(idx2)+1}`,
+            seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${(Number(idx2)+1+"").padStart(2,0)}位`,
+                `${directionDictionary(idx)}${cengConvert(idx1,len)}${Number(idx2)+1}`,
                 `${idx},${idx1},${idx2}`])
         }else if(lampdata.state===2){
             seledList.delete(lampdata.id)
@@ -246,9 +246,9 @@ class LampDetail extends React.Component{
                         </div>
                     </div>
                     <div className={`seled-bar`}>  
-                        <div className="seled-div">
+                        <div className="seled-div bg-red1">
                             <Button type="warning" onClick={()=>this.handleSureSelectClick()}
-                                >{selednum!==0?('已选'+selednum+'个 '):''}确认选位</Button>
+                                >{selednum!==0?('已选'+selednum+'个 '):''}确认祈福</Button>
                         </div>
                     </div>
                 </div>

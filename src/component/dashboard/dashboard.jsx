@@ -75,7 +75,7 @@ class Dashboard extends React.Component{
         const navList = [
             {path:'/gongde',title:'供灯功德',component:Gongde,father:['/shouye'],son:['/temple']},
             {path:'/haochu',title:'供灯意义',component:Haochu,father:['/shouye'],son:['/temple']},
-            {path:'/yuanqi',title:'缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
+            {path:'/yuanqi',title:'供灯缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
 
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
             {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/jpgmall/prayForm']},
@@ -85,10 +85,10 @@ class Dashboard extends React.Component{
             {path:'/template',title:'祈福语',component:Template,father:['/jpgmall/prayForm'],son:[]},
             {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/jpgmall/prayForm'],son:[]},
 
-            {path:'/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist','/personalCenter'],son:[]},
+            {path:'/jpgmall/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist','/personalCenter'],son:[]},
 
-            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest','/prayDetail']},
-            {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/prayDetail']},
+            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest','/jpgmall/prayDetail']},
+            {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/jpgmall/prayDetail']},
             {path:'/myCarelist',title:'我的收藏',component:MyCarelist,father:['/personalCenter'],son:['/temple','/tower']},
             {path:'/myHistory',title:'我的足迹',component:MyHistory,father:['/personalCenter'],son:['/temple','/tower']},
             {path:'/myPhone',title:'绑定手机号',component:MyPhone,father:['/personalCenter'],son:[]},

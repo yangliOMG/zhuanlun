@@ -1,10 +1,20 @@
 .temCard{
-    padding:10px;display: flex;background: #fff;
+    padding:10px;display: flex;background: #fff;position: relative;
     .img{flex: 2 1;
         .ico{height: 90px;box-shadow: 2px 2px 0px #aaa;border-radius: 9px;}
     }
     .ti{flex: 3 1;padding-left: 5px;
         .title{margin-bottom: 3px;font-size: 1.06rem;}
+    }
+    .absBlock{position: absolute;padding: 5px;border: 1px solid #bbb;background: white;z-index: 2;top: 50px;width: 89%;
+        .arrow_wrp{position: absolute;top: -13px;right: 40%;
+
+            .editor_arrow {display: inline-block;width: 0;height: 0;border-width: 12px;border-style: dashed;position: absolute;
+                border-color: transparent;border-top-width: 0;border-bottom-color: #fff;border-bottom-style: solid;
+                &.out{top: 0px;border-bottom-color: #bbb;}
+                &.in{top: 1px;}
+            }
+        }
     }
 }
 
@@ -13,7 +23,7 @@
 .modeBtn{margin: 0 5px 0px 0;display: inline-block;border-radius: 15px;font-size: 0.9rem;padding: 2px 12px;
     &:active{color:white;background: #ff6300}
 }
-.timeBtn{display: inline-block;padding: 3px 4px;border-radius: 8px;text-align: center;font-size: 0.9rem;line-height: 0.9rem;}
+.timeBtn{padding: 3px 4px;border-radius: 8px;text-align: center;font-size: 0.9rem;line-height: 0.9rem;}
 .am-list-extra{touch-action: none;}
 .def-listitem1.am-list-item .am-list-line .am-list-extra{flex-basis: initial;}
 .def-listitem.am-list-item .am-list-line .am-list-extra{flex-basis: 60%;}

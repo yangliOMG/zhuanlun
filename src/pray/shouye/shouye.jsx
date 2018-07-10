@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import { getQueryString,  getStorage } from '../../util'
 import User from '../../service/user-service.jsx'
 import {loadData} from '../../redux/user.redux'
-import "./shouye.less"
+import "./shouye.css"
 
 
 const _user = new User()

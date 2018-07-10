@@ -42,7 +42,8 @@ class Temple extends React.Component{
     handleClickPray(id,e){
         e.preventDefault()
         this.props.newOrder()
-        this.props.history.push(`/jpgmall/prayForm#${id}`)
+        window.location.href = `/jpgmall/prayForm#${id}`
+        // this.props.history.push(`/jpgmall/prayForm#${id}`)
     }
 
     render(){
@@ -76,15 +77,15 @@ class Temple extends React.Component{
                     {rowData.map((row,idx)=>
                         <div className="d-flexbox" key={idx}>
                             {row.map((v,idx)=>
-                                <div className="d-flexitem" key={v.id} 
-                                    onClick={(e)=> this.handleClickPray(v.id,e)}>
+                                <div className="d-flexitem" key={v.facility.id} 
+                                    onClick={(e)=> this.handleClickPray(v.facility.id,e)}>
                                     <div className="d-content radius">
-                                        <img className="d-img" src={v.ico||require('./tower.png')} alt=""/>
+                                        <img className="d-img" src={v.facility.ico||require('./tower.png')} alt=""/>
                                         <div className="d-text">
-                                            <div className="d-name">{v.tname+' '+ v.name}</div>
+                                            <div className="d-name">{v.facility.tname+' '+ v.facility.name}</div>
                                             <div className="d-tips">
-                                                <span className='lampIcon l-shan tini'></span>800&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <span className='lampIcon l-bushan tini'></span>224
+                                                <span className='lampIcon l-shan tini'></span>{v.bright}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span className='lampIcon l-bushan tini'></span>{v.lightNum-v.bright}
                                             </div>
                                         </div>
                                     </div>
@@ -93,7 +94,7 @@ class Temple extends React.Component{
                         </div>
                     )}
                 </div>
-                <div className='botCard c-erji radius'>
+                <div className='botCard c-erji radius' onClick={()=>this.props.history.push(`/haochu`)}>
                     <img className='img' src={require('./foqian.png')} alt="" />
                     <div>
                         <div className='title'>佛前供灯祈福</div>

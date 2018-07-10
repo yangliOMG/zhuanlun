@@ -6,6 +6,7 @@ const initState = {
     duration:30,
     position:[],
     total:'',
+    id:'',
 }
 export function order(state=initState, action){
     switch(action.type){

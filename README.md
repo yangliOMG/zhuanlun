@@ -104,3 +104,14 @@ date = 2018-07-06T11:54:43.000+00:00      //ios识别
 background: url(/static/media/background.bc45e995.png) 0 0 / 100% 100%; //铺满
 background:url('./images/background.png') 0 0~"/" 100% 100%;
 ```
+* 单页面应用，微信支付，ios当前页面未注册
+```
+IOS
+微信检测支付授权目录是第一次打开页面的时候顶部出现绿色加载条。而不是location.href，但是我们程序中使用的是location.href，就会造成一种假象链接明明是对的啊
+Android
+微信检测支付授权目录是location.href
+
+解决方案
+使用独立支付页面，通过location.href跳转。稳定
+配置多几个授权目录（授权目录上线好像是3个？）
+```

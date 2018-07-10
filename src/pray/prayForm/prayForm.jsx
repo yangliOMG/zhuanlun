@@ -7,7 +7,7 @@ import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 // import Template from '../../pray/template/template.jsx'
 
-import {updateOrder} from '../../redux/order.redux'
+import {updateOrder,newOrder} from '../../redux/order.redux'
 // import Order from '../../service/order-service.jsx'
 import {showToast,duringDictionary,getStorage,directionDictionary,cengConvert } from '../../util'
 import {webchatPay } from './wechatPay.js'
@@ -22,7 +22,7 @@ const _order = new Order()
 
 @connect(
     state=>state,
-    {updateOrder}
+    {updateOrder,newOrder}
 )
 class PrayForm extends React.Component{
     constructor(props){
@@ -45,7 +45,9 @@ class PrayForm extends React.Component{
             textScan:true,
             modal2: false,
             visible: false,
+            infoVisible: false,
         }
+
     }
     componentWillMount(){
         const id = this.props.location.hash.replace("#","")
@@ -60,24 +62,26 @@ class PrayForm extends React.Component{
                     })
                 }
             })
-            _temple.getRandomPosition(id,this.state.num).then(res=>{
-                if(res.status === 200){
-                    let position = res.data.data.map(v=>([
-                        v.address,
-                        [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Number(v.col)+"").padStart(3,0)}位`,
-                            `${directionDictionary(v.side-1,1)}${cengConvert(v.row-1,15)}${v.col}`,
-                            `${v.side-1},${v.row-1},${v.col-1}`]]))
-                    this.setState({
-                        position,
-                    })
-                    this.props.updateOrder({position})
-                }
-            })
+            if(this.state.position.length<=0){
+                _temple.getRandomPosition(id,this.state.num).then(res=>{
+                    if(res.status === 200){
+                        let position = res.data.data.map(v=>([
+                            v.address,
+                            [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Number(v.col)+"").padStart(2,0)}位`,
+                                `${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}${v.col}`,
+                                `${v.side-1},${v.row-1},${v.col-1}`]]))
+                        this.setState({
+                            position,
+                        })
+                        this.props.updateOrder({position})
+                    }
+                })
+            }
         }
     }
-    componentDidMount(){
-        document.getElementById('stepper').getElementsByClassName('am-stepper-input')[0].setAttribute('disabled',true)
-    }
+    // componentDidMount(){
+    //     document.getElementById('stepper').getElementsByClassName('am-stepper-input')[0].setAttribute('disabled',true)
+    // }
     
     handleTemplateType(type){
         _order.getRandomTemplateByType(type).then(res=>{
@@ -156,7 +160,30 @@ class PrayForm extends React.Component{
             return showToast('祈愿文内容违规')
         }
         delete order.position
-        webchatPay(order)
+        if(order.blessing){
+            _order.getTextScan(order.blessing).then(res=>{
+                if(res.status === 200&& res.data.suggestion==='pass'){
+                    this.createOrder(order)
+                }
+            })
+        }else{
+            this.createOrder(order)
+        }
+    }
+    createOrder(order){
+        _order.createOrder(order).then(res=>{
+            if(res.data.returnCode===1000){
+                this.props.newOrder()
+                this.setState({position:[]})
+                return webchatPay(res.data.data)
+            }else{
+                let occ = res.data.data.occ
+                let position = this.state.position.filter(v=>!occ.includes(v[0]))
+                this.setState({position})
+                this.props.updateOrder({position})
+                showToast(res.data.data.errorInfo)
+            }
+        })
     }
 
     showModal(key,e){
@@ -194,9 +221,17 @@ class PrayForm extends React.Component{
                         <div className='img'>   
                             <img className='ico' src={obj.ico} alt="" />
                         </div>
-                        <div className='ti'>
+                        <div className='ti' onClick={()=>this.setState({infoVisible:!this.state.infoVisible})}>
                             <div className='title'>{obj.tname}{obj.name}</div>
-                            <div className='info'>{obj.info}</div>
+                            <div className='info text-overflow4a'>{obj.info}</div>
+                        </div>
+                        <div className={`info absBlock radius ${this.state.infoVisible?'':'hidden'}`}
+                            onClick={()=>this.setState({infoVisible:false})}>
+                            {obj.info}
+                            <span className='arrow_wrp'>
+                                <i className='editor_arrow out'></i>
+                                <i className='editor_arrow in'></i>
+                            </span>
                         </div>
                     </div>
                     <WhiteSpace size="sm" />
@@ -250,7 +285,7 @@ class PrayForm extends React.Component{
                             <Item multipleLine >供灯时长
                                 <Brief style={{display:'flex'}}>
                                     {btnList.map((v,idx)=>
-                                        <div key={v.type} style={{flex:'1 1'}}>
+                                        <div key={v.type} style={{flex:'1 1',paddingRight:'2%'}}>
                                             <div className={`timeBtn ${this.state.duration===v.type?'oran':'oran-o'}`}
                                                 onClick={()=>this.handleTimeBtnClick(v.type)}>
                                                 <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>

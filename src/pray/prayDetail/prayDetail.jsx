@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import District from './area'
 import {duringDictionary, dateDictionary, showToast, directionDictionary, cengConvert, timeFormat } from '../../util'
 import Popup from '../../component/userMesTable/userMesTable.jsx'
+import {updateOrder} from '../../redux/order.redux'
 
 import Order from '../../service/order-service.jsx'
 import './prayDetail.less'
@@ -13,6 +14,7 @@ import './prayDetail.less'
 const _order = new Order()
 @connect(
     state=>state.prayList,
+    {updateOrder}
 )
 class PrayDetail extends React.Component{
     constructor(props){
@@ -99,7 +101,14 @@ class PrayDetail extends React.Component{
             blissMan.address = document.getElementById('addrPicker').getElementsByClassName('am-list-extra')[0].innerHTML.replace(/,/g,'')
             blissMan.thing = this.state.thing
             blissMan.pid = id
-        Toast.loading('生成中...',0)
+        if(!blissMan.name){
+            return showToast('请输入姓名')
+        }else if(!blissMan.phone){
+            return showToast('请输入电话')
+        }else if(!blissMan.sex){
+            return showToast('请选择性别')
+        }
+        Toast.loading('升疏生成中...',0)
         _order.createBlissMan(blissMan).then(res=>{
             if(res.status === 200){
                 return 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
@@ -116,13 +125,36 @@ class PrayDetail extends React.Component{
         }
         this.setState({burning: true})
         setTimeout(() => {
-            this.setState({src: ''})
             showToast('焚化完成')
-        }, 8000);
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
+        }, 8000)
+    }
+    handleClickReback(){
+        const order = this.state.order
+        if(order.payStatus===2){
+            this.props.history.push('/personalCenter')
+        }else{
+            let blessing = order.blessing,
+                num = order.dengwei.length, 
+                duration = order.duration, 
+                position = order.dengwei.map(v=>([
+                    v.address,
+                    [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Number(v.col)+"").padStart(2,0)}位`,
+                        `${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}${v.col}`,
+                        `${v.side-1},${v.row-1},${v.col-1}`]])), 
+                total = order.sum,
+                id = order.id
+            this.props.updateOrder({blessing,num,duration,position,total,id})
+            this.props.history.push('/jpgmall/prayForm#'+order.fid)
+            // window.location.href = `/jpgmall/prayForm#${order.id}`
+        }
     }
 
     render(){
         const order = this.state.order
+        console.log(order)
         //computed
         const during = duringDictionary().find(v=>v.type===order.duration).name
 
@@ -159,8 +191,8 @@ class PrayDetail extends React.Component{
                     </div>
                     <WhiteSpace/>
                     <Button type="warning" className="orangeBtn"
-                        onClick={()=>this.props.history.push('/myPraylist')}
-                    >返回</Button>
+                        onClick={()=>this.handleClickReback()}
+                    >{order.payStatus===2?'返回':'去支付'}</Button>
                 </WingBlank>
                 <WhiteSpace/>
 

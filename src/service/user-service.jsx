@@ -1,5 +1,5 @@
 import axios from "./axios"
-
+// import qs from 'qs'
 import {getStorage,setStorage } from '../util'
 
 class User{
@@ -7,13 +7,17 @@ class User{
     getSessionlogin(isMoblieMode,code){
         return new Promise(function(resolve,reject){
               const client = new XMLHttpRequest()
-              client.open("GET", `/login/login.do?isMoblieMode=${isMoblieMode}&code=${code}`,false)
+              client.open("GET", `/login/login.do?isMoblieMode=${isMoblieMode}&code=${code}`,true)
               client.onreadystatechange = function() {
                 if (this.status === 200) {
-                    let data = JSON.parse(this.response)
-                    const userinfo = {id:data.id, openid:data.openid, nick:data.nick, headImgURL:data.headImgURL}
-                    setStorage('user', userinfo )
-                    resolve(userinfo)
+                    try {
+                        let data = JSON.parse(this.response)
+                        const userinfo = {id:data.id, openid:data.openid, nick:data.nick, headImgURL:data.headImgURL}
+                        setStorage('user', userinfo )
+                        resolve(userinfo)
+                    } catch (error) {
+                        console.log('login',error)
+                    }
                 } else {
                     reject(new Error(this.statusText))
                 }
@@ -47,8 +51,14 @@ class User{
 
     submitSuggest(content){
         return axios.post(`/back/save.do`,{
-            content
+            content,
         })
+        // return axios({
+        //     method: 'post',
+        //     headers: { 'content-type': 'application/json' },
+        //     data: qs.stringify({content}),
+        //     url:'/back/save.do',
+        // })
     }
 
 }

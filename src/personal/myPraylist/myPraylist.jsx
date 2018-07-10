@@ -37,7 +37,9 @@ class MyPraylist extends React.Component{
                 <WingBlank size="lg">
                     {this.state.praylist.map((v,idx)=>
                         <div key={v.id}>
-                            <Card full className='radius prayLi' onClick={()=>this.props.history.push(`/prayDetail#${v.id}`)}>
+                            <Card full className='radius prayLi' 
+                                // onClick={()=>this.props.history.push(`/prayDetail#${v.id}`)}>
+                                onClick={()=>window.location.href = `/jpgmall/prayDetail#${v.id}`}>
                                 <div className='prayHead orangeBg'>{v.blessing}</div>
                                 <Card.Body>
                                     <div className='prayTitle'>

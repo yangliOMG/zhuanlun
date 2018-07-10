@@ -1,12 +1,11 @@
 import { Toast} from 'antd-mobile'
 import Order from '../../service/order-service.jsx'
+import {showToast } from '../../util'
 const _order = new Order()
 
-export function webchatPay(order){
+export function webchatPay(res){
     Toast.loading('加载中...',0)
-    _order.createOrder(order)
-    .then(res=>_order.getWechatPay(res.data))
-    .then(res=>{
+    _order.getWechatPay(res).then(res=>{
         if (typeof(WeixinJSBridge) === "undefined"){  
             if( document.addEventListener ){  
                 document.addEventListener('WeixinJSBridgeReady', onBridgeReady.bind(res.data), false);  
@@ -18,7 +17,8 @@ export function webchatPay(order){
             onBridgeReady.call(res.data);  
         }
         Toast.hide()
-    }).catch(error=>console.log(error))
+    }).catch(error=>{
+        showToast(error.message)})
 }
     
 function onBridgeReady(){
@@ -43,7 +43,7 @@ function onBridgeReady(){
                 // alert(res.errMsg)
             }
             _order.getWechatPayCallback({prayId:prayid,price:'1'})
-            window.location.href = '/prayDetail#'+prayid
+            window.location.href = '/jpgmall/prayDetail#'+prayid
         }  
     ) 
 } 
