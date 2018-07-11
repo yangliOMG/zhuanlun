@@ -14,7 +14,7 @@ axios.defaults.timeout = 100000
         // 3005未登录
         showToast('重新登录中。。。')
         removeStorage('user')
-        window.location.href = window.location.origin+'/shouye'
+        window.location.href = window.location.origin+'/shouye?type='+window.location.pathname.replace('/','')
     }else if (response.status === 200 || response.status === '200') {
         return response
     }else {

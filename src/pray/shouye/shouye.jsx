@@ -7,7 +7,7 @@ import "./shouye.css"
 
 
 const _user = new User()
-const isMoblieMode = false
+const isMoblieMode = true
 
 @connect(
     state=>state.user,
@@ -31,9 +31,9 @@ class Shouye extends React.Component{
         }else if(user === ''|| !user.openid){
             if(isMoblieMode){
                 let appid = 'wxf707fc6da6cf1a2f',
-                    RedicetURI = window.location.origin+'/shouye',
+                    RedicetURI = window.location.href,
                     uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${RedicetURI}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
-                    window.location.href = uri;
+                window.location.href = uri;
             }else{
                 _user.getSessionlogin(isMoblieMode).then(res=>{
                     this.props.loadData(res)

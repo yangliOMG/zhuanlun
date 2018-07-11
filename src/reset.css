@@ -12,6 +12,7 @@ html, body, h1, h2, h3, h4, h5, h6, hr, p, iframe, dl, dt, dd, ul, ol, li, pre, 
 .l,.f-l{float:left!important;_display:inline}
 .r,.f-r{float:right!important;_display:inline}
 .ofhd{overflow: hidden}
+.radiusNo{border-radius: 0px!important}
 .text-overflow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .text-overflow2{text-overflow: -o-ellipsis-lastline;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;/* autoprefixer: off */-webkit-box-orient: vertical;}
 .text-overflow2a{min-height: 22px;text-overflow: -o-ellipsis-lastline;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2; -webkit-box-orient: vertical;}

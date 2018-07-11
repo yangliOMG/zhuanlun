@@ -43,7 +43,12 @@ function onBridgeReady(){
                 // alert(res.errMsg)
             }
             _order.getWechatPayCallback({prayId:prayid,price:'1'})
-            window.location.href = '/jpgmall/prayDetail#'+prayid
+            const reload = window.location.href.includes('prayDetail')
+            if(reload){
+                window.location.reload()
+            }else{
+                window.location.href = '/jpgmall/prayDetail#'+prayid
+            }
         }  
     ) 
 } 

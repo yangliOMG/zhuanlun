@@ -2,13 +2,11 @@ import React from 'react'
 import { List, WhiteSpace  , Stepper, TextareaItem, Modal, WingBlank, InputItem,Popover} from 'antd-mobile'
 import {connect} from 'react-redux'
 
-// import {update} from '../../redux/user.redux'
 import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 // import Template from '../../pray/template/template.jsx'
 
 import {updateOrder,newOrder} from '../../redux/order.redux'
-// import Order from '../../service/order-service.jsx'
 import {showToast,duringDictionary,getStorage,directionDictionary,cengConvert } from '../../util'
 import {webchatPay } from './wechatPay.js'
 import Tem from '../../service/temple-service.jsx'
@@ -156,9 +154,9 @@ class PrayForm extends React.Component{
         if(order.duration===""){
             return showToast('请选择时长')
         }
-        if(this.state.textScan===false){
-            return showToast('祈愿文内容违规')
-        }
+        // if(this.state.textScan===false){
+        //     return showToast('祈愿文内容违规')
+        // }
         delete order.position
         if(order.blessing){
             _order.getTextScan(order.blessing).then(res=>{

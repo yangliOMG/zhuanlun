@@ -20,7 +20,7 @@ class App extends React.Component{
     }
     render(){
         return this.state.hasError?
-        <h2>页面出错了</h2>
+        <h2>你的系统版本过低，请升级</h2>
         :(
             <div>
                 <AuthRoute></AuthRoute>

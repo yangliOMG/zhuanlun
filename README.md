@@ -69,6 +69,38 @@ axios.interceptors.response.use(response => {
     }
 })
 ```
+> 3. axios的post请求格式书写
+```
+后台：
+@RequestMapping("/save.do")
+public boolean save(HttpServletRequest request , Back back){
+      back.setUid(uid); //back.content字段有传的值
+      。。。
+}
+@RequestMapping("/save2.do")
+public boolean save(HttpServletRequest request , String data){
+      JSONObject json = JSON.parseObject(data);
+      Back back = new Back();
+      back.setUid(uid);
+      back.setContent(json.getString("content"));
+      。。。
+}
+前台：
+import qs from 'qs'
+
+axios({
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify({content}),
+      url:'/back/save.do',
+})
+axios({
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify({data:JSON.stringify({content})}),
+      url:'/back/save2.do',
+})
+```
 * 单页应用（SPA）前端javascript如何阻止按下返回键页面回退
 ```
 componentDidMount() {

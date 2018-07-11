@@ -247,7 +247,7 @@ class LampDetail extends React.Component{
                     </div>
                     <div className={`seled-bar`}>  
                         <div className="seled-div bg-red1">
-                            <Button type="warning" onClick={()=>this.handleSureSelectClick()}
+                            <Button className='radiusNo' type="warning" onClick={()=>this.handleSureSelectClick()}
                                 >{selednum!==0?('已选'+selednum+'个 '):''}确认祈福</Button>
                         </div>
                     </div>

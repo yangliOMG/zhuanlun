@@ -1,5 +1,5 @@
 import axios from "./axios"
-// import qs from 'qs'
+import qs from 'qs'
 import {getStorage,setStorage } from '../util'
 
 class User{
@@ -50,15 +50,16 @@ class User{
     }
 
     submitSuggest(content){
-        return axios.post(`/back/save.do`,{
-            content,
-        })
-        // return axios({
-        //     method: 'post',
-        //     headers: { 'content-type': 'application/json' },
-        //     data: qs.stringify({content}),
-        //     url:'/back/save.do',
+        // return axios.post(`/back/save.do`,{
+        //     content,
         // })
+
+        return axios({
+            method: 'post',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify({content}),
+            url:'/back/save.do',
+        })
     }
 
 }

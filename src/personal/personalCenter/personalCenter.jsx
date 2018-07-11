@@ -3,16 +3,29 @@ import { List, WhiteSpace , WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 import { removeStorage,getStorage } from '../../util'
+import Order from '../../service/order-service.jsx'
+import {savePrayList} from '../../redux/pray.redux'
+
 // import {update} from '../../redux/user.redux'
 import "./personalCenter.css"
+const _order = new Order()
 @connect(
-    state=>state.user,
-    // {update}
+    state=>state,
+    {savePrayList}
 )
 class PersonalCenter extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+        }
+    }
+    componentWillMount(){
+        if(this.props.prayList.prayList.length===0){
+            _order.getOrderList().then(res=>{
+                if(res.status === 200){
+                    this.props.savePrayList(res.data)
+                }
+            })
         }
     }
 
@@ -25,8 +38,8 @@ class PersonalCenter extends React.Component{
                 {title:"手机绑定",path:'/myPhone',fontname:'phone',color:'#108ee9'},
                 {title:"意见反馈",path:'/mySuggest',fontname:'commenting',color:'grey'},
             ]
-        const headImg = this.props.headImgURL || getStorage('user').headImgURL
-        const nick = this.props.nick || getStorage('user').nick
+        const headImg = this.props.user.headImgURL || getStorage('user').headImgURL
+        const nick = this.props.user.nick || getStorage('user').nick
         return (
             <div>
                 <WhiteSpace/>

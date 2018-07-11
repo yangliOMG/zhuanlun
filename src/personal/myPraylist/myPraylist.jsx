@@ -55,12 +55,15 @@ class MyPraylist extends React.Component{
                                         </div>
                                     </div>
                                     <div>供灯时长：{duringDictionary().find(x=>x.type===v.duration).name}</div>
-                                    { v.payStatus===2?
+                                    { v.payStatus!==2?v.payStatus!==3?
+                                        <div>支付状态：<span className='c-red b'>未支付</span></div>
+                                        :
+                                        <div>支付状态：<span className='c-red b'>支付超时</span></div>
+                                        :
                                         <div><div>供灯周期：{timeFormat(v.payTime).toLocaleString()}-{timeFormat(v.closeTime).toLocaleString()}</div>
                                         <div>已供时间：{timeLongCount(v.payTime,v.closeTime)}</div>
                                         <div>供灯功德：{(v.sum/100).toFixed(2) }元</div></div>
-                                            :
-                                        <div>支付状态：<span className='c-red b'>未支付</span></div>
+                                            
                                     }
                                     
                                 </Card.Body>

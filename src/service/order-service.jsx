@@ -1,4 +1,6 @@
 import axios from "./axios"
+import qs from 'qs'
+
 import {getStorage } from '../util'
 
 class Order{
@@ -23,17 +25,17 @@ class Order{
 
 
     createBlissMan(blissMan){
-        return axios.post('/blissMan/img.do',
-            blissMan,
-            { responseType: 'arraybuffer' }
-        )
-        // return axios({
-        //     method: 'post',
-        //     headers: { 'content-type': 'application/json;charset=UTF-8' },
-        //     responseType: 'arraybuffer',
-        //     data: blissMan,
-        //     url:'/blissMan/img.do',
-        // });
+        // return axios.post('/blissMan/img.do',
+        //     blissMan,
+        //     { responseType: 'arraybuffer' }
+        // )
+        return axios({
+            method: 'post',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            responseType: 'arraybuffer',
+            data: qs.stringify(blissMan),
+            url:'/blissMan/img.do',
+        });
     }
     
 

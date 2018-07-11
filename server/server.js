@@ -25,7 +25,7 @@ const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
 // const lessMiddleware = require('less-middleware')
-const proxyPath = 'http://localhost:8000'
+const proxyPath = 'http://10.9.5.5:8000'
 
 app.use(cookieParser())
 app.use(bodyParser.json())
