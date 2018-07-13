@@ -1,12 +1,11 @@
-.temCard{
-    padding:10px;display: flex;background: #fff;position: relative;
+.temCard{padding:10px;display: flex;background: #fff;position: relative;
     .img{flex: 2 1;
         .ico{height: 90px;box-shadow: 2px 2px 0px #aaa;border-radius: 9px;}
     }
     .ti{flex: 3 1;padding-left: 5px;
         .title{margin-bottom: 3px;font-size: 1.06rem;}
     }
-    .absBlock{position: absolute;padding: 5px;border: 1px solid #bbb;background: white;z-index: 2;top: 50px;width: 89%;
+    .absBlock{position: absolute;padding: 5px;border: 1px solid #bbb;background: white;z-index: 2;top: 50px;width: 89%;left: 3%;
         .arrow_wrp{position: absolute;top: -13px;right: 40%;
 
             .editor_arrow {display: inline-block;width: 0;height: 0;border-width: 12px;border-style: dashed;position: absolute;
@@ -27,13 +26,15 @@
 .am-list-extra{touch-action: none;}
 .def-listitem1.am-list-item .am-list-line .am-list-extra{flex-basis: initial;}
 .def-listitem.am-list-item .am-list-line .am-list-extra{flex-basis: 60%;}
+.timelongArea{display: flex;
+    .btnBlock{flex: 1;padding-right: 2%;}
+}
 
 
-
-.stick-footer{z-index: 10;position: fixed;bottom: 0;width: 100%;display: flex;height: 44px;font-size: 1.1rem;align-items: stretch;
-    line-height: 44px;text-align: center;
-    .total{flex: 21 1;background: white;white-space: nowrap;}
-    .payBtn{flex: 15 1;background: #d12c28;color: white;font-weight: bold;
+.stick-footer{z-index: 10;position: fixed;bottom: 0;width: 100%;height: 44px;font-size: 1.1rem;line-height: 44px;text-align: center;
+    display: flex;
+    .total{flex: 21;background: white;white-space: nowrap;}
+    .payBtn{flex: 15;background: #d12c28;color: white;font-weight: bold;
         &:active{background: #af2522}
     }
 }

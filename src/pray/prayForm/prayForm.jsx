@@ -281,14 +281,16 @@ class PrayForm extends React.Component{
                                         />}
                             >供灯数量</Item>
                             <Item multipleLine >供灯时长
-                                <Brief style={{display:'flex'}}>
-                                    {btnList.map((v,idx)=>
-                                        <div key={v.type} style={{flex:'1 1',paddingRight:'2%'}}>
-                                            <div className={`timeBtn ${this.state.duration===v.type?'oran':'oran-o'}`}
-                                                onClick={()=>this.handleTimeBtnClick(v.type)}>
-                                                <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>
-                                        </div>
-                                    )}
+                                <Brief >
+                                    <div className="timelongArea">
+                                        {btnList.map((v,idx)=>
+                                            <div key={v.type} className="btnBlock">
+                                                <div className={`timeBtn ${this.state.duration===v.type?'oran':'oran-o'}`}
+                                                    onClick={()=>this.handleTimeBtnClick(v.type)}>
+                                                    <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </Brief>
                             </Item>
                             <Item arrow="horizontal" className="def-listitem"

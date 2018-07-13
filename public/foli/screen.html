@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>滚动屏幕</title>
+    <style>
+        body{background: #000;font-size: 40px;color:white;}
+        .bannel{margin-right: 30px;color: red;}
+        .c-white{color:white;}
+    </style>
+</head>
+
+<body>
+    <div class='outLine'>
+        <div id='asd'></div>
+        <marquee direction="scroll" id='root'>
+
+        </marquee>
+    </div>
+</body>
+<script src="js/jquery-1.11.0.js"></script>
+    <script>
+        function ajax(){
+            // document.getElementById('asd').innerHTML = document.getElementById('asd').innerHTML*1 + 1
+            $.get('/pray/top.do',{top:5},function(res){
+                if(res.returnCode === 1000){
+                    var data = res.data, htmlArr=''
+                    for (var i = 0; i < data.length; i++) {
+                        htmlArr += "<span class='bannel'><span class='c-white'>"+data[i].prayman+"</span>供灯"+data[i].lednums+"盏</span>"
+                    }
+                    console.log(1)
+                    $('#root').html(htmlArr)
+                }
+            })
+        }
+        ajax();
+        setInterval(ajax, 5000);
+    </script>
+</html>

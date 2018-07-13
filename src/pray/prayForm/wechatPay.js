@@ -42,13 +42,14 @@ function onBridgeReady(){
             }else{
                 // alert(res.errMsg)
             }
-            _order.getWechatPayCallback({prayId:prayid,price:'1'})
-            const reload = window.location.href.includes('prayDetail')
-            if(reload){
-                window.location.reload()
-            }else{
-                window.location.href = '/jpgmall/prayDetail#'+prayid
-            }
+            setTimeout(() => {
+                const reload = window.location.href.includes('prayDetail')
+                if(reload){
+                    window.location.reload()
+                }else{
+                        window.location.href = '/jpgmall/prayDetail#'+prayid
+                    }
+            }, 500)
         }  
     ) 
 } 

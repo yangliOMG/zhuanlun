@@ -1,4 +1,32 @@
 # 问题总结
+* 关于ios兼容性的问题
+> 1. ios8,9没有es的一些新方法，比如：symbol，padstart，includes，array.from。
+```
+使其兼容只用一步，在入口文件index.js顶部添加：
+import 'babel-polyfill';
+```
+> 2. display：flex等样式也不兼容，在webpack的打包文件中配置：
+```
+loader: require.resolve('postcss-loader'),
+。。。。
+autoprefixer({
+      browsers: [
+      。。。。
+      'ios >= 7.0',
+      ],
+      // flexbox: 'no-2009',
+}),
+
+postcss可以被理解为一个平台，可以让一些插件在上面跑
+
+它提供了一个解析器，可以将CSS解析成抽象语法树
+
+通过PostCSS这个平台，我们能够开发一些插件，来处理CSS。热门插件如autoprefixer
+
+Autoprefixer是一个后处理程序，它在CSS编译后运行
+
+```
+
 * 通过内网穿透，浏览器白屏 报错"Invalid Host header"--->/config/webpackDevServer.config.js下，
 ```
 disableHostCheck:                                                         ====》 disableHostCheck: true ,
@@ -74,16 +102,22 @@ axios.interceptors.response.use(response => {
 后台：
 @RequestMapping("/save.do")
 public boolean save(HttpServletRequest request , Back back){
-      back.setUid(uid); //back.content字段有传的值
+      back.setUid(uid);                         //back.content字段有传的值
       。。。
 }
 @RequestMapping("/save2.do")
 public boolean save(HttpServletRequest request , String data){
       JSONObject json = JSON.parseObject(data);
       Back back = new Back();
-      back.setUid(uid);
       back.setContent(json.getString("content"));
       。。。
+}
+@RequestMapping("/create.do")
+public Respond create(HttpSession session, String data) {
+      JSONObject json = JSON.parseObject(data);
+      Pray pray = new Pray();
+      pray.setPrayman(json.getString("prayman"));
+      ...
 }
 前台：
 import qs from 'qs'
@@ -91,7 +125,7 @@ import qs from 'qs'
 axios({
       method: 'post',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      data: qs.stringify({content}),
+      data: qs.stringify({content}),            //qs.stringify序列化：uid=cs11&pwd=000000als&username=cs11&password=000000als
       url:'/back/save.do',
 })
 axios({
@@ -100,6 +134,9 @@ axios({
       data: qs.stringify({data:JSON.stringify({content})}),
       url:'/back/save2.do',
 })
+axios.get('/pray/create.do',{params: {
+      data:JSON.stringify(pray)                 //JSON.stringify序列化：{"uid":"cs11","pwd":"000000als","username":"cs11","password":"000000als"}
+}})
 ```
 * 单页应用（SPA）前端javascript如何阻止按下返回键页面回退
 ```
@@ -147,3 +184,17 @@ Android
 使用独立支付页面，通过location.href跳转。稳定
 配置多几个授权目录（授权目录上线好像是3个？）
 ```
+* 关于图片
+> 1. jpg比png小得多；png支持透明；不用放缩图片的分辨率 对应设备的宽度即可；手机图片控制在100k以下
+
+
+
+
+npm i array-from --save-dev
+
+
+npm install --save es6-symbol
+Then,
+import 'es6-symbol/implement';
+
+import 'babel-polyfill';

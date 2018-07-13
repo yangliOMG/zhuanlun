@@ -1,13 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { getQueryString,  getStorage } from '../../util'
+import { getQueryString,  getStorage, setStorage } from '../../util'
 import User from '../../service/user-service.jsx'
 import {loadData} from '../../redux/user.redux'
 import "./shouye.css"
 
 
 const _user = new User()
-const isMoblieMode = true
+const isMoblieMode = false
 
 @connect(
     state=>state.user,
@@ -24,10 +24,7 @@ class Shouye extends React.Component{
         const id = getQueryString("id")||''
         const user = getStorage('user')
         if(code){
-            _user.getSessionlogin(isMoblieMode,code).then(res=>{
-                this.props.loadData(res)
-                this.props.history.push(`/${type}#${id}`)
-            })
+            _user.getUserLogin(isMoblieMode,code).then(res=>this.storageSave(res.data,type,id))
         }else if(user === ''|| !user.openid){
             if(isMoblieMode){
                 let appid = 'wxf707fc6da6cf1a2f',
@@ -35,16 +32,22 @@ class Shouye extends React.Component{
                     uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${RedicetURI}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
                 window.location.href = uri;
             }else{
-                _user.getSessionlogin(isMoblieMode).then(res=>{
-                    this.props.loadData(res)
-                    this.props.history.push(`/${type}#${id}`)
-                })
+                _user.getUserLogin(isMoblieMode).then(res=>this.storageSave(res.data,type,id))
             }
         }else{
-            this.props.loadData(user)       //为了在个人中心页中，从微信取了用户信息能够及时显示，所以只能用redux
-            this.props.history.push(`/${type}#${id}`)
+            this.reduxSaveAndPush(user,type,id)
         }
     }
+    storageSave(data,type,id){
+        const userinfo = {id:data.id, openid:data.openid, nick:data.nick, headImgURL:data.headImgURL}
+        setStorage('user', userinfo )
+        this.reduxSaveAndPush(userinfo,type,id)
+    }
+    reduxSaveAndPush(userinfo,type,id){
+        this.props.loadData(userinfo)       //为了在个人中心页中，从微信取了用户信息能够及时显示，所以只能用redux
+        this.props.history.push(`/${type}#${id}`)
+    }
+
     render(){
         return (
             <div>

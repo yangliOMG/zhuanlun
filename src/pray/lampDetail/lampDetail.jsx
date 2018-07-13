@@ -58,7 +58,7 @@ class LampDetail extends React.Component{
         const num = this.props.num , position = this.props.position
         const id = this.props.location.hash.replace("#","")
         if(id){
-            Toast.loading('加载中...',0)
+            Toast.loading('加载中。。。',0)
             _temple.getLayoutById(id).then(res=>{
                 let layout = res.data
                 if(res.status === 200){
@@ -79,8 +79,7 @@ class LampDetail extends React.Component{
                                 occupy:occupy.length
                             })
                             if(position.length>0){
-                                position.forEach((arr,idx)=>{
-                                    this.seatSelection(...arr[1][2].split(','))})
+                                position.forEach((arr,idx)=>this.seatSelection(...arr[1][2].split(',')))
                             }else if(num && num>0){
                                 this.handleRecBtnClick(num)
                             }
@@ -96,7 +95,6 @@ class LampDetail extends React.Component{
             const $div = document.getElementById('area').getElementsByClassName('am-tabs-pane-wrap-active')[0]||document  
             const $span = $div.getElementsByClassName('l-red')[0]
             if($span){
-                
                 $div.scrollTop = $span.offsetTop
             }else if($div){
                 $div.scrollTop = $div.scrollHeight - $div.offsetHeight
@@ -197,9 +195,6 @@ class LampDetail extends React.Component{
         const data = this.state.data
         return (
             <div className ='bodyBackgroundColor max-h' style={{overflow:"hidden"}}>
-                {/* <NavBar icon={<Icon type="left" style={{color:'black'}} />} mode='light' 
-                    onLeftClick={()=>this.props.onClose()}
-                    >选择灯位</NavBar> */}
                 <div className='state-bar'>  
                     {[['l-gong','已供灯位',occupy],['l-red','已选灯位',selednum],['l-grey','可供灯位',can]].map((v,idx)=>
                         <div className='lie' key={v[0]}>
@@ -219,7 +214,7 @@ class LampDetail extends React.Component{
                             <FontAwesome name={'chevron-left'} className={`${this.state.lastPageHide&&'hidden'}`} />
                         </div>
                         <div style={{flex: '12 1'}} className="titleCard">
-                            <div className="channel-box" style={{transform: `translate(-${this.state.curPage}00%,0)`  }}>
+                            <div className="channel-box" style={{WebkitTransform: `translate(-${this.state.curPage}00%,0)`  }}>
                                 {data.map((v,idx)=>
                                     <div className="channel" key={idx}>福佑灯塔 <span className='c-orange'>{directionDictionary(idx)}</span></div>
                                 )}

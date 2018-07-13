@@ -199,8 +199,9 @@ module.exports = {
                               'last 4 versions',
                               'Firefox ESR',
                               'not ie < 9', // React doesn't support IE8 anyway
+                              'ios >= 7.0',
                             ],
-                            flexbox: 'no-2009',
+                            // flexbox: 'no-2009',
                           }),
                         ],
                       },

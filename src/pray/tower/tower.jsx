@@ -8,7 +8,6 @@ import {showToast } from '../../util'
 import Tem from '../../service/temple-service.jsx'
 import './tower.less'
 const _temple = new Tem()
-const defaultTowImg = 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=e599da6bbea1cd1111bb7a72d87ba399/a8ec8a13632762d0ea469ae4a4ec08fa513dc674.jpg'
 
 @connect(
     state=>state,
@@ -52,7 +51,7 @@ class Tower extends React.Component{
                 <WhiteSpace />
                 <WingBlank size="lg">
                     <div className='towercontent radius'>
-                        <img style={{ width: '100%' }} src={obj.ico||defaultTowImg} alt="" />
+                        <img style={{ width: '100%' }} src={obj.ico} alt="" />
                         <WingBlank size="lg">
                             <div className='name'>
                                 <div className='l'>已供灯数199</div>    

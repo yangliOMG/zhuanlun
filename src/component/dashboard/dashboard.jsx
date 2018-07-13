@@ -27,6 +27,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 import {setStorage, getStorage, comparePath} from '../../util'
 import asyncComponent from './AsyncComponent'
 
+const PrayScreen = asyncComponent(() => import("../../pray/prayScreen/prayScreen.jsx"))
 const Gongde = asyncComponent(() => import("../../pray/introduce/gongde.jsx"))
 const Haochu = asyncComponent(() => import("../../pray/introduce/haochu.jsx"))
 const Yuanqi = asyncComponent(() => import("../../pray/introduce/yuanqi.jsx"))
@@ -56,10 +57,8 @@ class Dashboard extends React.Component{
         }
     }
     componentDidMount(){
-    //     window.onscroll = function(){ 
-    //         var t = document.documentElement.scrollTop || document.body.scrollTop;  
-    //         console.log(t)
-    //    } 
+        let height = document.documentElement.clientHeight
+        document.getElementById('root').style.height = height +'px'
     }
     handleLeftClick(path){
         if(path === '/prayDetail'){
@@ -73,6 +72,7 @@ class Dashboard extends React.Component{
     render(){
         const {pathname}  = this.props.location
         const navList = [
+            {path:'/prayScreen',title:'文字',component:PrayScreen,father:[],son:[]},
             {path:'/gongde',title:'供灯功德',component:Gongde,father:['/shouye'],son:['/temple']},
             {path:'/haochu',title:'供灯意义',component:Haochu,father:['/shouye'],son:['/temple']},
             {path:'/yuanqi',title:'供灯缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
@@ -96,12 +96,11 @@ class Dashboard extends React.Component{
 
         ]
         const page = navList.find(v=>v.path===pathname)
-        
         if(page){
             let lastPath = getStorage('lastPath')
             let plus = comparePath(lastPath,page) === 'father'? -1:1
             setStorage('lastPath',pathname)
-            let height = 300
+            let height = 500
             if(typeof document !== 'undefined'){
                 height = document.documentElement.clientHeight
                 document.title = page.title

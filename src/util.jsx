@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-07-09 19:46:37
+ * @Last Modified time: 2018-07-13 13:21:41
  */
 import { Toast } from 'antd-mobile';
 /**
@@ -25,7 +25,7 @@ export function getQueryString(name){
 export function comparePath(lastPath,page){
     let relationship = 'father'
     if(page.father && page.father.length>0){
-        relationship = page.father.includes(lastPath) ? 'father' : relationship
+        relationship = page.father.includes(lastPath)? 'father' : relationship
     }
     if(page.son && page.son.length>0){
         relationship = page.son.includes(lastPath) ? 'son' : relationship
@@ -44,7 +44,7 @@ export function setStorage(name,data){
     let dataType = typeof data;
     if(typeof data === 'object'){
         window.localStorage.setItem(name,JSON.stringify(data));
-    }else if(['number','string','boolean'].indexOf(dataType)>=0){
+    }else if(['number','string','boolean'].includes(dataType)){
         window.localStorage.setItem(name,data);
     }else{
         alert('不能存')

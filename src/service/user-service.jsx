@@ -1,6 +1,6 @@
 import axios from "./axios"
 import qs from 'qs'
-import {getStorage,setStorage } from '../util'
+import {getStorage } from '../util'
 
 class User{
 
@@ -13,7 +13,6 @@ class User{
                     try {
                         let data = JSON.parse(this.response)
                         const userinfo = {id:data.id, openid:data.openid, nick:data.nick, headImgURL:data.headImgURL}
-                        setStorage('user', userinfo )
                         resolve(userinfo)
                     } catch (error) {
                         console.log('login',error)
@@ -25,7 +24,7 @@ class User{
               client.send()
         })
     }
-    getUserInfo(isMoblieMode,code){
+    getUserLogin(isMoblieMode,code){
         return axios.get(`/login/login.do`,{params: {
             isMoblieMode,code
           }})

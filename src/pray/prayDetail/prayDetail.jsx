@@ -161,7 +161,7 @@ class PrayDetail extends React.Component{
                 <WhiteSpace/>
                 <WingBlank size="lg">
                     <div className='prayDetail'>
-                        <img width='100%' src={require(order.payStatus===2?'./fohou.png':'./fohou1.png')} alt=""/>
+                        <img width='100%' src={require(order.payStatus===2?'./fohou.jpg':'./fohou1.jpg')} alt=""/>
                         <div className='prayText'>
                             <div className='c-black1 art'>
                                 {order.payStatus!==2?order.payStatus!==3?
@@ -202,9 +202,10 @@ class PrayDetail extends React.Component{
                         <div className='title'>填写完整信息，获得升疏(表)</div>
                         <div className='content'>上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代别人升表
                             者，可以写当事人名，也可以写委托人名</div>
-                        <div className='btnArea'><div style={{flex:'1 1'}}></div>
-                            <div style={{flex:'1 1'}}><div className='bg-grey1 anniu' onClick={this.onClose('messageModal2')}>取消</div></div>
-                            <div style={{flex:'1 1'}}><div className='orangeBg anniu' onClick={()=>this.setState({messageModal:true,messageModal2:false})}>确认</div></div>
+                        <div className='btnArea'>
+                            <div className='btnBlock'></div>
+                            <div className='btnBlock'><div className='bg-grey1 anniu' onClick={this.onClose('messageModal2')}>取消</div></div>
+                            <div className='btnBlock'><div className='orangeBg anniu' onClick={()=>this.setState({messageModal:true,messageModal2:false})}>确认</div></div>
                         </div>
                     </div>
                 </Popup>
@@ -248,8 +249,8 @@ class PrayDetail extends React.Component{
                             </TextareaItem>
                         </List>
                         <div className='btnArea'>
-                            <div style={{flex:'1 1'}}><div className='bg-grey1 anniu' onClick={this.onClose('messageModal')}>取消</div></div>
-                            <div style={{flex:'1 1'}}><div className='orangeBg anniu' onClick={()=>this.handleSubMes()}>确认</div></div>
+                            <div className='btnBlock'><div className='bg-grey1 anniu' onClick={this.onClose('messageModal')}>取消</div></div>
+                            <div className='btnBlock'><div className='orangeBg anniu' onClick={()=>this.handleSubMes()}>确认</div></div>
                         </div>
                     </div>
                 </Popup>

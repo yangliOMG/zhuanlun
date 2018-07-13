@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import { WhiteSpace } from 'antd-mobile'
 
 import { newOrder} from '../../redux/order.redux'
 import Tem from '../../service/temple-service.jsx'
@@ -62,6 +63,7 @@ class Temple extends React.Component{
         })
         return (
             <div>
+                <WhiteSpace />
                 <div className='titlecard radius' style={{ backgroundImage:`url(${temple.ico||require('./linyinsi.jpg')})` }} 
                     onClick={()=>this.handleClick(temple.id)}>
                     <div className='title'>
@@ -80,7 +82,7 @@ class Temple extends React.Component{
                                 <div className="d-flexitem" key={v.facility.id} 
                                     onClick={(e)=> this.handleClickPray(v.facility.id,e)}>
                                     <div className="d-content radius">
-                                        <img className="d-img" src={v.facility.ico||require('./tower.png')} alt=""/>
+                                        <img className="d-img" src={v.facility.ico||require('./tower.jpg')} alt=""/>
                                         <div className="d-text">
                                             <div className="d-name">{v.facility.tname+' '+ v.facility.name}</div>
                                             <div className="d-tips">
@@ -95,7 +97,7 @@ class Temple extends React.Component{
                     )}
                 </div>
                 <div className='botCard c-erji radius' onClick={()=>this.props.history.push(`/haochu`)}>
-                    <img className='img' src={require('./foqian.png')} alt="" />
+                    <img className='img' src={require('./foqian.jpg')} alt="" />
                     <div>
                         <div className='title'>佛前供灯祈福</div>
                         <div>1.供灯两盏：福慧双增 大吉大利</div>

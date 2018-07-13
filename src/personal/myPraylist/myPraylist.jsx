@@ -43,7 +43,7 @@ class MyPraylist extends React.Component{
                                 <div className='prayHead orangeBg'>{v.blessing}</div>
                                 <Card.Body>
                                     <div className='prayTitle'>
-                                        <div className='imgBlock'><img src={require('./fo.png')||v.tico} alt="" style={{width:'100%'}} /></div>
+                                        <div className='imgBlock'><img src={require('./fo.jpg')||v.tico} alt="" style={{width:'100%'}} /></div>
                                         <div className='titBlock'>
                                             <div style={{paddingBottom:'5px'}}>{v.tname} {v.fname}</div>
                                             {v.dengwei.map((val,idx2)=>
