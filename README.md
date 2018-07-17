@@ -189,12 +189,3 @@ Android
 
 
 
-
-npm i array-from --save-dev
-
-
-npm install --save es6-symbol
-Then,
-import 'es6-symbol/implement';
-
-import 'babel-polyfill';

@@ -24,7 +24,6 @@ assethook({
 const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
-// const lessMiddleware = require('less-middleware')
 const DEFAULT_PORT = 8080
 const proxyPath = 'http://localhost:8000'
 
