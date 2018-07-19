@@ -1,3 +1,4 @@
+import 'babel-register'
 import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -25,7 +26,7 @@ const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
 const DEFAULT_PORT = 8080
-const proxyPath = 'http://localhost:8000'
+const proxyPath = 'http://10.9.5.18:8000'
 
 app.use(cookieParser())
 app.use(bodyParser.json())
@@ -79,8 +80,8 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
                 <App></App>
             </StaticRouter>
         </Provider>)
-    markupStream.pipe(res, { end: false })
-    markupStream.on('end', () => {
+    markupStream.pipe(res, { end: false })// end表示节点流还没有结束
+    markupStream.on('end', () => {      // 监听事件结束后 把剩下的流推过去
         res.write(`</div>
                 <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
                 <script src="/${staticPath['main.js']}"></script>

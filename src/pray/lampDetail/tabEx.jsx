@@ -8,8 +8,28 @@ class TabEx extends React.Component{
   constructor(props){
       super(props);
       this.state = {
+        x1:0,
+        x2:0
       }
   }
+  touchCount(x,v,idx){
+      if(idx===0||idx===7){
+        this.setState({[x]:v})
+      }
+  }
+  slideCount(idx){
+      if(idx===0||idx===7){
+        let changeX = this.state.x2 - this.state.x1
+        if(Math.abs(changeX)>30){
+            if(changeX > 0 && idx===0) {
+                this.props.turnPage(7)
+            }else if(changeX < 0 && idx===7){
+                this.props.turnPage(0)
+            }
+        }
+      }
+  }
+
   render(){
     
     const data = this.props.data
@@ -29,7 +49,11 @@ class TabEx extends React.Component{
                       <div key={idx1} style={{display:'table-row'}}>{(cengConvert(idx1,darr.length)+'').padStart(2,0)}</div>
                   )}
                 </div>
-                <div className='lampPannel'>
+                <div className='lampPannel' 
+                      onTouchEnd={()=>this.slideCount(idx)}
+                      onTouchStart={e=>this.touchCount('x1',e.targetTouches[0].pageX,idx)}
+                     onTouchMove={e=>this.touchCount('x2',e.targetTouches[0].pageX,idx)}
+                >
                   {darr.map((arr,idx1)=>
                       <div key={idx1} style={{display:'table-row'}}>
                         {arr.map((v,idx2)=> <div key={idx2} style={{display:'table-cell'}}>{v.state!==0?v.state!==1?
