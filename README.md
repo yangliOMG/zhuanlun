@@ -26,7 +26,24 @@ postcss可以被理解为一个平台，可以让一些插件在上面跑
 Autoprefixer是一个后处理程序，它在CSS编译后运行
 
 ```
-
+* npm 操作
+```
+npm init    创建一个package.json
+npm install  下载package中的所有依赖
+npm install -g <name> 全局安装
+npm install <name> --save 生产环境依赖
+npm install <name> --save-dev 生产开发环境依赖
+npm update xxxxx -x  更新
+npm uninstall  卸载
+```
+* package.json
+```
+"scripts": {            //NODE_ENV环境变量；nodemon --exec 以应用程序执行脚本；
+      。。。
+      "server": "set NODE_ENV=test&&nodemon --exec babel-node server/server.js",
+      "server_lx": "export NODE_ENV=test&&nodemon --exec babel-node server/server.js",
+}
+```
 * 通过内网穿透，浏览器白屏 报错"Invalid Host header"--->/config/webpackDevServer.config.js下，
 ```
 disableHostCheck:                                                         ====》 disableHostCheck: true ,
@@ -138,6 +155,7 @@ axios.get('/pray/create.do',{params: {
       data:JSON.stringify(pray)                 //JSON.stringify序列化：{"uid":"cs11","pwd":"000000als","username":"cs11","password":"000000als"}
 }})
 ```
+
 * 单页应用（SPA）前端javascript如何阻止按下返回键页面回退
 ```
 componentDidMount() {

@@ -25,7 +25,7 @@ class Temple extends React.Component{
     componentWillMount(){
         const id = this.props.location.hash.replace("#","")
         _temple.getHistoryByType(0)
-        .then(res=>_temple.getTempleById(id||res.data.oid||1))
+        .then(res=>_temple.getTempleById(id||res.data.oid||1,true))
         .then(res=>{
             if(res.status === 200&&res.data.temple.length>0){
                 this.setState({
@@ -76,26 +76,47 @@ class Temple extends React.Component{
                     </div>
                 </div>
                 <div>
-                    {rowData.map((row,idx)=>
-                        <div className="d-flexbox" key={idx}>
-                            {row.map((v,idx)=>
-                                <div className="d-flexitem" key={v.facility.id} 
-                                    onClick={(e)=> this.handleClickPray(v.facility.id,e)}>
-                                    <div className="d-content radius">
-                                        <img className="d-img" src={v.facility.ico||require('./tower.jpg')} alt=""/>
-                                        <div className="d-text">
-                                            <div className="d-name">{v.facility.tname+' '+ v.facility.name}</div>
-                                            <div className="d-tips">
-                                                <span className='lampIcon l-shan tini'></span>{v.bright}&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <span className='lampIcon l-bushan tini'></span>{v.lightNum-v.bright}
+                    {
+                        facility.length===1?
+                        <div className="d-flexbox" onClick={(e)=> this.handleClickPray(facility[0].facility.id,e)}>
+                            <div className='temCard radius'>
+                                <div className='img'>   
+                                    <img className='ico' src={facility[0].facility.ico||require('./tower.jpg')} alt="" />
+                                </div>
+                                <div className='ti'>
+                                    <div className='title'>{facility[0].facility.tname+' '+ facility[0].facility.name}</div>
+                                    <div className="d-tips">
+                                        <span className='lampIcon l-shan tini'></span>{facility[0].bright}&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span className='lampIcon l-bushan tini'></span>{facility[0].lightNum-facility[0].bright}
+                                    </div>
+                                    <div className="d-qifu orangeBtn">我要祈福</div>
+                                </div>
+                            </div>
+                        </div>
+                        :
+                        rowData.map((row,idx)=>
+                            <div className="d-flexbox" key={idx}>
+                                {row.map((v,idx)=>
+                                    <div className="d-flexitem" key={v.facility.id} 
+                                        onClick={(e)=> this.handleClickPray(v.facility.id,e)}>
+                                        <div className="d-content radius">
+                                            <img className="d-img" src={v.facility.ico||require('./tower.jpg')} alt=""/>
+                                            <div className="d-text">
+                                                <div className="d-name">{v.facility.tname+' '+ v.facility.name}</div>
+                                                <div className="d-tips">
+                                                    <span className='lampIcon l-shan tini'></span>{v.bright}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span className='lampIcon l-bushan tini'></span>{v.lightNum-v.bright}
+                                                </div>
                                             </div>
+                                            <div className="d-qifu orangeBg">我要祈福</div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                                )}
+                            </div>
+                        )
+                    }
                 </div>
+                
                 <div className='botCard c-erji radius' onClick={()=>this.props.history.push(`/haochu`)}>
                     <img className='img' src={require('./foqian.jpg')} alt="" />
                     <div>

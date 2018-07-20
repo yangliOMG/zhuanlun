@@ -18,7 +18,8 @@ class PrayNavbar extends React.Component{
         }
     }
     componentWillMount(){
-        _order.getTopMes().then(res=>{
+        const fid = window.location.hash.replace("#","")
+        _order.getTopMes(fid).then(res=>{
             if(res.status === 200){
                 const data = res.data.data
                 this.setState({data})

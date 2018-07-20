@@ -36,9 +36,9 @@ class Temple{
           }})
     }
 
-    getTempleById(tid){
+    getTempleById(tid,ifset=false){
         return axios.get(`/temple/info.do`,{params: {
-            tid
+            tid,ifset
         }})
     }
 

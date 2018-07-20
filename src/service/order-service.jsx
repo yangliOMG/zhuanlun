@@ -17,9 +17,9 @@ class Order{
             id
         }})
     }
-    getTopMes(){
+    getTopMes(fid){
         return axios.get('/pray/top.do',{params: {
-            top:5
+            top:5,fid
         }})
     }
 
