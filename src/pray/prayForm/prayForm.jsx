@@ -176,9 +176,11 @@ class PrayForm extends React.Component{
                 return webchatPay(res.data.data)
             }else{
                 let occ = res.data.data.occ
-                let position = this.state.position.filter(v=>!occ.includes(v[0]))
-                this.setState({position})
-                this.props.updateOrder({position})
+                if(occ){
+                    let position = this.state.position.filter(v=>!occ.includes(v[0]))
+                    this.setState({position})
+                    this.props.updateOrder({position})
+                }
                 showToast(res.data.data.errorInfo)
             }
         })
