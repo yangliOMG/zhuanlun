@@ -97,7 +97,6 @@ class Dashboard extends React.Component{
         if(page){
             let lastPath = getStorage('lastPath')
             let plus = comparePath(lastPath,page) === 'father'? -1:1
-            console.log("plus",plus)
             setStorage('lastPath',pathname)
             let height = 500
             if(typeof document !== 'undefined'){
