@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd-mobile": "^2.1.8",
+    "antd-mobile": "^2.2.2",
     "asset-require-hook": "^1.2.0",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
@@ -15,6 +15,7 @@
     "babel-plugin-import": "^1.7.0",
     "babel-plugin-transform-require-ignore": "^0.1.1",
     "babel-preset-react-app": "^3.1.1",
+    "babel-register": "^6.26.0",
     "babel-runtime": "6.26.0",
     "body-parser": "^1.18.2",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
@@ -70,7 +71,9 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "server": "set NODE_ENV=test&&nodemon --exec babel-node server/server.js",
-    "server_pm2": "babel-node ./server/server.js"
+    "server_lx": "export NODE_ENV=test&&nodemon --exec babel-node server/server.js",
+    "pm2": "set NODE_ENV=test&&pm2 start server/server_pm2.js",
+    "server_pm2": "export NODE_ENV=test&&pm2 start server/server_pm2.js"
   },
   "jest": {
     "collectCoverageFrom": [

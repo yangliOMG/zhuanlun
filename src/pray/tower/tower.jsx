@@ -41,7 +41,7 @@ class Tower extends React.Component{
     }
     handleClickPray(id){
         this.props.newOrder()
-        this.props.history.push(`/jpgmall/prayForm#${id}`)
+        this.props.history.push(`/pay/prayForm#${id}`)
     }
 
     render(){

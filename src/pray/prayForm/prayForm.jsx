@@ -252,7 +252,7 @@ class PrayForm extends React.Component{
                                     value={prayArticle}
                                     >
                                 </TextareaItem>
-                                <Popover mask overlayClassName="fortest" visible={this.state.visible}
+                                <Popover mask visible={this.state.visible}
                                     overlay={[
                                         (<Item>
                                             <span className="modeBtn" onClick={()=>this.handleTemplateType('0')}>健康</span>

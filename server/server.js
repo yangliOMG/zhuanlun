@@ -1,4 +1,3 @@
-import 'babel-register'
 import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -26,7 +25,7 @@ const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
 const DEFAULT_PORT = 8080
-const proxyPath = 'http://10.9.5.18:8000'
+const proxyPath = 'http://localhost:8000'
 
 app.use(cookieParser())
 app.use(bodyParser.json())
@@ -50,8 +49,8 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
         '/temple': '寺院',
         '/tower': '祈福塔',
         '/templeDetail': '寺院详情',
-        '/jpgmall/prayForm': '祈福供灯',
-        '/jpgmall/prayDetail': '供灯详情',
+        '/pay/prayForm': '祈福供灯',
+        '/pay/prayDetail': '供灯详情',
         '/personalCenter': '个人中心',
         '/myPraylist': '我的祈福',
         '/myCarelist': '我的收藏',

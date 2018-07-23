@@ -19,13 +19,9 @@ class PersonalCenter extends React.Component{
         this.state = {
         }
     }
-    componentWillMount(){
+    componentDidMount(){
         if(this.props.prayList.prayList.length===0){
-            _order.getOrderList().then(res=>{
-                if(res.status === 200){
-                    this.props.savePrayList(res.data)
-                }
-            })
+            _order.getOrderList()
         }
     }
 

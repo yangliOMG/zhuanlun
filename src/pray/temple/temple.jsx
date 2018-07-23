@@ -43,8 +43,8 @@ class Temple extends React.Component{
     handleClickPray(id,e){
         e.preventDefault()
         this.props.newOrder()
-        window.location.href = `/jpgmall/prayForm#${id}`
-        // this.props.history.push(`/jpgmall/prayForm#${id}`)
+        window.location.href = `/pay/prayForm#${id}`
+        // this.props.history.push(`/pay/prayForm#${id}`)
     }
 
     render(){

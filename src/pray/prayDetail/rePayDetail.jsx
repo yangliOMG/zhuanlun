@@ -148,8 +148,8 @@ class PrayDetail extends React.Component{
             //     total = order.sum,
             //     id = order.id
             // this.props.updateOrder({blessing,num,duration,position,total,id})
-            // this.props.history.push('/jpgmall/prayForm#'+order.fid)
-            // window.location.href = `/jpgmall/prayForm#${order.id}`
+            // this.props.history.push('/pay/prayForm#'+order.fid)
+            // window.location.href = `/pay/prayForm#${order.id}`
             new Promise(webchatPay({prayId:order.id,sum:order.sum,tid:order.tid})).then(res=>console.log(res))
         }else{
             this.props.history.push('/temple')

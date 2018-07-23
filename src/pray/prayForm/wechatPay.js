@@ -47,7 +47,7 @@ function onBridgeReady(){
                 if(reload){
                     window.location.reload()
                 }else{
-                        window.location.href = '/jpgmall/prayDetail#'+prayid
+                        window.location.href = '/pay/prayDetail#'+prayid
                     }
             }, 500)
         }  

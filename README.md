@@ -42,6 +42,10 @@ npm uninstall  卸载
       。。。
       "server": "set NODE_ENV=test&&nodemon --exec babel-node server/server.js",
       "server_lx": "export NODE_ENV=test&&nodemon --exec babel-node server/server.js",
+      "pm2": "set NODE_ENV=test&&pm2 start server/server_pm2.js",
+      "server_pm2": "export NODE_ENV=test&&pm2 start server/server_pm2.js"
+      //babel-register将es6转换为es5的语法
+      //为了使pm2能够运行es6，在普通Javascript中准备一个入口点，它将在包含非转换源之前调用require('babel-register')。
 }
 ```
 * 通过内网穿透，浏览器白屏 报错"Invalid Host header"--->/config/webpackDevServer.config.js下，

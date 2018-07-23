@@ -27,7 +27,6 @@ import { AnimatedSwitch } from 'react-router-transition';
 import {setStorage, getStorage, comparePath} from '../../util'
 import asyncComponent from './AsyncComponent'
 
-const PrayScreen = asyncComponent(() => import("../../pray/prayScreen/prayScreen.jsx"))
 const Gongde = asyncComponent(() => import("../../pray/introduce/gongde.jsx"))
 const Haochu = asyncComponent(() => import("../../pray/introduce/haochu.jsx"))
 const Yuanqi = asyncComponent(() => import("../../pray/introduce/yuanqi.jsx"))
@@ -72,23 +71,22 @@ class Dashboard extends React.Component{
     render(){
         const {pathname}  = this.props.location
         const navList = [
-            {path:'/prayScreen',title:'文字',component:PrayScreen,father:[],son:[]},
             {path:'/gongde',title:'供灯功德',component:Gongde,father:['/shouye'],son:['/temple']},
             {path:'/haochu',title:'供灯意义',component:Haochu,father:['/shouye'],son:['/temple']},
             {path:'/yuanqi',title:'供灯缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
 
             {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
-            {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/jpgmall/prayForm']},
+            {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/pay/prayForm']},
             {path:'/templeDetail',title:'寺院详情',component:TempleDetail,father:['/temple'],son:[]},
-            // {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/jpgmall/prayForm']},
-            {path:'/jpgmall/prayForm',title:'祈福供灯',component:PrayForm,father:['/temple'],son:['/template','/lampDetail']},
-            {path:'/template',title:'祈福语',component:Template,father:['/jpgmall/prayForm'],son:[]},
-            {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/jpgmall/prayForm'],son:[]},
+            // {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/pay/prayForm']},
+            {path:'/pay/prayForm',title:'祈福供灯',component:PrayForm,father:['/temple'],son:['/template','/lampDetail']},
+            {path:'/template',title:'祈福语',component:Template,father:['/pay/prayForm'],son:[]},
+            {path:'/lampDetail',title:'选择灯位',component:LampDetail,father:['/pay/prayForm'],son:[]},
 
-            {path:'/jpgmall/prayDetail',title:'供灯详情',component:PrayDetail,father:['/jpgmall/prayForm','/myPraylist','/personalCenter'],son:[]},
+            {path:'/pay/prayDetail',title:'供灯详情',component:PrayDetail,father:['/pay/prayForm','/myPraylist','/personalCenter'],son:[]},
 
-            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest','/jpgmall/prayDetail']},
-            {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/jpgmall/prayDetail']},
+            {path:'/personalCenter',title:'个人中心',component:PersonalCenter,father:[],son:['/myCarelist','/myHistory','/myPraylist','/myPhone','/mySuggest','/pay/prayDetail']},
+            {path:'/myPraylist',title:'我的祈福',component:MyPraylist,father:['/personalCenter'],son:['/pay/prayDetail']},
             {path:'/myCarelist',title:'我的收藏',component:MyCarelist,father:['/personalCenter'],son:['/temple','/tower']},
             {path:'/myHistory',title:'我的足迹',component:MyHistory,father:['/personalCenter'],son:['/temple','/tower']},
             {path:'/myPhone',title:'绑定手机号',component:MyPhone,father:['/personalCenter'],son:[]},
@@ -99,6 +97,7 @@ class Dashboard extends React.Component{
         if(page){
             let lastPath = getStorage('lastPath')
             let plus = comparePath(lastPath,page) === 'father'? -1:1
+            console.log("plus",plus)
             setStorage('lastPath',pathname)
             let height = 500
             if(typeof document !== 'undefined'){
