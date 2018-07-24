@@ -44,7 +44,7 @@ class Shouye extends React.Component{
     }
     reduxSaveAndPush(userinfo,type){
         this.props.loadData(userinfo)       //为了在个人中心页中，从微信取了用户信息能够及时显示，所以只能用redux
-        this.props.history.push(`/${type.replace(':','#')}`)
+        window.location.href = `/${type.replace(':','#')}`
     }
 
     render(){
