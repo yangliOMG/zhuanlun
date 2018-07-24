@@ -36,7 +36,7 @@ class TabEx extends React.Component{
     const tabs2 = data.map((i,idx)=>({title: idx+1+' Tab', sub: idx+1+''}))
     const tabHeight = document.documentElement.clientHeight -233
     //  <div style={{position:'absolute',top:'-20px',left:'-20px',right:'-20px',bottom:'-20px',background:`url(${require('./tower.png')}) ` }}></div> 
-      return (
+    return (
         <Tabs tabs={tabs2} 
           initialPage={this.props.curPage} page={this.props.curPage}
           onChange={(tab,idx)=>this.props.turnPage(idx)}
@@ -46,7 +46,7 @@ class TabEx extends React.Component{
               <div key={idx} className='lampTab' style={{  minHeight: `${tabHeight}px`}}>
                 <div className='rowNum'>
                   {darr.map((arr,idx1)=>
-                      <div key={idx1} style={{display:'table-row'}}>{(cengConvert(idx1,darr.length)+'').padStart(2,0)}</div>
+                      <div key={idx1} style={{display:'table-row'}}>{(Array(2).join('0')+cengConvert(idx1,darr.length)).slice(-2)}</div>
                   )}
                 </div>
                 <div className='lampPannel' 

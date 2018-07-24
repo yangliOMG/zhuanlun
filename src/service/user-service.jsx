@@ -36,15 +36,18 @@ class User{
     }
 
 
-    sendVerCode(phone){
-        return axios.get(`/login/login.do`,{params: {
-            phone,
+    judgeIsFollow(){
+        return axios.get(`/login/judgeIsFollow.do`,{params: {
+        }})
+    }
+    sendVerCode(tel){
+        return axios.get(`/sendMes/sendVerCode.do`,{params: {
+            tel,
         }})
     }
     submitPhone(obj){
-        return axios.get(`/login/login.do`,{params: {
+        return axios.get(`/login/bindingTel.do`,{params: {
             ...obj,
-            openid: getStorage('user').openid,
         }})
     }
 

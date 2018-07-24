@@ -9,6 +9,11 @@ class Order{
             data:JSON.stringify(order)
         }})
     }
+    deleteOrder(id){
+        return axios.get('/pray/delete.do',{params: {
+            id
+        }})
+    }
     getOrderList(){
         return axios.get('/pray/list.do')
     }

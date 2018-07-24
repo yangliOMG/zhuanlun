@@ -61,19 +61,20 @@ class MyPhone extends React.Component{
                 }
             },1000)
 
-            // _user.sendVerCode(phone).then(data=>{
-            //     if(data.status===1){
-            //         showToast('短信验证码已成功发送！')
-            //     }else if(data.status===-1){
-            //         showToast('短信验证码请求间隔为60s！')
-            //     }else{
-            //         showToast('短信验证码发送失败！！')
-            //         this.setState({
-            //             disabled:false,
-            //             btnContent: times+'秒后重试'
-            //         })
-            //     }
-            // })
+            _user.sendVerCode(phone).then(res=>{
+                let status = res.data[0]
+                if(status==='1'){
+                    showToast('短信验证码已成功发送！',2)
+                }else if(status==='-1'){
+                    showToast('短信验证码请求间隔为60s！',2)
+                }else{
+                    showToast('短信验证码发送失败！！',2)
+                    this.setState({
+                        disabled:false,
+                        btnContent: '获取验证码'
+                    })
+                }
+            })
         }
     }
     handleChange(event,key){
@@ -85,16 +86,13 @@ class MyPhone extends React.Component{
 
     handleSubmitPhone(){
         Toast.loading('加载中...',0)
-        _user.submitPhone({phone:this.state.inputphone,code:this.state.vercode}).then(data=>{
-            if(data.status===1){
-                showToast('提交成功！')
-                setTimeout(()=>this.props.history.goBack(), 500)
-            }else if(data.status===-1){
-                showToast('短信验证码不正确！请重新输入')
+        _user.submitPhone({tel:this.state.inputphone,code:this.state.vercode}).then(res=>{
+            if(res.data){
+                showToast('绑定成功！')
+                setTimeout(()=>this.props.history.goBack(), 1000)
             }else{
-                showToast(data.result)
+                showToast('验证码有误！',2)
             }
-            Toast.hide()
         })
     }
 

@@ -7,12 +7,14 @@ import Popup from '../../component/userMesTable/userMesTable.jsx'
 import {updateOrder} from '../../redux/order.redux'
 
 import Order from '../../service/order-service.jsx'
+import User from '../../service/user-service.jsx'
 import './prayDetail.less'
 import {webchatPay } from '../prayForm/wechatPay.js'
 
 // import asyncComponent from '../../component/dashboard/AsyncComponent'
 // const District = asyncComponent(() => import("./area"))
 const _order = new Order()
+const _user = new User()
 @connect(
     state=>state.prayList,
     {updateOrder}
@@ -33,9 +35,6 @@ class PrayDetail extends React.Component{
                 fname:'xxx',
                 createTime:'',
             },
-            obj : {
-                id:'qwer',
-            },
             show:false,
             messageModal: false,
             messageModal2: false,
@@ -47,6 +46,7 @@ class PrayDetail extends React.Component{
             thing:'',
             src:'',
             burning:false,
+            followFlag:false
         }
     }
     componentWillMount(){
@@ -60,6 +60,11 @@ class PrayDetail extends React.Component{
                     this.messageInit(res.data)
                 }else{
                     this.props.history.push('/myPraylist')
+                }
+            })
+            _user.judgeIsFollow().then(res=>{
+                if(res.status === 200){
+                    this.setState({followFlag : res.data})
                 }
             })
         // }
@@ -132,19 +137,6 @@ class PrayDetail extends React.Component{
         if(order.payStatus===2){
             this.props.history.push('/personalCenter')
         }else if(order.payStatus===1){
-            // let blessing = order.blessing,
-            //     num = order.dengwei.length, 
-            //     duration = order.duration, 
-            //     position = order.dengwei.map(v=>([
-            //         v.address,
-            //         [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Number(v.col)+"").padStart(2,0)}位`,
-            //             `${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}${v.col}`,
-            //             `${v.side-1},${v.row-1},${v.col-1}`]])), 
-            //     total = order.sum,
-            //     id = order.id
-            // this.props.updateOrder({blessing,num,duration,position,total,id})
-            // this.props.history.push('/pay/prayForm#'+order.fid)
-            // window.location.href = `/pay/prayForm#${order.id}`
             webchatPay({prayId:order.id,sum:order.sum,tid:order.tid})
         }else{
             this.props.history.push('/temple')
@@ -179,14 +171,18 @@ class PrayDetail extends React.Component{
                                 <div className='leftBlock c-erji'>
                                     <p className={this.state.show?'':'text-overflow2'} onClick={()=>this.setState({show:!this.state.show})}>
                                         供灯位置：{order.dengwei.map(val=>
-                                        `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,15)}层${(Number(val.col)+"").padStart(2,0)}位、`)}</p>
+                                        `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,15)}层${(Array(2).join('0')+val.col).slice(-2)}位、`)}</p>
                                     <p>供灯时长：{during}</p>
                                     <p>创建时间：{timeFormat(order.createTime).toLocaleString()}</p>
                                 </div>
                                 <div className='rightBlock'>
                                     <img width='100%' src={require('./qrcode.jpg')} alt=""/>
                                 </div>
-                            </div>                       
+                            </div>   
+                            <div className={`follow ${this.state.followFlag?'hidden':''}`}>
+                                <img className='arrow pos-a' width="15px" src={require('./arrow.png')} alt='' />
+                                <div className='f-16 c-red'>长按图片 识别二维码关注公众号</div>
+                            </div>                    
                         </div>  
                     </div>
                     <WhiteSpace/>

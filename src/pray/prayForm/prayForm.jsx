@@ -65,7 +65,7 @@ class PrayForm extends React.Component{
                     if(res.status === 200){
                         let position = res.data.data.map(v=>([
                             v.address,
-                            [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Number(v.col)+"").padStart(2,0)}位`,
+                            [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}层第${(Array(2).join('0')+v.col).slice(-2)}位`,
                                 `${directionDictionary(v.side-1)}${cengConvert(v.row-1,15)}${v.col}`,
                                 `${v.side-1},${v.row-1},${v.col-1}`]]))
                         this.setState({
@@ -250,7 +250,7 @@ class PrayForm extends React.Component{
                                 <TextareaItem className="textarea" title="祈愿文："
                                     onChange={v=>this.handleTextarea(v)}
                                     onBlur={()=>this.handleBlurTextScan()}
-                                    rows={3} autoHeight placeholder={'请输入'}
+                                    rows={3} count={30} autoHeight placeholder={'请输入'}
                                     value={prayArticle}
                                     >
                                 </TextareaItem>

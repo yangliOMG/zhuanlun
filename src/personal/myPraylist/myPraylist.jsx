@@ -1,8 +1,8 @@
 import React from 'react'
-import { WhiteSpace, Card, WingBlank } from 'antd-mobile'
+import { WhiteSpace, Card, WingBlank,Modal } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat } from '../../util'
+import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat,showToast } from '../../util'
 import Order from '../../service/order-service.jsx'
 import {savePrayList} from '../../redux/pray.redux'
 import  "./myPraylist.less"
@@ -30,6 +30,23 @@ class MyPraylist extends React.Component{
         }
     }
 
+    handleDeleteClick(id,e){
+        e.stopPropagation()
+        Modal.alert('删除', '确认删除订单？', [
+            { text: '取消' },
+            { text: '确认', onPress: () => {
+                _order.deleteOrder(id).then(res=>{
+                    if(res.status === 200&&res.data.returnCode===1000){
+                        const praylist = this.state.praylist.filter(v=>v.id!==id)
+                        this.setState({praylist})
+                        this.props.savePrayList(praylist)
+                    }
+                    showToast(res.data.data)
+                })
+            } },
+        ])
+    }
+
     render(){
         return (
             <div>
@@ -49,7 +66,7 @@ class MyPraylist extends React.Component{
                                             {v.dengwei.map((val,idx2)=>
                                                 <div key={idx2} className='spand'>
                                                     <span className='lampIcon l-shan tini'></span>
-                                                    {directionDictionary(val.side-1)}{cengConvert(val.row-1,15)}层{(Number(val.col)+"").padStart(2,0)}位
+                                                    {directionDictionary(val.side-1)}{cengConvert(val.row-1,15)}层{(Array(2).join('0')+val.col).slice(-2)}位
                                                 </div>
                                             )}
                                         </div>
@@ -67,7 +84,10 @@ class MyPraylist extends React.Component{
                                     }
                                     
                                 </Card.Body>
-                                <Card.Footer content="" extra={<div>查看详情 > </div>} />
+                                <Card.Footer 
+                                    content={<div onClick={(e)=>this.handleDeleteClick(v.id,e)}
+                                                    className='c-red f-16'>删除订单</div>} 
+                                    extra={<div>查看详情 > </div>} />
                             </Card>
                             <WhiteSpace/>
                         </div>

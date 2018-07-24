@@ -1,12 +1,18 @@
 .prayDetail{border-radius: 15px;overflow: hidden;
     >img{display: block;}
-    .prayText{background: #fff;padding: 10px;
+    .prayText{background: #fff;padding: 10px;position: relative;
         .art{font-size:1rem;padding-bottom: 10px;
             .notpay{font-size: 20px;font-weight: bold;color: red}
         }
         .inf{padding-bottom:10px;display: flex;
             .leftBlock{flex: 3 1}
             .rightBlock{flex: 1 1}
+        }
+        .follow{position: absolute;right: 20px;bottom: 0px;
+            .arrow{transform: rotate(180deg);right: 20px;top: -14px;
+                animation:fudong 1s;animation-direction: alternate;animation-iteration-count:infinite;
+                -webkit-animation:fudong 1s;-webkit-animation-direction: alternate;-webkit-animation-iteration-count:infinite;}
+                @keyframes fudong{from {margin-top:-3px;}to {margin-top:3px;}}
         }
     }
 }
