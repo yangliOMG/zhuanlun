@@ -7,7 +7,7 @@ import "./shouye.css"
 
 
 const _user = new User()
-const isMoblieMode = false
+const isMoblieMode = true
 
 @connect(
     state=>state.user,
