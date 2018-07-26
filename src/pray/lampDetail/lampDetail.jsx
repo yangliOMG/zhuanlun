@@ -146,7 +146,7 @@ class LampDetail extends React.Component{
 
         if(lampdata.state===0){
             lampdata.state = 2
-            seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${(Array(2).join('0')+(Number(idx2)+1)).slice(-2)}位`,
+            seledList.set(lampdata.id,[`${directionDictionary(idx)}${cengConvert(idx1,len)}层第${('0'+(Number(idx2)+1)).slice(-2)}位`,
                 `${directionDictionary(idx)}${cengConvert(idx1,len)}${Number(idx2)+1}`,
                 `${idx},${idx1},${idx2}`])
         }else if(lampdata.state===2){

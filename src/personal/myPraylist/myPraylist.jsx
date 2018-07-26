@@ -66,7 +66,7 @@ class MyPraylist extends React.Component{
                                             {v.dengwei.map((val,idx2)=>
                                                 <div key={idx2} className='spand'>
                                                     <span className='lampIcon l-shan tini'></span>
-                                                    {directionDictionary(val.side-1)}{cengConvert(val.row-1,15)}层{(Array(2).join('0')+val.col).slice(-2)}位
+                                                    {directionDictionary(val.side-1)}{cengConvert(val.row-1,val.maxrow||15)}层{('0'+val.col).slice(-2)}位
                                                 </div>
                                             )}
                                         </div>

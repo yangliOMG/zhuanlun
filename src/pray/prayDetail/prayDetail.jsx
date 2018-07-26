@@ -162,7 +162,7 @@ class PrayDetail extends React.Component{
                                     <div className='notpay'>支付超时，请重新下单</div>
                                     :
                                     <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    {order.unick}在{order.tname} {order.fname}点亮了{order.dengwei.length}盏佛灯</div>    
+                                    {order.unick}在{order.tname} {order.fname}点亮了{order.dengwei.length}盏佛灯。</div>    
                                     <div className={`${order.blessing?'':'hidden'}`}>祝愿：{order.blessing}</div></div>
                                 }
 
@@ -171,7 +171,7 @@ class PrayDetail extends React.Component{
                                 <div className='leftBlock c-erji'>
                                     <p className={this.state.show?'':'text-overflow2'} onClick={()=>this.setState({show:!this.state.show})}>
                                         供灯位置：{order.dengwei.map(val=>
-                                        `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,15)}层${(Array(2).join('0')+val.col).slice(-2)}位、`)}</p>
+                                        `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,val.maxrow||15)}层${('0'+val.col).slice(-2)}位、`)}</p>
                                     <p>供灯时长：{during}</p>
                                     <p>创建时间：{timeFormat(order.createTime).toLocaleString()}</p>
                                 </div>

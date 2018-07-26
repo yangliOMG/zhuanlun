@@ -46,7 +46,7 @@ class TabEx extends React.Component{
               <div key={idx} className='lampTab' style={{  minHeight: `${tabHeight}px`}}>
                 <div className='rowNum'>
                   {darr.map((arr,idx1)=>
-                      <div key={idx1} style={{display:'table-row'}}>{(Array(2).join('0')+cengConvert(idx1,darr.length)).slice(-2)}</div>
+                      <div key={idx1} style={{display:'table-row'}}>{('0'+cengConvert(idx1,darr.length)).slice(-2)}</div>
                   )}
                 </div>
                 <div className='lampPannel' 

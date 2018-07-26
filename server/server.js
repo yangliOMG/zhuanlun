@@ -34,7 +34,8 @@ app.use(bodyParser.json())
 app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}))
 
 app.use(function (req, res, next) {   //不是/static(静态资源)，都映射到index.html
-    if ( req.url.startsWith('/static')||req.url.startsWith('/foli')||req.url.startsWith('/html')||req.url.endsWith('.ico')||req.url.endsWith('.txt')) {
+    if ( req.url.startsWith('/static')||req.url.startsWith('/foli')||req.url.startsWith('/html')||req.url.startsWith('/fontAwesome')
+        ||req.url.endsWith('.ico')||req.url.endsWith('.txt')) {
         return next()
     }
     const store = createStore(reducer, compose(
@@ -63,7 +64,7 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
             <meta name="theme-color" content="#000000">
             <title>${obj[req.url]||'福佑灯塔'}</title>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+            <link href="/fontAwesome/css/font-awesome.min.css" rel="stylesheet">
             <Link rel="stylesheet" href="/${staticPath['main.css']}">
             <meta name="keywords" content="福佑灯塔">
             <meta name="description" content="${obj[req.url]||'福佑灯塔'}">

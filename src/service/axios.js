@@ -15,6 +15,8 @@ axios.defaults.timeout = 100000
         showToast('重新登录中。。。')
         removeStorage('user')
         window.location.href = window.location.origin+'/shouye?type='+window.location.pathname.replace('/','')+':'+window.location.hash.replace('#','')
+        // console.log("axois",response)
+        // return response.data
     }else if (response.status === 200 || response.status === '200') {
         return response
     }else {
