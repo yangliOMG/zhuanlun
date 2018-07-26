@@ -66,7 +66,7 @@ class PrayForm extends React.Component{
                         let position = res.data.data.map(v=>([
                             v.address,
                             [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}层第${('0'+v.col).slice(-2)}位`,
-                                `${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow)}${v.col}`,
+                                `${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}${v.col}`,
                                 `${v.side-1},${v.row-1},${v.col-1}`]]))
                         this.setState({
                             position,
