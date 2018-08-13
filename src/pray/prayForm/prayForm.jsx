@@ -7,7 +7,7 @@ import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 // import Template from '../../pray/template/template.jsx'
 
 import {updateOrder,newOrder} from '../../redux/order.redux'
-import {showToast,duringDictionary,getStorage,directionDictionary,cengConvert } from '../../util'
+import {showToast,duringDictionary,getStorage,directionDictionary,cengConvert,getQueryString } from '../../util'
 import {webchatPay } from './wechatPay.js'
 import Tem from '../../service/temple-service.jsx'
 import Order from '../../service/order-service.jsx'
@@ -48,21 +48,23 @@ class PrayForm extends React.Component{
 
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
+        let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
         if(id){
             _temple.getTowerAndPriceById(id).then(res=>{
-                if(res.status === 200){
+                if(res.status === 200 && res.data.facility){
                     let price = {}
                     res.data.price.forEach(v=>price[v.duration]=v.price)
                     this.setState({
                         obj: res.data.facility,
                         price
                     })
+                }else{
+                    showToast('没有该祈福塔信息')
                 }
             })
             if(this.state.position.length<=0){
                 _temple.getRandomPosition(id,this.state.num).then(res=>{
-                    if(res.status === 200){
+                    if(res.status === 200 && res.data.data){
                         let position = res.data.data.map(v=>([
                             v.address,
                             [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}层第${('0'+v.col).slice(-2)}位`,
@@ -72,6 +74,8 @@ class PrayForm extends React.Component{
                             position,
                         })
                         this.props.updateOrder({position})
+                    }else{
+                        console.log('无法随机供灯位置')
                     }
                 })
             }
@@ -120,7 +124,7 @@ class PrayForm extends React.Component{
                     this.setState({textScan:true})
                 }else{
                     this.setState({textScan:false})
-                    if(res.status === 200){
+                    if(res.status === 200&& res.data.suggestion==='block'){
                         const dic = {
                             spam:'含垃圾信息',
                             ad:'广告',
@@ -148,6 +152,7 @@ class PrayForm extends React.Component{
         order.type = 1
         order.adds = order.position.map(i=>i[0])
         order.fid = this.props.location.hash.replace("#","")
+        order.source = getQueryString('src')===1? 1:2       //src = 1 入口，src = 2扫码
         if((order.num !== order.position.length)||(order.adds.length<=0)){
             return showToast('请完善供灯位置')
         }

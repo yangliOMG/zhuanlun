@@ -30,8 +30,6 @@ class AuthRoute extends React.Component{
     async getLogin(){
         const code = getQueryString("code")
         const user = getStorage('user')
-        let user_session = await _user.getUserMes()
-        console.log('user_session',user_session)
         console.log(1)
         if(code){
             let res = await _user.getUserLogin(isMoblieMode,code)
@@ -39,7 +37,7 @@ class AuthRoute extends React.Component{
                 console.log(2)
                 this.storageSave(res.data)
             }
-        }else if(user === ''|| !user.openid|| user_session.returnCode===3005){
+        }else if(user === ''|| !user.openid){
             if(isMoblieMode){
                 let appid = 'wx9ce81988a89adfc4',//瑞金网络'wxf707fc6da6cf1a2f',福佑法缘'wx9ce81988a89adfc4'
                     RedicetURI = window.location.href,
@@ -50,6 +48,10 @@ class AuthRoute extends React.Component{
                 console.log(3,res)
                 if(res.status===200){
                     this.storageSave(res.data)
+                    if (this.userInfoReadyCallback) {
+                        console.log('callback')
+                        this.userInfoReadyCallback(this.data)
+                    }
                 }
             }
         }else{

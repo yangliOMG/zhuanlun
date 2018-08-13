@@ -2,7 +2,7 @@ import axios from 'axios'
 import {removeStorage,showToast } from '../util'
 
 axios.defaults.withCredentials = true
-axios.defaults.timeout = 100000
+axios.defaults.timeout = 10000
 // // axios拦截器
  axios.interceptors.request.use(config => {
     return config

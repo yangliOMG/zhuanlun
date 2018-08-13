@@ -74,6 +74,29 @@ location / {
       try_files $uri $uri/ /index.html;         //如果不存在着内部重定向到index.html
 }
 ```
+* nginx做ssl证书配置，使站点通过https访问
+```
+阿里云上购买免费的证书--->域名解析设置，添加一条TXT的记录值，测试dns配置，等待证书签发->下载公钥私钥->部署到nginx/tomcat下，
+server {
+      listen 443;                   //http协议默认端口是80，https是443
+      server_name www.fuyoufayuan.com;
+      ssl on;
+      root html;
+      index index.html index.htm;
+      ssl_certificate   cert/214860875720209.pem;
+      ssl_certificate_key  cert/214860875720209.key;
+      ssl_session_timeout 5m;
+      ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      ssl_prefer_server_ciphers on;
+      location / {                        //使https的默认端口映射到http的默认端口（使对https的访问转发到80端口）
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://127.0.0.1:80;
+      }
+}
+```
 * 使用Node.js中间层做服务端渲染,server.js
 > 1. 跨域 代理
 ```
@@ -87,7 +110,20 @@ app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}))
 ```
 服务端渲染的页面，没有window、document，注意避免渲染时使用（放在mount之中），或对其判断是否存在
 ```
+* tomcat程序记录客户端真实IP,日志logs/access_log记录客户真实ip
+> 1. 修改conf/server.xml文件
+> 2. https://www.cnblogs.com/pangguoping/p/5748783.html
+```
+<Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%{X-Real-IP}i %{X-FORWARDED-FOR}i %l %u %t %r %s %b %D %q %{User-Agent}i" resolveHosts="false" />
 
+1. X-Forwarded-For 的内容由「英文逗号 + 空格」隔开的多个部分组成，最开始的是离服务端最远的设备 IP，然后是每一级代理设备的 IP
+2. X-Real-IP 通常被 HTTP 代理用来表示与它产生 TCP 连接的设备 IP，这个设备可能是其他代理，也可能是真正的请求端
+3. 直接对外提供服务的 Web 应用，在进行与安全有关的操作时，只能通过 Remote Address 获取 IP，不能相信任何请求头
+
+https://imququ.com/post/x-forwarded-for-header-in-http.html
+```
 * axios
 > 1. 处理二进制流图片的乱码
 ```
