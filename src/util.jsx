@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-07-13 13:21:41
+ * @Last Modified time: 2018-08-23 16:17:53
  */
 import { Toast } from 'antd-mobile';
 /**
@@ -197,6 +197,18 @@ export function recommendAI(dataArr,num){
 export function timeFormat(date){
     try {
         return new Date(date.replace(/(\+\d{2})(\d{2})$/, "$1:$2"))
+    } catch (error) {
+        return '0'
+    }
+}
+/**
+ * 时间ios兼容转换
+ * @param {日期} date 
+ */
+export function continueLamp(date){
+    try {
+        let cha = new Date(date.replace(/(\+\d{2})(\d{2})$/, "$1:$2")).getTime() - new Date().getTime()
+        return cha > 0 ? true:false
     } catch (error) {
         return '0'
     }

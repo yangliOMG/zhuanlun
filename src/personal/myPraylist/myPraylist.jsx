@@ -2,7 +2,7 @@ import React from 'react'
 import { WhiteSpace, Card, WingBlank,Modal } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat,showToast } from '../../util'
+import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat,showToast,continueLamp } from '../../util'
 import Order from '../../service/order-service.jsx'
 import {savePrayList} from '../../redux/pray.redux'
 import  "./myPraylist.less"
@@ -47,6 +47,11 @@ class MyPraylist extends React.Component{
         ])
     }
 
+    handleContinueClick(id,fid,e){
+        e.stopPropagation()
+        window.location.href = `/pay/prayForm?pid=${id}#${fid}`
+    }
+
     render(){
         return (
             <div>
@@ -82,12 +87,18 @@ class MyPraylist extends React.Component{
                                         <div>供灯功德：{(v.sum/100).toFixed(2) }元</div></div>
                                             
                                     }
-                                    
+                                    <div className='btnRow'>
+                                        <div className='lf' onClick={(e)=>this.handleDeleteClick(v.id,e)}>
+                                            <div className='btn btnred'>删除订单</div>
+                                        </div>
+                                        {/* <div className='ct' onClick={(e)=>this.handleContinueClick(v.id,v.fid,e)}>
+                                            { continueLamp(v.closeTime) ?
+                                                <div className='btn btngold'>续灯</div>:''
+                                            }
+                                        </div> */}
+                                        <div className='rt'>查看详情 > </div>
+                                    </div>
                                 </Card.Body>
-                                <Card.Footer 
-                                    content={<div onClick={(e)=>this.handleDeleteClick(v.id,e)}
-                                                    className='c-red f-16'>删除订单</div>} 
-                                    extra={<div>查看详情 > </div>} />
                             </Card>
                             <WhiteSpace/>
                         </div>

@@ -1,4 +1,17 @@
 # 问题总结
+* npm 操作
+```
+npm init    创建一个package.json
+npm install  下载package中的所有依赖
+npm install -g <name> 全局安装
+npm install <name> --save 生产环境依赖
+npm install <name> --save-dev 生产开发环境依赖
+npm update xxxxx -x  更新
+npm uninstall  卸载
+```
+* create-react-app安装步骤
+https://github.com/yangliOMG/recruit-app#create-react-app
+
 * 关于ios兼容性的问题
 > 1. ios8,9没有es的一些新方法，比如：symbol，padstart，includes，array.from。
 ```
@@ -26,16 +39,6 @@ postcss可以被理解为一个平台，可以让一些插件在上面跑
 Autoprefixer是一个后处理程序，它在CSS编译后运行
 
 ```
-* npm 操作
-```
-npm init    创建一个package.json
-npm install  下载package中的所有依赖
-npm install -g <name> 全局安装
-npm install <name> --save 生产环境依赖
-npm install <name> --save-dev 生产开发环境依赖
-npm update xxxxx -x  更新
-npm uninstall  卸载
-```
 * package.json
 ```
 "scripts": {            //NODE_ENV环境变量；nodemon --exec 以应用程序执行脚本；
@@ -44,8 +47,8 @@ npm uninstall  卸载
       "server_lx": "export NODE_ENV=test&&nodemon --exec babel-node server/server.js",
       "pm2": "set NODE_ENV=test&&pm2 start server/server_pm2.js",
       "server_pm2": "export NODE_ENV=test&&pm2 start server/server_pm2.js"
-      //babel-register将es6转换为es5的语法
       //为了使pm2能够运行es6，在普通Javascript中准备一个入口点，它将在包含非转换源之前调用require('babel-register')。
+      //server_pm2.js文件中包含babel-register，其将es6转换为es5的语法
 }
 ```
 * 通过内网穿透，浏览器白屏 报错"Invalid Host header"--->/config/webpackDevServer.config.js下，

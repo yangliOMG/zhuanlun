@@ -44,12 +44,39 @@ class PrayForm extends React.Component{
             modal2: false,
             visible: false,
             infoVisible: false,
+            positionChangable:true
         }
 
     }
     componentWillMount(){
         let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
-        if(id){
+        let pid = getQueryString("pid")
+        if(pid){
+            _order.getOrderByid(pid).then(res=>{
+                if(res.status === 200){
+                    let dengwei = res.data.dengwei, fid = res.data.fid
+                    let position = dengwei.map(v=>([
+                        v.address,
+                        [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}层第${('0'+v.col).slice(-2)}位`,
+                            `${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}${v.col}`,
+                            `${v.side-1},${v.row-1},${v.col-1}`]]))
+                    _temple.getTowerAndPriceById(fid).then(res=>{
+                        if(res.status === 200 && res.data.facility){
+                            let price = {}
+                            res.data.price.forEach(v=>price[v.duration]=v.price)
+                            this.setState({
+                                obj: res.data.facility,
+                                price,
+                                position,
+                                positionChangable:false
+                            })
+                        }else{
+                            showToast('没有该祈福塔信息')
+                        }
+                    })
+                }
+            })
+        }else if(id){
             _temple.getTowerAndPriceById(id).then(res=>{
                 if(res.status === 200 && res.data.facility){
                     let price = {}
@@ -118,7 +145,7 @@ class PrayForm extends React.Component{
     }
     handleBlurTextScan(){
         let blessing = this.state.blessing.replace(/{{prayer}}/g,this.state.unick||'')
-        if(blessing!==''){
+        if(blessing!==''&&false){
             _order.getTextScan(blessing).then(res=>{
                 if(res.status === 200&& res.data.suggestion==='pass'){
                     this.setState({textScan:true})
@@ -163,7 +190,7 @@ class PrayForm extends React.Component{
         //     return showToast('祈愿文内容违规')
         // }
         delete order.position
-        if(order.blessing){
+        if(order.blessing&&false){
             _order.getTextScan(order.blessing).then(res=>{
                 if(res.status === 200&& res.data.suggestion==='pass'){
                     this.createOrder(order)
@@ -193,18 +220,17 @@ class PrayForm extends React.Component{
 
     showModal(key,e){
         e.preventDefault(); // 修复 Android 上点击穿透
-        this.setState({
-            [key]: true,
-        });
+        if(this.state.positionChangable){
+            this.setState({[key]: true})
+            document.getElementById('root').style.overflow ='hidden'// 修复 ios 上滚动穿透
+        }else{
+            showToast("续灯不可改变位置")
+        }
     }
     onClose = key => (value) => {
-        this.setState({[key]: false,...value});
+        this.setState({[key]: false,...value})
+        document.getElementById('root').style.overflow =''
     }
-
-    handleVisibleChange = (visible) => {
-        this.setState({visible})
-    }
-
 
     render(){
         const obj = this.state.obj
@@ -246,11 +272,6 @@ class PrayForm extends React.Component{
                                 value={this.state.unick}
                                 onChange={v=>this.handleInput(v)}
                             >祈愿人：</InputItem>
-                            {/* <Item 
-                                arrow="horizontal"
-                                extra={'使用模板'}
-                                onClick={(e) => this.showModal('modal1', e)}
-                            >祈愿文：</Item> */}
                             <div className="pos-r">
                                 <TextareaItem className="textarea" title="祈愿文："
                                     onChange={v=>this.handleTextarea(v)}
@@ -262,14 +283,15 @@ class PrayForm extends React.Component{
                                 <Popover mask visible={this.state.visible}
                                     overlay={[
                                         (<Item>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('0')}>健康</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('1')}>长寿</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('2')}>平安</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('3')}>富贵</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('0')}>通用</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('1')}>平安</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('2')}>智慧</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('3')}>事业</span>
                                         </Item>),(<Item>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('4')}>事业</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('5')}>姻缘</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('6')}>学业</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('4')}>健康</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('5')}>财富</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('6')}>福寿</span>
+                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('7')}>姻缘</span>
                                         </Item>),
                                     ]}
                                     align={{    
@@ -284,6 +306,7 @@ class PrayForm extends React.Component{
                                 extra={<Stepper style={{ width: '100%', minWidth: '100px' }}
                                                 showNumber max={100} min={1}
                                                 value={this.state.num}
+                                                disabled={!this.state.positionChangable}
                                                 onChange={(v) =>this.handleNumChange(v)}
                                         />}
                             >供灯数量</Item>

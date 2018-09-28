@@ -12,6 +12,11 @@ class Order{
             id
         }})
     }
+    cancelOrder(id){
+        return axios.get('/pray/cancel.do',{params: {
+            id
+        }})
+    }
     getOrderList(){
         return axios.get('/pray/list.do')
     }

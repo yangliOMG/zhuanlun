@@ -71,20 +71,20 @@ body {
 
 .lampIcon{line-height: 0;margin: 0 auto;display: flex;vertical-align: middle;border: 0 none;outline: none;background-color: transparent;background-repeat: no-repeat;background-attachment: scroll;
   background-image: url('./images/lamp.png');width: 32px;height: 40px;background-size:520%;
-  ._share{background-position: 0 0;animation-duration: 3s;animation-timing-function: steps(2, end);animation-iteration-count: infinite;}
+  ._share{background-position: 0 -3px;animation-duration: 3s;animation-timing-function: steps(2, end);animation-iteration-count: infinite;}
   &.l-gong{animation-name:mymove;._share;}
   &.l-gong-mini{animation-name:mymove1;._share;}
-  @keyframes mymove {100% {background-position: -196px 0;}}
-  @keyframes mymove1 {100% {background-position: -167px 0;}}
+  @keyframes mymove {100% {background-position: -196px -3px;}}
+  @keyframes mymove1 {100% {background-position: -167px -3px;}}
 
   &.l-shan{background-position: 0 0;}
   &.l-bushan{background-position: -82px 0;}
   &.tini{width: 19px;height:23px;display: inline-block;vertical-align: bottom;}
 
-  &.l-red{background-position: -49px 0;
+  &.l-red{background-position: -49px -3px;
       &.mini{background-position-x:-42px;}
   }
-  &.l-grey{background-position: -139px 0;
+  &.l-grey{background-position: -139px -3px;
       &.mini{background-position-x:-118px;}
   }
   &.mini{width: 27px;height:33px;}
