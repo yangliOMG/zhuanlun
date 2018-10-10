@@ -61,11 +61,11 @@ class PrayForm extends React.Component{
                             `${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}${v.col}`,
                             `${v.side-1},${v.row-1},${v.col-1}`]]))
                     _temple.getTowerAndPriceById(fid).then(res=>{
-                        if(res.status === 200 && res.data.facility){
+                        if(res.status === 200 && res.data.data.facility){
                             let price = {}
-                            res.data.price.forEach(v=>price[v.duration]=v.price)
+                            res.data.data.price.forEach(v=>price[v.duration]=v.price)
                             this.setState({
-                                obj: res.data.facility,
+                                obj: res.data.data.facility,
                                 price,
                                 position,
                                 positionChangable:false
@@ -78,11 +78,11 @@ class PrayForm extends React.Component{
             })
         }else if(id){
             _temple.getTowerAndPriceById(id).then(res=>{
-                if(res.status === 200 && res.data.facility){
+                if(res.status === 200 && res.data.data.facility){
                     let price = {}
-                    res.data.price.forEach(v=>price[v.duration]=v.price)
+                    res.data.data.price.forEach(v=>price[v.duration]=v.price)
                     this.setState({
-                        obj: res.data.facility,
+                        obj: res.data.data.facility,
                         price
                     })
                 }else{
@@ -231,6 +231,18 @@ class PrayForm extends React.Component{
         this.setState({[key]: false,...value})
         document.getElementById('root').style.overflow =''
     }
+    // tt(){
+    //     let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
+    //     _temple.getTowerAndPriceById(id).then(res=>{
+    //         alert("W"+JSON.stringify(res))
+    //     }).catch(e=>alert("W"+JSON.stringify(e))).finally(e=>alert("X"+JSON.stringify(e)))
+    // }
+    // ss(){
+    //     let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
+    //     _temple.getRandomPosition(id,this.state.num).then(res=>{
+    //         alert("W"+JSON.stringify(res))
+    //     }).catch(e=>alert("W"+JSON.stringify(e))).finally(e=>alert("X"+JSON.stringify(e)))
+    // }
 
     render(){
         const obj = this.state.obj
@@ -331,7 +343,10 @@ class PrayForm extends React.Component{
                         
                     </div>
                 </WingBlank>
-                
+                {/* <div className='stick-footer'>  
+                    <div className="total" onClick={()=>{this.tt()}}>/facility/info1.do?id=16</div>
+                    <a className="payBtn" onClick={()=>{this.ss()}}>/facility/random.do?id=16&num=2</a>
+                </div> */}
                 <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />

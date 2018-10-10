@@ -39,6 +39,30 @@ postcss可以被理解为一个平台，可以让一些插件在上面跑
 Autoprefixer是一个后处理程序，它在CSS编译后运行
 
 ```
+> 3. 部分ios系统，对于某种格式的接口，在https或http下（有的http接口可用，https不行；部分系统相反），会报错"ECONNABORTED"
+```
+接口格式：
+@RequestMapping("/info1.do")
+public Map<String, Object> info1(String id, HttpServletRequest request) {
+      String uid = (String) request.getSession().getAttribute("uid");
+      Facility f = facilityService.findById(id);
+      List<Price> price = facilityService.priceList(id);                     
+      Map<String, Object> map = new HashMap<String, Object>();
+      if (f != null) {
+            BrowsingHistory newHistory = new BrowsingHistory();
+            newHistory.setUid(uid);
+            newHistory.setOid(f.getTid());
+            browsingHistoryService.saveHistory(newHistory);
+      }
+      map.put("facility", f);
+      map.put("price", price);                              //该行导致错误，new一个priceList也不会出现问题
+      return map;                                           
+}
+
+==> //最终修改方案：给输出结果套一个格式Response.setSuccess(map)
+```
+
+
 * package.json
 ```
 "scripts": {            //NODE_ENV环境变量；nodemon --exec 以应用程序执行脚本；

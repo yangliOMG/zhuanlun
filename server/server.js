@@ -25,7 +25,7 @@ const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
 const DEFAULT_PORT = 8081
-const proxyPath = 'http://10.9.5.199:8000'
+const proxyPath = 'http://localhost:8080'
 
 app.use(cookieParser())
 app.use(bodyParser.json())
