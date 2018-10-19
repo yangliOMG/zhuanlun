@@ -3,6 +3,7 @@ import { WingBlank, WhiteSpace } from 'antd-mobile'
 import {connect} from 'react-redux'
 import Tem from '../../service/temple-service.jsx'
 
+import logo from '../../pray/temple/foqian.jpg';
 // import { StickyContainer, Sticky } from 'react-sticky';
 
 import "./myHistory.less"
@@ -34,6 +35,13 @@ class MyHistory extends React.Component{
             <div>
                 <WhiteSpace/>
                 <WingBlank size="lg">
+                    <div className='li radius ofhd' onClick={()=>window.location.href = `/templeList`}>
+                        <div className='imgBlock'><img src={logo} alt="" /></div>
+                        <div className='textBlock'>
+                            <div className='b name'>更多寺院</div>
+                            <div className="text-overflow4a c-grey1 pt-20">点击前往寺庙列表页</div>
+                        </div>
+                    </div>
                     {this.state.historylist.map((v,idx)=>
                         // <StickyContainer key={v.id}>
                         //   <Sticky>

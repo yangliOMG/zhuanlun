@@ -6,6 +6,8 @@ import {connect} from 'react-redux'
 
 import {saveAnchor} from '../../redux/temple.redux'
 
+import './style.less'
+
 
 // function genData() {
 //     const dataArr = [];
@@ -69,19 +71,18 @@ class Listview extends React.Component {
                     onRefresh={this.onRefresh}
                 >
                     {this.props.templeData.map((obj,idx) => (
-                        <div id={obj.id} key={obj.id} 
-                            style={{ padding: '0 15px',borderBottom: '10px solid #efeff4',background:'#fff' }} 
+                        <div id={obj.id} key={obj.id} className='line_box'
                             onClick={()=>this.handleClick(obj.id)}
                         >
-                            <div style={{  display: 'flex', padding: '15px 0', pointerEvents: 'none' }}>
-                                <img style={{ height: '120px', marginRight: '15px' }} src={obj.ico} alt="" />
-                                <div style={{ lineHeight: 1 }}>
-                                    <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.name}</div>
-                                    <div className="text-overflow6">{obj.tag}</div>
-                                    <div>
-                                        <span>{obj.sect}</span>
-                                        <span style={{ marginLeft: 20 }}>{obj.province}</span>
-                                    </div>
+                            <div className='img_box'>
+                                <img className='img' src={obj.ico} alt="" />
+                            </div>
+                            <div className='text_box'>
+                                <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.name}</div>
+                                <div className="text-overflow6"></div>
+                                <div>
+                                    <span>{obj.sect}</span>
+                                    <span style={{ marginLeft: 20 }}>{obj.province}</span>
                                 </div>
                             </div>
                         </div>

@@ -30,7 +30,7 @@ import asyncComponent from './AsyncComponent'
 const Gongde = asyncComponent(() => import("../../pray/introduce/gongde.jsx"))
 const Haochu = asyncComponent(() => import("../../pray/introduce/haochu.jsx"))
 const Yuanqi = asyncComponent(() => import("../../pray/introduce/yuanqi.jsx"))
-const TempleList = asyncComponent(() => import("../../pray/prayForm/prayForm.jsx"))
+const TempleList = asyncComponent(() => import("../../pray/templeList/templeList.jsx"))
 const PrayForm = asyncComponent(() => import("../../pray/prayForm/prayForm.jsx"))
 const TempleDetail = asyncComponent(() => import("../../pray/templeDetail/templeDetail.jsx"))
 const Template = asyncComponent(() => import("../../pray/template/template.jsx"))

@@ -26,10 +26,9 @@ class Temple{
           }})
     }
 
-    getTempleListByPicker(province,sect,tag,index){
+    getTempleListByPicker(province,tag,index){
         return axios.get(`/temple/proAndSectList.do`,{params: {
             province,
-            sect,
             tag,
             index:1,
             page:5*index

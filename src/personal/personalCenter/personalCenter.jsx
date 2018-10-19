@@ -25,6 +25,12 @@ class PersonalCenter extends React.Component{
         }
     }
 
+    handleClick(){
+        if(false){
+            removeStorage('user');alert('清除缓存')
+        }
+    }
+
     render(){
         const Item = List.Item
         const namelist = [
@@ -44,7 +50,7 @@ class PersonalCenter extends React.Component{
                         <table style={{height: "120px", margin:"0 auto"}} >
                             <tbody>
                                 <tr>
-                                    <td><div className="headImgDiv mt-15" onClick={()=>{removeStorage('user');alert('清除缓存')}}>
+                                    <td><div className="headImgDiv mt-15" onClick={()=>this.handleClick()}>
                                         <img id="img" height="60" width="60" src={headImg||require("./default_photo.jpg")} alt="" />
                                     </div></td>
                                 </tr>

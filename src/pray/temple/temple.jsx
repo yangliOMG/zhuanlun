@@ -25,8 +25,10 @@ class Temple extends React.Component{
     componentWillMount(){
         const id = this.props.location.hash.replace("#","")
         _temple.getHistoryByType(0)
-        .then(res=>_temple.getTempleById(id||res.data.oid||1,true))
-        .then(res=>{
+        .then(res=> (id||res.data.oid)? 
+            _temple.getTempleById(id||res.data.oid,true):
+            window.location.href = '/templeList'
+        ).then(res=>{
             if(res.status === 200&&res.data.temple.length>0){
                 this.setState({
                     ...res.data,

@@ -1,11 +1,15 @@
 import React from 'react'
-import {Picker, List, SearchBar} from 'antd-mobile'
+import {
+    // Picker, List, 
+    SearchBar} from 'antd-mobile'
 import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 
 import Listview from '../../component/listview/pullRefresh.jsx';
 import Temple from '../../service/temple-service.jsx'
 import {saveTempleList} from '../../redux/temple.redux'
+
+import './templeList.less'
 
 const _temple = new Temple()
 
@@ -18,23 +22,6 @@ class TempleList extends React.Component{
         super(props);
         this.state = {
             pickerVal:'',
-            pickerOpt:[
-                [
-                    {label: '浙江',value: '浙江',},
-                    {label: '安徽',value: '安徽',},
-                    {label: '上海',value: '上海',},
-                ],
-                [
-                    {label: '佛教',value: '佛教',},
-                ],
-                [
-                    {label: '健康',value: '健康',},
-                    {label: '智慧',value: '智慧',},
-                    {label: '求财',value: '求财',},
-                    {label: '求子',value: '求子',},
-                    {label: '事业',value: '事业',},
-                ],
-            ],
             index:1,
             templeList:[]
         }
@@ -50,12 +37,12 @@ class TempleList extends React.Component{
             this.ajaxTempleList({index:this.state.index})
         }
     }
-    async ajaxTempleList({province='',sect='',tag='',name='',index},scrollMore=false){
+    async ajaxTempleList({province='',tag='',name='',index},scrollMore=false){
         let res 
         if(name !== ''){
             res = await  _temple.getTempleListByName(name,index)
-        }else if(province !== ''&&sect !== ''&&tag !== ''){
-            res = await  _temple.getTempleListByPicker(province,sect,tag,index)
+        }else if(province !== ''&&tag !== ''){
+            res = await  _temple.getTempleListByPicker(province,tag,index)
         }else if(this.state.pickerVal!==''){
             const arr = this.state.pickerVal.split('，')
             res = await  _temple.getTempleListByPicker(...arr,index)
@@ -81,29 +68,43 @@ class TempleList extends React.Component{
         }
     }
     handlePicker(v){
-        const [province,sect,tag] = v
+        const [province,tag] = v
         this.setState({
             pickerVal : v.join('，')
         })
-        this.ajaxTempleList({province,sect,tag,index:1})
+        this.ajaxTempleList({province,tag,index:1})
     }
     handleSearchBar(v){
         this.ajaxTempleList({name:v,index:1})
     }
     render(){
+        // let pickerOpt = [
+        //     [
+        //         {label: '浙江',value: '浙江',},
+        //         {label: '安徽',value: '安徽',},
+        //         {label: '上海',value: '上海',},
+        //     ],
+        //     [
+        //         {label: '健康',value: '健康',},
+        //         {label: '智慧',value: '智慧',},
+        //         {label: '求财',value: '求财',},
+        //         {label: '求子',value: '求子',},
+        //         {label: '事业',value: '事业',},
+        //     ],
+        // ]
         return (
             <div>
-                <List>
+                {/* <List>
                     <Picker
-                        data={this.state.pickerOpt}
+                        data={pickerOpt}
                         title="筛选"
                         cascade={false}
                         value={this.state.sValue}
                         onOk={v => this.handlePicker(v)}
                     >
-                        <List.Item arrow="horizontal">{this.state.pickerVal||'地区、宗派、祈愿'}</List.Item>
+                        <List.Item arrow="horizontal">{this.state.pickerVal||'地区、祈愿'}</List.Item>
                     </Picker>
-                </List>
+                </List> */}
                 <SearchBar
                     placeholder="关键字搜索"
                     onChange={v=>this.handleSearchBar( v )}

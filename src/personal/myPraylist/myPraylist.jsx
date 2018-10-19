@@ -2,7 +2,9 @@ import React from 'react'
 import { WhiteSpace, Card, WingBlank,Modal } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat,showToast,continueLamp } from '../../util'
+import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat,showToast,
+    // continueLamp 
+} from '../../util'
 import Order from '../../service/order-service.jsx'
 import {savePrayList} from '../../redux/pray.redux'
 import  "./myPraylist.less"
