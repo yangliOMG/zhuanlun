@@ -32,7 +32,7 @@ class TempleList extends React.Component{
                 templeList :this.props.templeList,
                 index:Math.ceil(this.props.templeList.length/5)
             })
-            setTimeout(() => { window.location.href = this.props.anchor }, 500)  //回退定位
+            // setTimeout(() => { window.location.href = this.props.anchor }, 500)  //回退定位
         }else{
             this.ajaxTempleList({index:this.state.index})
         }
