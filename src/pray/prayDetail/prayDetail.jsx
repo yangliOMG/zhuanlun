@@ -161,9 +161,12 @@ class PrayDetail extends React.Component{
                                         :
                                     <div className='notpay'>支付超时，请重新下单</div>
                                     :
-                                    <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    {order.unick}在{order.tname} {order.fname}点亮了{order.dengwei.length}盏佛灯。</div>    
-                                    <div className={`${order.blessing?'':'hidden'}`}>祝愿：{order.blessing}</div></div>
+                                    <div className='lh-26'><div className='textIndent2 pb-20 '>
+                                    {order.unick}在{order.tname} {order.fname}供奉了{order.dengwei.length}盏{order.content?order.content:"佛灯"}。</div>    
+                                    <div className={`${order.blessing?'':'hidden'}`}>
+                                        <div className='pt-10'>祈愿文：</div>
+                                        <div className='textIndent2 pb-20'>{order.blessing}</div>
+                                    </div></div>
                                 }
 
                             </div>

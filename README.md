@@ -1,4 +1,11 @@
 # 问题总结
+* 从零开始部署
+```
+1.安装node(https://www.cnblogs.com/liuqi/p/6483317.html)
+2.安装pm2(https://my.oschina.net/u/2252639/blog/1798667)
+3.安装git
+4.配置deploy_key(https://www.cnblogs.com/yeshaoxiang/p/7839603.html)
+```
 * npm 操作
 ```
 npm init    创建一个package.json

@@ -16,6 +16,24 @@
         }
     }
 }
+.gridRow{margin: 0 -15px;
+    .gridTitle{font-size: 17px;overflow: hidden;padding: 0 15px;
+        .tit{float: left;}
+        .exp{float: right;font-size: 15px;
+            input{width: 20px;height: 18px;margin-top: 2px;float: left;}
+            .word{display: inline-block;margin-left: 5px;}
+        }
+    }
+    .gridItem{width: 65%;margin: 0 auto;padding: 4px;border-radius: 50%;
+        &.active{background: #f30700;border: 1px solid #f30700;}
+        .gridImg{width: 100%;height: auto;border-radius: 50%;min-width: 52px;min-height: 52px}
+        .gridIco{margin-bottom: -28px;margin-left: -9px;}
+    }
+    .gridText{font-size: 14px;
+        &.active{color: #f30700;}
+    }
+    .descri{padding: 14px 19px 0;white-space: initial;font-size: 15px;color: grey;text-align: center;}
+}
 
 .radius{
     textarea{border-radius: 10px;font-size: 1rem;padding: 5px;line-height: 19.5px;}
@@ -28,7 +46,7 @@
 .am-list-extra{touch-action: none;}
 .def-listitem1.am-list-item .am-list-line .am-list-extra{flex-basis: initial;}
 .def-listitem.am-list-item .am-list-line .am-list-extra{flex-basis: 60%;}
-.timelongArea{display: flex;
+.timelongArea{display: flex;margin-bottom: 5px;
     .btnBlock{flex: 1;padding-right: 2%;}
 }
 

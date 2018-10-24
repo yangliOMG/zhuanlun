@@ -48,7 +48,7 @@ class Order{
     
 
     getWechatPay(res){
-        return axios.get('/wxpay/wechat_paytest.do',{params: {
+        return axios.get('/wxpay/wechat_pay.do',{params: {          //wechat_pay     wechat_paytest
             prayId:res.prayId , 
         }})
     }
@@ -60,6 +60,9 @@ class Order{
 
 
 
+    getTemplateType(fid){
+        return axios.get(`/template/type.do?fid=${fid}`)
+    }
     getTemplateList({type,content}){
         return axios.get(`/template/info.do?type=${type}&content=${content}`)
     }

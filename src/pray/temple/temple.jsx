@@ -66,7 +66,7 @@ class Temple extends React.Component{
         return (
             <div>
                 <WhiteSpace />
-                <div className='titlecard radius' style={{ backgroundImage:`url(${temple.ico||require('./linyinsi.jpg')})` }} 
+                <div className='titlecard radius' style={{ backgroundImage: temple.ico?`url(${temple.ico})`:'' }} 
                     onClick={()=>this.handleClick(temple.id)}>
                     <div className='title'>
                         <div className='name'>{temple.name}</div>
