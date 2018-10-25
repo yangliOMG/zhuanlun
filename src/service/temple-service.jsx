@@ -54,6 +54,12 @@ class Temple{
             id
         }})
     }
+    getPriceById(id){
+        return axios.get(`/facility/price.do`,{params: {
+            id
+        }})
+    }
+
     getLayoutById(id){
         return axios.get(`/facility/layout.do`,{params: {
             id

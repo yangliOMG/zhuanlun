@@ -2,7 +2,7 @@ import React from 'react'
 import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker, Toast, Button } from 'antd-mobile'
 import {connect} from 'react-redux'
 import District from './area'
-import {duringDictionary, dateDictionary, showToast, directionDictionary, cengConvert, timeFormat } from '../../util'
+import {duringDictionary, dateDictionary, showToast, timeFormat, positionMesArray } from '../../util'
 import Popup from '../../component/userMesTable/userMesTable.jsx'
 import {updateOrder} from '../../redux/order.redux'
 
@@ -161,20 +161,23 @@ class PrayDetail extends React.Component{
                                         :
                                     <div className='notpay'>支付超时，请重新下单</div>
                                     :
-                                    <div className='lh-26'><div className='textIndent2 pb-20 '>
-                                    {order.unick}在{order.tname} {order.fname}供奉了{order.dengwei.length}盏{order.content?order.content:"佛灯"}。</div>    
-                                    <div className={`${order.blessing?'':'hidden'}`}>
-                                        <div className='pt-10'>祈愿文：</div>
-                                        <div className='textIndent2 pb-20'>{order.blessing}</div>
-                                    </div></div>
+                                    <div className='lh-26'>
+                                        <div className='textIndent2 pb-20 '>
+                                            {order.unick}在{order.tname} {order.fname}供奉了{order.content?order.content:"佛灯"}共{order.dengwei.length}盏。
+                                        </div>    
+                                        <div className={`${order.blessing?'':'hidden'}`}>
+                                            <div className='pt-10'>祈愿文：</div>
+                                            <div className='textIndent2 pb-20'>{order.blessing}</div>
+                                        </div>
+                                    </div>
                                 }
 
                             </div>
                             <div className='inf'>
                                 <div className='leftBlock c-erji'>
                                     <p className={this.state.show?'':'text-overflow2'} onClick={()=>this.setState({show:!this.state.show})}>
-                                        供灯位置：{order.dengwei.map(val=>
-                                        `${directionDictionary(val.side-1)}面${cengConvert(val.row-1,val.maxrow||15)}层${('0'+val.col).slice(-2)}位、`)}</p>
+                                        供灯位置：{order.dengwei.map(v=>
+                                        positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")).map(val=>val[0]).join("、")}</p>
                                     <p>供灯时长：{during}</p>
                                     <p>创建时间：{timeFormat(order.createTime).toLocaleString()}</p>
                                 </div>

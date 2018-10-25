@@ -8,7 +8,7 @@ import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
 // import Template from '../../pray/template/template.jsx'
 
 import {updateOrder,newOrder} from '../../redux/order.redux'
-import {showToast,duringDictionary,getStorage,directionDictionary,cengConvert,getQueryString } from '../../util'
+import {showToast,duringDictionary,getStorage,getQueryString,positionMesArray } from '../../util'
 import {webchatPay } from './wechatPay.js'
 import Tem from '../../service/temple-service.jsx'
 import Order from '../../service/order-service.jsx'
@@ -49,49 +49,70 @@ class PrayForm extends React.Component{
             infoVisible: false,
             positionChangable:true
         }
-
     }
+    ajaxGetFacilityMessage(fid){
+        _temple.getTowerAndPriceById(fid).then(res=>{
+            alert(JSON.stringify(res.data.data))
+            if(res.status === 200 && res.data.data.facility){
+                // let price = {}
+                // res.data.data.price.forEach(v=>price[v.duration]=v.price)
+                this.setState({
+                    obj: res.data.data.facility,
+                    // price
+                })
+            }else{
+                showToast('没有该祈福塔信息')
+            }
+        })
+        _temple.getPriceById(fid).then(res=>{
+            alert(JSON.stringify(res.data.data))
+            if(res.status === 200 && res.data.data.price){
+                let price = {}
+                res.data.data.price.forEach(v=>price[v.duration]=v.price)
+                this.setState({
+                    price
+                })
+            }
+        })
+    }
+    ajaxGetRandomPosition(num){
+        let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
+        _temple.getRandomPosition(id,num).then(res=>{
+            if(res.status === 200 && res.data.data){
+                let position = res.data.data.map(v=>([
+                    v.address,
+                    positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")
+                ]))
+                this.setState({ position })
+                this.props.updateOrder({position})
+            }else{
+                console.log('无法随机供灯位置')
+            }
+        })
+    }
+
     componentWillMount(){
         let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
         let pid = getQueryString("pid")
         if(pid){
             _order.getOrderByid(pid).then(res=>{
                 if(res.status === 200){
-                    let dengwei = res.data.dengwei, fid = res.data.fid
+                    let { dengwei,fid } = res.data
                     let position = dengwei.map(v=>([
                         v.address,
-                        [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}层第${('0'+v.col).slice(-2)}位`,
-                            `${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}${v.col}`,
-                            `${v.side-1},${v.row-1},${v.col-1}`]]))
-                    _temple.getTowerAndPriceById(fid).then(res=>{
-                        if(res.status === 200 && res.data.data.facility){
-                            let price = {}
-                            res.data.data.price.forEach(v=>price[v.duration]=v.price)
-                            this.setState({
-                                obj: res.data.data.facility,
-                                price,
-                                position,
-                                positionChangable:false
-                            })
-                        }else{
-                            showToast('没有该祈福塔信息')
-                        }
+                        positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")
+                    ]))
+                            
+                    this.ajaxGetFacilityMessage(fid)
+                    this.setState({
+                        position,
+                        positionChangable:false
                     })
                 }
             })
         }else if(id){
-            _temple.getTowerAndPriceById(id).then(res=>{
-                if(res.status === 200 && res.data.data.facility){
-                    let price = {}
-                    res.data.data.price.forEach(v=>price[v.duration]=v.price)
-                    this.setState({
-                        obj: res.data.data.facility,
-                        price
-                    })
-                }else{
-                    showToast('没有该祈福塔信息')
-                }
-            })
+            this.ajaxGetFacilityMessage(id)
+
             _order.getTemplateType(id).then(res=>{
                 if(res.status === 200 && res.data.data){
                     this.setState({
@@ -100,21 +121,7 @@ class PrayForm extends React.Component{
                 }
             })
             if(this.state.position.length<=0){
-                _temple.getRandomPosition(id,this.state.num).then(res=>{
-                    if(res.status === 200 && res.data.data){
-                        let position = res.data.data.map(v=>([
-                            v.address,
-                            [`${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}层第${('0'+v.col).slice(-2)}位`,
-                                `${directionDictionary(v.side-1)}${cengConvert(v.row-1,v.maxrow||15)}${v.col}`,
-                                `${v.side-1},${v.row-1},${v.col-1}`]]))
-                        this.setState({
-                            position,
-                        })
-                        this.props.updateOrder({position})
-                    }else{
-                        console.log('无法随机供灯位置')
-                    }
-                })
+                this.ajaxGetRandomPosition(this.state.num)
             }
         }
     }
@@ -154,37 +161,44 @@ class PrayForm extends React.Component{
         this.props.updateOrder({num: Math.ceil(num/len)})
     }
     handleGrid(e){
-        let {typeList, checkBoxFlag, num} = this.state
+        let {typeList, checkBoxFlag, num, position} = this.state
         if(!checkBoxFlag){
             typeList = typeList.map(v=>({...v, flag:e.id===v.id?true:false}))
         }else{
             let li = typeList.filter(v=>v.flag===true)
             if(li.length===1&&li[0].id===e.id){
             }else{
-                num = e.flag? num-num/li.length :num+num/li.length
+                num = Math.ceil(e.flag? num-num/li.length :num+num/li.length)
                 typeList = typeList.map(v=>({...v, flag:e.id===v.id?(!v.flag):v.flag}))
             }
         }
-        let chosen = typeList.filter(v=>v.flag===true)
-        this.setState({
-            typeList,
-            num
-        })
-        this.props.updateOrder({num})
+        let chosen = typeList.filter(v=>v.flag===true), value = {num}
+        if( num < position.length){
+            position = position.slice(0,num)
+            value = {...value, position}
+        }else if(num > position.length){
+            this.ajaxGetRandomPosition(num)
+        }
+        this.setState({...value ,typeList})
+        this.props.updateOrder(value)
         this.handleTemplateType(chosen.length===1?chosen[0].id:'0')
     }
     handleNumChange(num){
-        let {position, typeList, num: oddnum} = this.state
+        let {position, typeList} = this.state
         let checked = typeList.filter(v=>v.flag===true)
-        if( num < position.length){
-            position = position.slice(0,num)
-        }
-        num = oddnum+(num-oddnum)*checked.length
         if(num<checked.length){
             return true
         }
-        this.setState({num,position,})
-        this.props.updateOrder({num,position})
+
+        let  value = {num}
+        if( num < position.length){
+            position = position.slice(0,num)
+            value = {...value, position}
+        }else if(num > position.length){
+            this.ajaxGetRandomPosition(num)
+        }
+        this.setState(value)
+        this.props.updateOrder(value)
     }
     handleTimeBtnClick(duration){
         this.setState({duration}) 
@@ -239,9 +253,12 @@ class PrayForm extends React.Component{
         order.adds = order.position.map(i=>i[0])
         order.fid = this.props.location.hash.replace("#","")
         order.source = getQueryString('src')===1? 1:2       //src = 1 入口，src = 2扫码
-        order.content = contentType.length===1?contentType[0].name:contentType.map((v,idx)=>v.name).join("、")
+        order.content = contentType.length===1?contentType[0].name:contentType.map(v=>v.name).join("、")
         if((order.num !== order.position.length)||(order.adds.length<=0)){
             return showToast('请完善供灯位置')
+        }
+        if(contentType.length>order.num){
+            return showToast('祈福类型不能多于供灯数量',2)
         }
         if(order.duration===""){
             return showToast('请选择时长')
@@ -347,7 +364,7 @@ class PrayForm extends React.Component{
                                 value={this.state.unick}
                                 onChange={v=>this.handleInput(v)}
                             >祈愿人：</InputItem>
-                            <Item className='gridRow'>
+                            { typeList.length>0 ?<Item className='gridRow'>
                                 <div className='gridTitle'>
                                     <div className='tit'>祈福类型：</div>
                                     <div className={`exp ${checkBoxFlag?'c-red':'c-fuzhu'}`}>
@@ -358,7 +375,7 @@ class PrayForm extends React.Component{
                                     </div>
                                 </div>
                                 <Grid data={typeList} hasLine={false} columnNum={4} activeStyle={false}
-                                    onClick={ v=>this.handleGrid(v) }
+                                    onClick={ v=>this.handleGrid(v) } itemStyle={{minHeight:"80px"}}
                                     renderItem={v => (
                                         <div >
                                             <div className={`gridItem gridBord ${v.flag?"active":""}`}>
@@ -376,7 +393,7 @@ class PrayForm extends React.Component{
                                 />
                                 <div className='descri'>供奉{contentType.length===1?contentType[0].name:contentType.map(v=>v.name).join('、')}共
                                     {this.state.num}盏{(contentTime||"").name}</div>
-                            </Item>
+                            </Item>:null}
                             {/* <div className="pos-r"> */}
                                 <TextareaItem className="textarea" title="祈愿文："
                                     onChange={v=>this.handleTextarea(v)}

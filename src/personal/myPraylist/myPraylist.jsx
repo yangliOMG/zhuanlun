@@ -2,7 +2,7 @@ import React from 'react'
 import { WhiteSpace, Card, WingBlank,Modal } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,directionDictionary,cengConvert,timeFormat,showToast,
+import {timeLongCount,duringDictionary,timeFormat,showToast,positionMesArray
     // continueLamp 
 } from '../../util'
 import Order from '../../service/order-service.jsx'
@@ -70,10 +70,10 @@ class MyPraylist extends React.Component{
                                         <div className='imgBlock'><img src={require('./fo.jpg')||v.tico} alt="" style={{width:'100%'}} /></div>
                                         <div className='titBlock'>
                                             <div style={{paddingBottom:'5px'}}>{v.tname} {v.fname}</div>
-                                            {v.dengwei.map((val,idx2)=>
+                                            {v.dengwei.map(v=>positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")).map((val,idx2)=>
                                                 <div key={idx2} className='spand'>
                                                     <span className='lampIcon l-shan tini'></span>
-                                                    {directionDictionary(val.side-1)}{cengConvert(val.row-1,val.maxrow||15)}层{('0'+val.col).slice(-2)}位
+                                                    {val[0]}
                                                 </div>
                                             )}
                                         </div>
