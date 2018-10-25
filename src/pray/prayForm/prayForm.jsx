@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, WhiteSpace  , Stepper, TextareaItem, Modal, WingBlank, InputItem, Grid, Icon } from 'antd-mobile'
+import { List, WhiteSpace  , Stepper, TextareaItem, Modal, WingBlank, InputItem, Grid,  } from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
@@ -373,19 +373,21 @@ class PrayForm extends React.Component{
                                     </div>
                                 </div>
                                 <Grid data={typeList} hasLine={false} columnNum={4} activeStyle={false}
-                                    onClick={ v=>this.handleGrid(v) } itemStyle={{minHeight:"80px"}}
+                                    onClick={ v=>this.handleGrid(v) } itemStyle={{height:"40px"}}
                                     renderItem={v => (
                                         <div >
-                                            <div className={`gridItem gridBord ${v.flag?"active":""}`}>
-                                                <img src={v.img} className='gridImg' alt="" />
-                                                <Icon className='gridIco' style={{display: checkBoxFlag?'':'none'}}
+                                            <div className={`gridItem gridBord ${v.flag?"gridBg":""}`}>
+                                                {/* <img src={v.img} className='gridImg' alt="" /> */}
+                                                <div className={`gridText gridCol ${v.flag?"active":""}`}>
+                                                    <span>{v.name}</span>
+                                                </div>
+                                                <img src={require('./cloud.png')} className='gridIco' style={{display: v.flag?'':'none'}} alt="" /> 
+                                                {/* <Icon className='gridIco' style={{display: checkBoxFlag?'':'none'}}
                                                     type={v.flag?"check-circle":"check-circle-o" } 
                                                     color={v.flag?"red":"#bbb"} 
-                                                />
+                                                /> */}
                                             </div>
-                                            <div className={`gridText ${v.flag?"c-red":""}`}>
-                                                <span>{v.name}</span>
-                                            </div>
+                                            
                                         </div>
                                     )} 
                                 />
