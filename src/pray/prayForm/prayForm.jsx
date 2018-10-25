@@ -30,10 +30,10 @@ class PrayForm extends React.Component{
             obj :{},
             num: this.props.order.num,
             price:{
-                1:980,
-                30:1980,
-                365:19900,
-                7200:360000
+                1:1200,
+                30:19900,
+                365:120000,
+                7200:600000
             },
             unick:getStorage('user').nick,
             duration:this.props.order.duration,
@@ -52,7 +52,6 @@ class PrayForm extends React.Component{
     }
     ajaxGetFacilityMessage(fid){
         _temple.getTowerAndPriceById(fid).then(res=>{
-            alert(JSON.stringify(res.data.data))
             if(res.status === 200 && res.data.data.facility){
                 // let price = {}
                 // res.data.data.price.forEach(v=>price[v.duration]=v.price)
@@ -65,10 +64,9 @@ class PrayForm extends React.Component{
             }
         })
         _temple.getPriceById(fid).then(res=>{
-            alert(JSON.stringify(res.data.data))
-            if(res.status === 200 && res.data.data.price){
+            if(res.status === 200 && res.data.data){
                 let price = {}
-                res.data.data.price.forEach(v=>price[v.duration]=v.price)
+                res.data.data.forEach(v=>price[v.duration]=v.price)
                 this.setState({
                     price
                 })
