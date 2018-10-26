@@ -112,10 +112,13 @@ class PrayForm extends React.Component{
             this.ajaxGetFacilityMessage(id)
 
             _order.getTemplateType(id).then(res=>{
-                if(res.status === 200 && res.data.data){
+                let list = res.data.data
+                if(res.status === 200 && list.length>0){
                     this.setState({
-                        typeList:res.data.data.map((v,idx)=>({...v,flag:idx===0?true:false})),
+                        typeList:list.map((v,idx)=>({...v,flag:idx===0?true:false})),
                     })
+                    
+                    this.handleTemplateType(list[0].id)
                 }
             })
             if(this.state.position.length<=0){
