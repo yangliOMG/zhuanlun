@@ -74,19 +74,19 @@ class PrayForm extends React.Component{
         })
     }
     ajaxGetRandomPosition(num){
-        let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
-        _temple.getRandomPosition(id,num).then(res=>{
-            if(res.status === 200 && res.data.data){
-                let position = res.data.data.map(v=>([
-                    v.address,
-                    positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")
-                ]))
-                this.setState({ position })
-                this.props.updateOrder({position})
-            }else{
-                console.log('无法随机供灯位置')
-            }
-        })
+        // let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
+        // _temple.getRandomPosition(id,num).then(res=>{
+        //     if(res.status === 200 && res.data.data){
+        //         let position = res.data.data.map(v=>([
+        //             v.address,
+        //             positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")
+        //         ]))
+        //         this.setState({ position })
+        //         this.props.updateOrder({position})
+        //     }else{
+        //         console.log('无法随机供灯位置')
+        //     }
+        // })
     }
 
     componentWillMount(){

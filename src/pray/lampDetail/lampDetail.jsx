@@ -55,7 +55,7 @@ class LampDetail extends React.Component{
     }
 
     componentWillMount(){
-        const num = this.props.num , position = this.props.position
+        const position = this.props.position
         const id = this.props.location.hash.replace("#","")
         if(id){
             Toast.loading('加载中。。。',0)
@@ -80,9 +80,10 @@ class LampDetail extends React.Component{
                             })
                             if(position.length>0){
                                 position.forEach((arr,idx)=>this.seatSelection(...arr[1][2].split(',')))
-                            }else if(num && num>0){
-                                this.handleRecBtnClick(num)
                             }
+                            // else if(num && num>0){
+                            //     this.handleRecBtnClick(num)
+                            // }
                         }
                         Toast.hide()
                     })

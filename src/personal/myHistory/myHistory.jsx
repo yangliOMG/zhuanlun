@@ -38,7 +38,7 @@ class MyHistory extends React.Component{
                     <div className='li radius ofhd' onClick={()=>window.location.href = `/templeList`}>
                         <div className='imgBlock'><img src={logo} alt="" /></div>
                         <div className='textBlock'>
-                            <div className='b name'>更多寺院</div>
+                            <div className='b name'>所有寺院</div>
                             <div className="text-overflow4a c-grey1 pt-20">点击前往寺庙列表页</div>
                         </div>
                     </div>

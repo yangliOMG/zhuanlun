@@ -2,8 +2,8 @@ const UPDATEORDER = 'UPDATEORDER'
 
 const initState = {
     blessing:'',
-    num:2,
-    duration:30,
+    num:1,
+    duration:1,
     position:[],
     total:'',
     id:'',
