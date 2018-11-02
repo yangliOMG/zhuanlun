@@ -24,7 +24,7 @@
     function ajax(){
         var fid = window.location.hash.replace('#','')
         var client = new XMLHttpRequest()
-        var url = fid===""? "/pray/top.do?top=5": "/pray/top.do?top=5&fid="+fid
+        var url = fid===""? "/pray/top.do?top=10": "/pray/top.do?top=10&fid="+fid
         client.open("GET", url)
         client.onreadystatechange = function() {
             if (this.status === 200 && this.response!=="") {

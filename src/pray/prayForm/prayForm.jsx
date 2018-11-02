@@ -332,7 +332,7 @@ class PrayForm extends React.Component{
         const contentTime = duringDictionary().find(v=>v.type+''===duration)
         const btnList = Object.keys(price).map(val=>
                             duringDictionary().find(v=>v.type+''===val)
-                        )
+                        ).filter(v=>v)
         const total = (price[duration]||0)* num
         const prayArticle = blessing.replace(/{{prayer}}/g,unick||'')
 
