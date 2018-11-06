@@ -1,10 +1,29 @@
 # 问题总结
+* 从零开始在linux系统中运行natapp
+```
+1.下载linux客户端natapp，拷到linux中
+2.给权限 chmod u+x natapp （否则permission denied）
+3.启动 natapp -authtoken=你的authtoken
+（https://natapp.cn/article/nohup）
+```
+* 从零开始提交项目到码云上
+```
+1.在码云上新建一个项目，去掉所有文件自动生成的勾选
+2.在代码目录中，git init
+3.git remote add origin 路径
+4.git add . => git commit -m '注释信息' => git push -u origin master
+```
 * 从零开始部署
 ```
 1.安装node(https://www.cnblogs.com/liuqi/p/6483317.html)
 2.安装pm2(https://my.oschina.net/u/2252639/blog/1798667)
 3.安装git
 4.配置deploy_key(https://www.cnblogs.com/yeshaoxiang/p/7839603.html)
+      获取linu中的ssh_key:    cat ~/.ssh/id_rsa.pub
+```
+* 阿里云移除端口的防火墙
+```
+云服务器ECS/网络和安全/安全组 => 配置规则 => 添加端口号
 ```
 * npm 操作
 ```

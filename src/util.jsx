@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-10-25 10:53:41
+ * @Last Modified time: 2018-11-06 10:26:37
  */
 import { Toast } from 'antd-mobile';
 /**
@@ -234,14 +234,22 @@ export function continueLamp(date){
 /**
  * 计算时长
  * @param {起始日期} date 
- * @param {结束日期} date 
+ * @param {结束日期} date  
+ * @param {切换为计算剩余时间} boolean 
  */
-export function timeLongCount(begin,end){
+export function timeLongCount(begin,end,otherside){
     try {
         let a = new Date(timeFormat(begin)).getTime(),
             b = new Date(timeFormat(end)).getTime(),  
             c = new Date().getTime()
         let date3 = b<c? b-a : c-a
+        if(otherside){
+            if(b<c){
+                return '已过期'
+            }else{
+                date3 = b-c
+            }
+        }
         //计算出相差天数
         let days=Math.floor(date3/(24*3600*1000))
         //计算出小时数
