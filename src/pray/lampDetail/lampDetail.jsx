@@ -3,19 +3,21 @@ import {withRouter} from 'react-router-dom'
 import { Button, Toast } from 'antd-mobile'
 import FontAwesome from 'react-fontawesome';
 import {connect} from 'react-redux'
+
+
 import TabEx from  './tabEx.jsx'
 import {directionDictionary, recommendAI, positionMesArray, showToast} from '../../util'
-import {updateOrder} from '../../redux/order.redux'
-import Tem from '../../service/temple-service.jsx'
+import { TO_GET_LAYOUT,UPDATEORDER} from '../../constant/actionType'
 
 import './lampDetail.less'
 
-const _temple = new Tem()
 
 @withRouter 
-@connect(
-    state=>state.order,
-    {updateOrder}
+@connect( ({order})=>order,
+    dispatch => ({
+        getLayoutById: (payload, callback, callback2) => dispatch({type: TO_GET_LAYOUT, payload, callback, callback2}),
+        updateOrder: (payload) => dispatch({type: UPDATEORDER,payload}),
+    })
 )
 class LampDetail extends React.Component{
     constructor(props){
@@ -59,35 +61,14 @@ class LampDetail extends React.Component{
         const id = this.props.location.hash.replace("#","")
         if(id){
             Toast.loading('加载中。。。',0)
-            _temple.getLayoutById(id).then(res=>{
-                let layout = res.data
-                if(res.status === 200){
-                    _temple.getOccupyById(id).then(res=>{
-                        let occupy = res.data
-                        if(res.status === 200){
-                            let total = 0
-                            this.setState({
-                                data: layout.map(arrd=>
-                                        arrd.map(arr=>
-                                            arr.map(id=>{
-                                                total++;
-                                                return {id,state: occupy.includes(id)?1:0}
-                                            })     //0可选，1不可选，2已选
-                                        )
-                                ),
-                                total,
-                                occupy:occupy.length
-                            })
-                            if(position.length>0){
-                                position.forEach((arr,idx)=>this.seatSelection(...arr[1][2].split(',')))
-                            }
-                            // else if(num && num>0){
-                            //     this.handleRecBtnClick(num)
-                            // }
-                        }
-                        Toast.hide()
-                    })
+            this.props.getLayoutById({id},(data,total,occupy)=>{
+                this.setState({
+                    data,total,occupy
+                })
+                if(position.length>0){
+                    position.forEach((arr,idx)=>this.seatSelection(...arr[1][2].split(',')))
                 }
+                Toast.hide()
             })
         }
     }
@@ -129,19 +110,15 @@ class LampDetail extends React.Component{
     
     turnPage(curPage){
         curPage = Number(curPage)
-        // const lastPageHide = curPage===0
-        // const nextPageHide = this.state.data.length===(curPage+1)
         if(this.state.curPage!==curPage){
             this.scrollToBottom()
         }
         this.setState({
             curPage,
-            // lastPageHide,nextPageHide
         })
     }
     seatSelection(idx,idx1,idx2){
-        let data = this.state.data
-        let seledList = this.state.seledList
+        let { data, seledList } = this.state
         let lampdata = data[idx][idx1][idx2]
         let len = data[idx].length
 
@@ -164,12 +141,13 @@ class LampDetail extends React.Component{
         //         arr.forEach(i=>i.state===2?i.state=0:'' )
         //     )
         // )
+        let { data,seledList } = this.state
         let re = new RegExp('"id":'+id+',"state":2','ig')
-        let data = JSON.parse(JSON.stringify(this.state.data).replace(re,'"id":'+id+',"state":0'))
-        this.state.seledList.delete(id)
+        data = JSON.parse(JSON.stringify(data).replace(re,'"id":'+id+',"state":0'))
+        seledList.delete(id)
         this.setState({
             data,
-            seledList:this.state.seledList
+            seledList
         })
     }
     handleSureSelectClick(){
@@ -195,9 +173,9 @@ class LampDetail extends React.Component{
     }
 
     render(){
-        const selednum = this.state.seledList.size, occupy = this.state.occupy||0, can = this.state.total-occupy-selednum||0
+        const { seledList, occupy = 0, total, data, curPage, activeArrow, lastPageHide,nextPageHide} = this.state
+        const selednum = seledList.size, can = total-occupy-selednum||0
         const btnList = [{type:1,name:'1盏'},{type:2,name:'2盏'},{type:3,name:'3盏'},{type:4,name:'4盏'}]
-        const data = this.state.data
         return (
             <div className ='bodyBackgroundColor max-h' style={{overflow:"hidden"}}>
                 <div className='state-bar'>  
@@ -208,25 +186,25 @@ class LampDetail extends React.Component{
                     )}
                 </div>
                 <div id='area' className={`area ${selednum===0?'':'b187'}`}>
-                    <TabEx data={data} curPage={this.state.curPage}
+                    <TabEx data={data} curPage={curPage}
                         turnPage={(idx)=>this.turnPage(idx)} 
                         seatSelection={(idx,idx1,idx2)=>this.seatSelection(idx,idx1,idx2)}
                     ></TabEx>
                 </div>
                 <div className="fixed-bar">
                     <div className='field-bar'>
-                        <div className={`leftArrow c-grey1 ${this.state.activeArrow}`} onClick={()=>this.handleArrowClick('left')}>
-                            <FontAwesome name={'chevron-left'} className={`${this.state.lastPageHide&&'hidden'}`} />
+                        <div className={`leftArrow c-grey1 ${activeArrow}`} onClick={()=>this.handleArrowClick('left')}>
+                            <FontAwesome name={'chevron-left'} className={`${lastPageHide&&'hidden'}`} />
                         </div>
                         <div style={{flex: '12 1'}} className="titleCard">
-                            <div className="channel-box" style={{WebkitTransform: `translate(-${this.state.curPage}00%,0)`  }}>
+                            <div className="channel-box" style={{WebkitTransform: `translate(-${curPage}00%,0)`  }}>
                                 {data.map((v,idx)=>
                                     <div className="channel" key={idx}>福佑灯塔 <span className='c-orange'>{directionDictionary(idx)}</span></div>
                                 )}
                             </div>
                         </div>
-                        <div className={`rightArrow c-grey1 ${this.state.activeArrow}`} onClick={()=>this.handleArrowClick('right')}>
-                            <FontAwesome name={'chevron-right'} className={`${this.state.nextPageHide&&'hidden'}`} />
+                        <div className={`rightArrow c-grey1 ${activeArrow}`} onClick={()=>this.handleArrowClick('right')}>
+                            <FontAwesome name={'chevron-right'} className={`${nextPageHide&&'hidden'}`} />
                         </div>
                     </div>
                     <div className={`recom-bar ${selednum!==0&&'hidden'}`}>  
@@ -237,7 +215,7 @@ class LampDetail extends React.Component{
                     </div>
                     <div className={`pos-bar ${selednum===0&&'hidden'}`}>
                         <div className="nowrap">
-                            {[...this.state.seledList].map((v,idx)=>
+                            {[...seledList].map((v,idx)=>
                                 <div className="nameplate bg-red1 radius" key={v[0]}>{v[1][0]}
                                     <FontAwesome name={'times-circle'} className='timecircle' size='lg'
                                         onClick={()=>this.handleSeatDelete(v[0])}/>

@@ -1,18 +1,15 @@
-import React from 'react'
+import React,{Fragment} from 'react'
 import { Button, WhiteSpace ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
-// import FontAwesome from 'react-fontawesome';
 
-import {showToast } from '../../util'
-import Tem from '../../service/temple-service.jsx'
-
+import { TO_GET_TEMPLE, } from '../../constant/actionType'
 import './templeDetail.less'
 
-const _temple = new Tem()
 
-@connect(
-    state=>state.user,
-    // {update}
+@connect( ()=>({}),
+    dispatch => ({
+        getTempleMessage: (payload, callback) => dispatch({type: TO_GET_TEMPLE, payload, callback}),
+    })
 )
 class TempleDetail extends React.Component{
     constructor(props){
@@ -26,29 +23,19 @@ class TempleDetail extends React.Component{
     }
     componentWillMount(){
         const id = this.props.location.hash.replace("#","")
-        _temple.getTempleById(id).then(res=>{
-            if(res.status === 200){
-                this.setState({
-                    ...res.data,
-                    temple : res.data.temple[0]
-                })
-            }
+        this.props.getTempleMessage({id}, res =>{
+            this.setState({
+                ...res,
+                temple : res.temple[0]
+            })
         })
-    }
-
-    handleClick(id){
-        this.setState({
-            care:!this.state.care
-        })
-        showToast(!this.state.care?'已收藏':'取消收藏')
     }
 
     render(){
-        const temple = this.state.temple
-        const templeMaterial = this.state.templeMaterial
+        const { temple, templeMaterial } = this.state
         const zhuchi = templeMaterial.find(v=>v.name==='主持')
         return (
-            <div>
+            <Fragment>
                 <WingBlank size="lg">
                     <WhiteSpace />
                     <div className='content radius'>
@@ -77,7 +64,7 @@ class TempleDetail extends React.Component{
                     >我要祈福</Button>
                 <WhiteSpace size="lg" />
                 
-            </div>
+            </Fragment>
         )
     }
 }

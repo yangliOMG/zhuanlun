@@ -2,14 +2,19 @@ import React from 'react'
 import { WingBlank, WhiteSpace,  List, Button, Toast } from 'antd-mobile'
 import {connect} from 'react-redux'
 
-import {showToast } from '../../util'
+import VBtn from '../../component/vercodeBtn/vercodeBtn.jsx'
 
-import User from '../../service/user-service.jsx'
+import {showToast, getStorage } from '../../util'
+import { TO_GET_USERINFO, TO_GET_VERCODE, TO_PUT_PHONE } from '../../constant/actionType'
+
 import  "./myPhone.less"
 
-const _user = new User()
-@connect(
-    state=>state.user,
+@connect(()=>({}),
+    dispatch => ({
+        getUserinfo: (payload,callback) => dispatch({type: TO_GET_USERINFO, payload,callback}),
+        sendVerCode: (payload, callback, callback2) => dispatch({type: TO_GET_VERCODE, payload, callback, callback2}),
+        submitPhone: (payload, callback, callback2) => dispatch({type: TO_PUT_PHONE, payload, callback, callback2}),
+    })
 )
 class MyPhone extends React.Component{
     constructor(props){
@@ -19,107 +24,58 @@ class MyPhone extends React.Component{
             phone:'',
             inputphone:'',
             vercode:'',
-            disabled:false,
-            btnContent:'获取验证码'
         }
     }
 
     componentWillMount(){
-        _user.getUserMes().then(res=>{
-            if(res.status === 200 && res.data.tel){
-                this.setState({
-                    phone: res.data.tel,
-                    flag:true
-                })
-            }
+        const openid = getStorage('user').openid
+        this.props.getUserinfo({openid},(res)=>{
+            this.setState({ phone: res, flag:true })
         })
     }
 
-    handleGetvercode(){
-        if( this.state.disabled )
-            return true;
-        let phone = this.state.inputphone
-        let preg = /^(((13[0-9]{1})|(15[0-35-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/; //匹配手机号
-        if( phone==='' || !preg.test(phone)){
-            showToast('请输入正确格式的电话号码')
-            return false
-        }else{
-            let times=60, T = null
-            T=setInterval(()=>{
-                times--;
-                if(times<=0){
-                    this.setState({
-                        disabled:false,
-                        btnContent:'获取验证码'
-                    })
-                    clearInterval(T)
-                }else{
-                    this.setState({
-                        disabled:true,
-                        btnContent: times+'秒后重试'
-                    })
-                }
-            },1000)
-
-            _user.sendVerCode(phone).then(res=>{
-                let status = res.data[0]
-                if(status==='1'){
-                    showToast('短信验证码已成功发送！',2)
-                }else if(status==='-1'){
-                    showToast('短信验证码请求间隔为60s！',2)
-                }else{
-                    showToast('短信验证码发送失败！！',2)
-                    this.setState({
-                        disabled:false,
-                        btnContent: '获取验证码'
-                    })
-                }
-            })
-        }
-    }
     handleChange(event,key){
         this.setState({[key]: event.target.value})
     }
-    handleBindnum(){
-        this.setState({flag: false})
-    }
 
     handleSubmitPhone(){
+        const { inputphone, vercode } = this.state
         Toast.loading('加载中...',0)
-        _user.submitPhone({tel:this.state.inputphone,code:this.state.vercode}).then(res=>{
-            if(res.data){
-                showToast('绑定成功！')
-                setTimeout(()=>this.props.history.goBack(), 1000)
-            }else{
-                showToast('验证码有误！',2)
-            }
-        })
+        this.props.submitPhone({tel:inputphone,code:vercode}, 
+            mes=> showToast( mes,2), 
+            ()=> setTimeout(()=>this.props.history.goBack(), 1000)
+        )
     }
 
     render(){
+        const { flag, phone, inputphone, vercode,} = this.state
+        const { sendVerCode } = this.props
         return (
             <div>
                 <WhiteSpace/>
                 <WingBlank size="lg">
 
-                    <List className={`radius phonePannel ${!this.state.flag&&'hidden'}`}>
-                        <div className='pt-30'>绑定的手机号：{this.state.phone}</div>
+                    <List className={`radius phonePannel ${!flag&&'hidden'}`}>
+                        <div className='pt-30'>绑定的手机号：{phone}</div>
                         <div className='pd-30'>
-                            <div className='changebtn' onClick={()=>this.handleBindnum()}>更换手机号</div>
+                            <div className='changebtn' onClick={()=>this.setState({flag: false})}>更换手机号</div>
                         </div>
                     </List>
-                    <div className={`${this.state.flag&&'hidden'}`}>
+                    <div className={`${flag&&'hidden'}`}>
                         <List className='radius phonePannel'>
                             <div className='bordbot'>
                                 <input type="text" className="inputBot" placeholder="输入您的手机号" 
-                                    onChange={(event)=>this.handleChange(event,'inputphone')} value={this.state.inputphone}  />
+                                    onChange={(event)=>this.handleChange(event,'inputphone')} value={inputphone}  />
                             </div>
                             <table>
                                 <tbody>
                                 <tr>
                                     <td><input type="text" className="inputBot" placeholder="验证码"
-                                        onChange={(event)=>this.handleChange(event,'vercode')} value={this.state.vercode} /></td>
-                                    <td width="92"><a className={`codebtn ${this.state.disabled&&'disabled'}`} onClick={()=>this.handleGetvercode()} >{this.state.btnContent}</a></td>
+                                        onChange={(event)=>this.handleChange(event,'vercode')} value={vercode} /></td>
+                                    <td width="92">
+                                        <VBtn className="codebtn" inputphone={inputphone} 
+                                            sendVerCode={ (phone,fn1,fn2) => sendVerCode({phone},fn1,fn2)}/>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

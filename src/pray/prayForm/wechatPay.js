@@ -1,11 +1,11 @@
 import { Toast} from 'antd-mobile'
-import Order from '../../service/order-service.jsx'
+
+import {getWechatPay} from '../../service/api.js'
 import {showToast } from '../../util'
-const _order = new Order()
 
 export function webchatPay(res){
     Toast.loading('加载中...',0)
-    _order.getWechatPay(res).then(res=>{
+    getWechatPay(res).then(res=>{
         if (typeof(WeixinJSBridge) === "undefined"){  
             if( document.addEventListener ){  
                 document.addEventListener('WeixinJSBridgeReady', onBridgeReady.bind(res.data), false);  

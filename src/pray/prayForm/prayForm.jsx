@@ -3,126 +3,76 @@ import { List, WhiteSpace  , Stepper, TextareaItem, Modal, WingBlank, InputItem,
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
-import PrayNavbar from '../../component/prayNavbar/prayNavbar.jsx'
+import PrayNavbar from '../../component/prayNavbar/hoc.jsx'
 import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
-// import Template from '../../pray/template/template.jsx'
 
-import {updateOrder,newOrder} from '../../redux/order.redux'
-import {showToast,duringDictionary,getStorage,getQueryString,positionMesArray } from '../../util'
+import { TO_GET_TOWERMES, TO_GET_TEMPLATE,TO_GET_TEXTSCAN,TO_PUT_ORDER,TO_GET_ORDER,TO_GET_RANDOMPOSITION,
+     UPDATEORDER } from '../../constant/actionType'
+import {showToast,duringDictionary,getStorage,getQueryString } from '../../util'
 import {webchatPay } from './wechatPay.js'
-import Tem from '../../service/temple-service.jsx'
-import Order from '../../service/order-service.jsx'
-
 
 import './prayForm.css'
 import './prayForm.less'
-const _temple = new Tem()
-const _order = new Order()
 
-@connect(
-    state=>state,
-    {updateOrder,newOrder}
+@connect( state=>state ,
+    dispatch => ({
+        getTowerMessage: (payload, callback, callback2) => dispatch({type: TO_GET_TOWERMES, payload, callback, callback2}),
+        getTemplate: (payload, callback, callback2) => dispatch({type: TO_GET_TEMPLATE, payload,callback,callback2}),
+        getRandomPosition: (payload, callback) => dispatch({type: TO_GET_RANDOMPOSITION, payload,callback}),
+        getOrderByid: (payload, callback) => dispatch({type: TO_GET_ORDER, payload,callback }),
+        updateOrder: (payload) => dispatch({type: UPDATEORDER,payload}),
+        getTextScan: (payload, callback, callback2) => dispatch({type: TO_GET_TEXTSCAN, payload,callback,callback2}),
+        createOrder: (payload, callback, callback2) => dispatch({type: TO_PUT_ORDER, payload,callback,callback2}),
+    })
 )
 class PrayForm extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             obj :{},
-            num: this.props.order.num,
-            price:{
-                1:1200,
-                30:19900,
-                365:120000,
-                7200:600000
-            },
+            price:{ 1:1200, 30:19900, 365:120000, 7200:600000 },
             unick:getStorage('user').nick,
-            duration:this.props.order.duration,
-            total:0,
-            blessing:this.props.order.blessing,
-            position:this.props.order.position,
 
             typeList:[],
+            navList:[],
             checkBoxFlag:false,
             textScan:true,
             modal2: false,
-            visible: false,
             infoVisible: false,
             positionChangable:true
         }
     }
-    ajaxGetFacilityMessage(fid){
-        _temple.getTowerAndPriceById(fid).then(res=>{
-            if(res.status === 200 && res.data.data.facility){
-                // let price = {}
-                // res.data.data.price.forEach(v=>price[v.duration]=v.price)
-                this.setState({
-                    obj: res.data.data.facility,
-                    // price
-                })
-            }else{
-                showToast('没有该祈福塔信息')
-            }
-        })
-        _temple.getPriceById(fid).then(res=>{
-            if(res.status === 200 && res.data.data){
-                let price = {}
-                res.data.data.forEach(v=>price[v.duration]=v.price)
-                this.setState({
-                    price
-                })
-            }
-        })
-    }
     ajaxGetRandomPosition(num){
         // let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
-        // _temple.getRandomPosition(id,num).then(res=>{
-        //     if(res.status === 200 && res.data.data){
-        //         let position = res.data.data.map(v=>([
-        //             v.address,
-        //             positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")
-        //         ]))
-        //         this.setState({ position })
-        //         this.props.updateOrder({position})
-        //     }else{
-        //         console.log('无法随机供灯位置')
-        //     }
+        // this.props.getRandomPosition({id,num},(mes)=>{
+        //     console.log(mes)
         // })
     }
 
     componentWillMount(){
         let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
         let pid = getQueryString("pid")
+        const { position,num } = this.props.order
         if(pid){
-            _order.getOrderByid(pid).then(res=>{
-                if(res.status === 200){
-                    let { dengwei,fid } = res.data
-                    let position = dengwei.map(v=>([
-                        v.address,
-                        positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")
-                    ]))
-                            
-                    this.ajaxGetFacilityMessage(fid)
-                    this.setState({
-                        position,
-                        positionChangable:false
-                    })
-                }
+            this.props.getOrderByid({id:pid},(obj,price)=>{
+                this.setState({
+                    obj, price, positionChangable:false
+                })
+            },(mes)=>{
+                showToast('没有该订单信息')
+                console.log(mes)
             })
         }else if(id){
-            this.ajaxGetFacilityMessage(id)
-
-            _order.getTemplateType(id).then(res=>{
-                let list = res.data.data
-                if(res.status === 200 && list.length>0){
-                    this.setState({
-                        typeList:list.map((v,idx)=>({...v,flag:idx===0?true:false})),
-                    })
-                    
-                    this.handleTemplateType(list[0].id)
-                }
+            this.props.getTowerMessage( {fid:id}, (obj,price,typeList,navList)=>{
+                this.setState({
+                    obj,price,typeList,navList
+                })
+                this.handleTemplateType(typeList[0].id)
+            },(mes)=>{
+                showToast(mes)
             })
-            if(this.state.position.length<=0){
-                this.ajaxGetRandomPosition(this.state.num)
+            if(position.length<=0){
+                this.ajaxGetRandomPosition(num)
             }
         }
     }
@@ -131,19 +81,15 @@ class PrayForm extends React.Component{
     // }
     
     handleTemplateType(type){
-        _order.getRandomTemplateByType(type).then(res=>{
-            this.setState({visible:false})
-            if(res.status === 200&& res.data.content){
-                this.handleTextarea(res.data.content)
-                this.handleBlurTextScan()
-            }else{
-                showToast('暂无该类模板')
-            }
-        })
-        
+        this.props.getTemplate({type},()=>{
+            this.handleBlurTextScan()
+        },()=>
+            showToast('暂无该类模板')
+        )
     }
     handleCheckbox(){
-        let {typeList, checkBoxFlag, num} = this.state
+        let {typeList, checkBoxFlag,} = this.state
+        let { num} = this.props.order
         let len = 1
         if(checkBoxFlag){
             len = typeList.filter(v=>v.flag===true).length
@@ -157,12 +103,12 @@ class PrayForm extends React.Component{
         this.setState({
             checkBoxFlag: !checkBoxFlag,
             typeList,
-            num: Math.ceil(num/len)
         })
         this.props.updateOrder({num: Math.ceil(num/len)})
     }
     handleGrid(e){
-        let {typeList, checkBoxFlag, num, position} = this.state
+        let { typeList, checkBoxFlag, } = this.state
+        let { num, position } = this.props.order
         if(!checkBoxFlag){
             typeList = typeList.map(v=>({...v, flag:e.id===v.id?true:false}))
         }else{
@@ -180,12 +126,13 @@ class PrayForm extends React.Component{
         }else if(num > position.length){
             this.ajaxGetRandomPosition(num)
         }
-        this.setState({...value ,typeList})
+        this.setState({ typeList})
         this.props.updateOrder(value)
         this.handleTemplateType(chosen.length===1?chosen[0].id:'0')
     }
     handleNumChange(num){
-        let {position, typeList} = this.state
+        let { typeList} = this.state
+        let { position } = this.props.order
         let checked = typeList.filter(v=>v.flag===true)
         if(num<checked.length){
             return true
@@ -198,11 +145,9 @@ class PrayForm extends React.Component{
         }else if(num > position.length){
             this.ajaxGetRandomPosition(num)
         }
-        this.setState(value)
         this.props.updateOrder(value)
     }
     handleTimeBtnClick(duration){
-        this.setState({duration}) 
         this.props.updateOrder({duration})
         if(duration===7300){
             this.handleNumChange(1)
@@ -212,31 +157,17 @@ class PrayForm extends React.Component{
         this.setState({unick})
     }
     handleTextarea(blessing){
-        this.setState({blessing})
         this.props.updateOrder({blessing})
     }
     handleBlurTextScan(){
-        let blessing = this.state.blessing.replace(/{{prayer}}/g,this.state.unick||'')
+        let { blessing } = this.props.order
+        blessing = blessing.replace(/{{prayer}}/g,this.state.unick||'')
         if(blessing!==''&&false){
-            _order.getTextScan(blessing).then(res=>{
-                if(res.status === 200&& res.data.suggestion==='pass'){
-                    this.setState({textScan:true})
-                }else{
-                    this.setState({textScan:false})
-                    if(res.status === 200&& res.data.suggestion==='block'){
-                        const dic = {
-                            spam:'含垃圾信息',
-                            ad:'广告',
-                            politics:'涉政',
-                            terrorism:'暴恐',
-                            abuse:'辱骂',
-                            porn:'色情',
-                            flood:'灌水',
-                            contraband:'违禁',
-                            meaningless:'无意义'}
-                        showToast('祈愿文内容违规，违规原因：'+dic[res.data.label],3)
-                    }
-                }
+            this.props.getTextScan({blessing},()=>{
+                this.setState({textScan:true})
+            },(mes)=>{
+                this.setState({textScan:false})
+                showToast(mes,3)
             })
         }else{
             this.setState({textScan:true})
@@ -246,7 +177,6 @@ class PrayForm extends React.Component{
         let order = {...this.props.order}
         let { unick, typeList} = this.state
         let contentType = typeList.filter(v=>v.flag)
-        // order.total = (this.state.price[this.state.duration]||0)* this.state.num
         order.blessing = order.blessing.replace(/{{prayer}}/g,unick||'')
         order.prayman = unick
         order.openTime = (new Date()).getTime()
@@ -269,30 +199,21 @@ class PrayForm extends React.Component{
         // }
         delete order.position
         if(order.blessing&&false){
-            _order.getTextScan(order.blessing).then(res=>{
-                if(res.status === 200&& res.data.suggestion==='pass'){
-                    this.createOrder(order)
-                }
+            this.props.getTextScan({blessing:order.blessing},()=>{
+                this.createOrder(order)
+            },(mes)=>{
+                this.setState({textScan:false})
+                showToast(mes,3)
             })
         }else{
             this.createOrder(order)
         }
     }
     createOrder(order){
-        _order.createOrder(order).then(res=>{
-            if(res.data.returnCode===1000){
-                this.props.newOrder()
-                this.setState({position:[]})
-                return webchatPay(res.data.data)
-            }else{
-                let occ = res.data.data.occ
-                if(occ){
-                    let position = this.state.position.filter(v=>!occ.includes(v[0]))
-                    this.setState({position})
-                    this.props.updateOrder({position})
-                }
-                showToast(res.data.data.errorInfo)
-            }
+        this.props.createOrder({order},(res)=>{
+            webchatPay(res)
+        },(mes)=>{
+            showToast(mes)
         })
     }
 
@@ -309,21 +230,11 @@ class PrayForm extends React.Component{
         this.setState({[key]: false,...value})
         document.getElementById('root').style.overflow =''
     }
-    // tt(){
-    //     let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
-    //     _temple.getTowerAndPriceById(id).then(res=>{
-    //         alert("W"+JSON.stringify(res))
-    //     }).catch(e=>alert("W"+JSON.stringify(e))).finally(e=>alert("X"+JSON.stringify(e)))
-    // }
-    // ss(){
-    //     let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
-    //     _temple.getRandomPosition(id,this.state.num).then(res=>{
-    //         alert("W"+JSON.stringify(res))
-    //     }).catch(e=>alert("W"+JSON.stringify(e))).finally(e=>alert("X"+JSON.stringify(e)))
-    // }
+      
 
     render(){
-        const { obj, price, duration, num, blessing, unick, typeList, checkBoxFlag } = this.state
+        const { obj, price, unick, typeList, navList, checkBoxFlag, infoVisible, positionChangable, modal2 } = this.state
+        const { duration, num, blessing, position } = this.props.order
         //module
         const Item = List.Item
         const Brief = Item.Brief
@@ -338,18 +249,18 @@ class PrayForm extends React.Component{
 
         return (
             <div>
-                <PrayNavbar />
+                <PrayNavbar navList={navList} />
                 <WingBlank size="lg">
                     <WhiteSpace size="lg" />
                     <div className='temCard radius'>
                         <div className='img'>   
                             <img className='ico' src={obj.ico} alt="" />
                         </div>
-                        <div className='ti' onClick={()=>this.setState({infoVisible:!this.state.infoVisible})}>
+                        <div className='ti' onClick={()=>this.setState({infoVisible:!infoVisible})}>
                             <div className='title'>{obj.tname}{obj.name}</div>
                             <div className='info text-overflow4a'>{obj.info}</div>
                         </div>
-                        <div className={`info absBlock radius ${this.state.infoVisible?'':'hidden'}`}
+                        <div className={`info absBlock radius ${infoVisible?'':'hidden'}`}
                             onClick={()=>this.setState({infoVisible:false})}>
                             {obj.info}
                             <span className='arrow_wrp'>
@@ -362,10 +273,10 @@ class PrayForm extends React.Component{
                     <div className='radius ofhd'>
                         <List>
                             <InputItem placeholder="输入名字"
-                                value={this.state.unick}
+                                value={unick}
                                 onChange={v=>this.handleInput(v)}
                             >祈愿人：</InputItem>
-                            { typeList.length>0 ?<Item className='gridRow'>
+                            { typeList.length>0&&positionChangable ?<Item className='gridRow'>
                                 <div className='gridTitle'>
                                     <div className='tit'>祈福类型：</div>
                                     <div className={`exp ${checkBoxFlag?'c-red':'c-fuzhu'}`}>
@@ -380,58 +291,30 @@ class PrayForm extends React.Component{
                                     renderItem={v => (
                                         <div >
                                             <div className={`gridItem gridBord ${v.flag?"gridBg":""}`}>
-                                                {/* <img src={v.img} className='gridImg' alt="" /> */}
                                                 <div className={`gridText gridCol ${v.flag?"active":""}`}>
                                                     <span>{v.name}</span>
                                                 </div>
                                                 <img src={require('./cloud.png')} className='gridIco' style={{display: v.flag?'':'none'}} alt="" /> 
-                                                {/* <Icon className='gridIco' style={{display: checkBoxFlag?'':'none'}}
-                                                    type={v.flag?"check-circle":"check-circle-o" } 
-                                                    color={v.flag?"red":"#bbb"} 
-                                                /> */}
                                             </div>
                                             
                                         </div>
                                     )} 
                                 />
                                 <div className='descri'>供奉{contentType.length===1?contentType[0].name:contentType.map(v=>v.name).join('、')}共
-                                    {this.state.num}盏{(contentTime||"").name}</div>
+                                    {num}盏{(contentTime||"").name}</div>
                             </Item>:null}
-                            {/* <div className="pos-r"> */}
-                                <TextareaItem className="textarea" title="祈愿文："
-                                    onChange={v=>this.handleTextarea(v)}
-                                    onBlur={()=>this.handleBlurTextScan()}
-                                    rows={3} count={30} autoHeight placeholder={'请输入'}
-                                    value={prayArticle}
-                                    >
-                                </TextareaItem>
-                                {/* <Popover mask visible={this.state.visible}
-                                    overlay={[
-                                        (<Item>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('0')}>通用</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('1')}>平安</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('2')}>智慧</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('3')}>事业</span>
-                                        </Item>),(<Item>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('4')}>健康</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('5')}>财富</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('6')}>福寿</span>
-                                            <span className="modeBtn" onClick={()=>this.handleTemplateType('7')}>姻缘</span>
-                                        </Item>),
-                                    ]}
-                                    align={{    
-                                        points:['br', 'tr'],//https://github.com/yiminghe/dom-align
-                                    }}
-                                    onVisibleChange={(visible)=>this.setState({visible})}
+                            <TextareaItem className="textarea" title="祈愿文："
+                                onChange={v=>this.handleTextarea(v)}
+                                onBlur={()=>this.handleBlurTextScan()}
+                                rows={3} count={30} autoHeight placeholder={'请输入'}
+                                value={prayArticle}
                                 >
-                                    <div className='moremodule'>更多模板</div>
-                                </Popover> */}
-                            {/* </div> */}
+                            </TextareaItem>
                             <Item  className="def-listitem1" id='stepper'
                                 extra={<Stepper style={{ width: '100%', minWidth: '100px' }}
                                                 showNumber max={100} min={1}
-                                                value={this.state.num}
-                                                disabled={!this.state.positionChangable}
+                                                value={num}
+                                                disabled={!positionChangable}
                                                 onChange={(v) =>this.handleNumChange(v)}
                                         />}
                             >供灯数量</Item>
@@ -440,33 +323,29 @@ class PrayForm extends React.Component{
                                     <div className="timelongArea">
                                         {btnList.map((v,idx)=> v.type!==7300?
                                             <div key={v.type} className="btnBlock">
-                                                <div className={`timeBtn ${this.state.duration===v.type?'oran':'oran-o'}`}
+                                                <div className={`timeBtn ${duration===v.type?'oran':'oran-o'}`}
                                                     onClick={()=>this.handleTimeBtnClick(v.type)}>
-                                                    <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>
+                                                    <p>{v.name}</p><p>({(price[v.type]/100)}元)</p></div>
                                             </div>:null
                                         )}
                                     </div>
                                     {btnList.map((v,idx)=> v.type===7300?
                                         <div key={v.type} className="btnBlock">
-                                            <div className={`timeBtn ${this.state.duration===v.type?'oran':'oran-o'}`}
+                                            <div className={`timeBtn ${duration===v.type?'oran':'oran-o'}`}
                                                 onClick={()=>this.handleTimeBtnClick(v.type)}>
-                                                <p>{v.name}</p><p>({(this.state.price[v.type]/100)}元)</p></div>
+                                                <p>{v.name}</p><p>({(price[v.type]/100)}元)</p></div>
                                         </div>:null
                                     )}
                                 </Brief>
                             </Item>
                             <Item arrow="horizontal" className="def-listitem"
-                                extra={this.state.position.map((v,idx)=>this.state.position.length===idx+1?v[1][1]:v[1][1]+',')}
+                                extra={position.map((v,idx)=>position.length===idx+1?v[1][1]:v[1][1]+',')}
                                 onClick={(e) => this.showModal('modal2', e)}
                             >供灯位置</Item>
                         </List>
                         
                     </div>
                 </WingBlank>
-                {/* <div className='stick-footer'>  
-                    <div className="total" onClick={()=>{this.tt()}}>/facility/info1.do?id=16</div>
-                    <a className="payBtn" onClick={()=>{this.ss()}}>/facility/random.do?id=16&num=2</a>
-                </div> */}
                 <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />
                 <WhiteSpace size="lg" />
@@ -478,7 +357,7 @@ class PrayForm extends React.Component{
                 </div>
 
 
-                <Modal visible={this.state.modal2}
+                <Modal visible={modal2}
                     transitionName ='slide-right'
                     maskTransitionName  ='slide-right'
                     >

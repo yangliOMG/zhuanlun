@@ -33,17 +33,16 @@ class Order{
 
 
     createBlissMan(blissMan){
-        // return axios.post('/blissMan/img.do',
-        //     blissMan,
-        //     { responseType: 'arraybuffer' }
-        // )
-        return axios({
-            method: 'post',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            responseType: 'arraybuffer',
-            data: qs.stringify(blissMan),
-            url:'/blissMan/img.do',
-        });
+        return axios.post('/blissMan/img.do',
+            qs.stringify(blissMan),
+            { responseType: 'arraybuffer' }
+        )
+        // return axios({
+        //     method: 'post',
+        //     responseType: 'arraybuffer',
+        //     data: qs.stringify(blissMan),
+        //     url:'/blissMan/img.do',
+        // });
     }
     
 

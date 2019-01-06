@@ -1,30 +1,9 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import { Route, Redirect} from 'react-router-dom' 
 // import QueueAnim from 'rc-queue-anim';
 import { AnimatedSwitch } from 'react-router-transition';
 
-// import Gongde from '../../pray/introduce/gongde.jsx'
-// import Haochu from '../../pray/introduce/haochu.jsx'
-// import Yuanqi from '../../pray/introduce/yuanqi.jsx'
-// import TempleList from '../../pray/templeList/templeList.jsx'
-// import PrayForm from '../../pray/prayForm/prayForm.jsx'
-// import TempleDetail from '../../pray/templeDetail/templeDetail.jsx'
-// import Template from '../../pray/template/template.jsx'
-// import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
-// import PrayDetail from '../../pray/prayDetail/prayDetail.jsx'
-
-
-// import Temple from '../../pray/temple/temple.jsx'
-
-// import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
-// import MyPraylist from '../../personal/myPraylist/myPraylist.jsx'
-// import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
-// import MyHistory from '../../personal/myHistory/myHistory.jsx'
-// import MyPhone from '../../personal/myPhone/myPhone.jsx'
-// import MySuggest from '../../personal/mySuggest/mySuggest.jsx'
-
-import {setStorage, getStorage, comparePath} from '../../util'
+import {setStorage, getStorage, comparePath,} from '../../util'
 import asyncComponent from './AsyncComponent'
 
 const Gongde = asyncComponent(() => import("../../pray/introduce/gongde.jsx"))
@@ -45,14 +24,10 @@ const MyHistory = asyncComponent(() => import("../../personal/myHistory/myHistor
 const MyPhone = asyncComponent(() => import("../../personal/myPhone/myPhone.jsx"))
 const MySuggest = asyncComponent(() => import("../../personal/mySuggest/mySuggest.jsx"))
 
-@connect(
-    state=>state,
-)
 class Dashboard extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            title:'',
         }
     }
     componentDidMount(){
@@ -71,11 +46,11 @@ class Dashboard extends React.Component{
     render(){
         const {pathname}  = this.props.location
         const navList = [
-            {path:'/gongde',title:'供灯功德',component:Gongde,father:['/shouye'],son:['/temple']},
-            {path:'/haochu',title:'供灯意义',component:Haochu,father:['/shouye'],son:['/temple']},
-            {path:'/yuanqi',title:'供灯缘起',component:Yuanqi,father:['/shouye'],son:['/temple']},
+            {path:'/gongde',title:'供灯功德',component:Gongde,father:[],son:['/temple']},
+            {path:'/haochu',title:'供灯意义',component:Haochu,father:[],son:['/temple']},
+            {path:'/yuanqi',title:'供灯缘起',component:Yuanqi,father:[],son:['/temple']},
 
-            {path:'/templeList',title:'寺院列表',component:TempleList,father:['/shouye'],son:['/temple']},
+            {path:'/templeList',title:'寺院列表',component:TempleList,father:[],son:['/temple']},
             {path:'/temple',title:'寺院',component:Temple,father:['/templeList','/myCarelist','/myHistory'],son:['/templeDetail','/pay/prayForm']},
             {path:'/templeDetail',title:'寺院详情',component:TempleDetail,father:['/temple'],son:[]},
             // {path:'/tower',title:'祈福塔',component:Tower,father:['/temple','/myCarelist','/myHistory'],son:['/pay/prayForm']},
@@ -105,8 +80,6 @@ class Dashboard extends React.Component{
             }
             return (
                 <div>
-                    {/* <NavBar id="navbar" icon={<span className="navleft"><Icon type="left" /><span id="pagetitle">{page.title}</span></span>} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}></NavBar> */}
-                    {/* <NavBar id="navbar" icon={<Icon type="left" style={{color:'black'}} />} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar> */}
                     <AnimatedSwitch
                         atEnter={{ opacity: 0, foo: 0 }}
                         atLeave={{ opacity: 0, foo: 2 }}

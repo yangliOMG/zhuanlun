@@ -1,34 +1,36 @@
 import React from 'react'
 import { Route, Switch} from 'react-router-dom';
 
-import Shouye from './pray/shouye/shouye.jsx';
-
-import AuthRoute from './component/authroute/authroute.jsx';
+import AuthLogin from './component/authLogin/authLogin.jsx';
 import Dashboard from './component/dashboard/dashboard.jsx';
 
 class App extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            hasError:false
+            hasError:false,
+            err:''
         }
     }
     componentDidCatch(err,info){
         this.setState({
-            hasError:true
+            hasError:true,
+            err
         })
     }
     render(){
-        return this.state.hasError?
-        <h2>你的系统版本过低，请升级</h2>
+        const { hasError, err} = this.state
+        return hasError?
+        <div>
+            <h2>你的系统版本过低，请升级</h2>
+            <div>{ err.stack?err.stack.toString():err.toString()}</div>
+        </div>
         :(
-            <div>
-                <AuthRoute></AuthRoute>
+            <AuthLogin>
                 <Switch>
-                    <Route path='/shouye' component={Shouye}></Route>
                     <Route component={Dashboard}></Route>
                 </Switch>
-            </div>
+            </AuthLogin>
         )
     }
 }

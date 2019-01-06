@@ -1,7 +1,8 @@
 
-const LOAD_DATA = 'LOAD_DATA'
+import { LOAD_DATA } from '../constant/actionType'
 
 const initState = {
+    id:'',
     openid:'',
     nick:'',
     headImgURL:''
@@ -13,9 +14,4 @@ export function user(state=initState, action){
         default:
             return state
     }
-}
-
-
-export function loadData(userinfo){
-    return {type:LOAD_DATA , payload:userinfo}
 }

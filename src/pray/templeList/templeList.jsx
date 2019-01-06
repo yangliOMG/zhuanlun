@@ -3,68 +3,30 @@ import {
     // Picker, List, 
     SearchBar} from 'antd-mobile'
 import {connect} from 'react-redux'
-// import {Redirect} from 'react-router-dom'
 
 import Listview from '../../component/listview/pullRefresh.jsx';
-import Temple from '../../service/temple-service.jsx'
-import {saveTempleList} from '../../redux/temple.redux'
+import { TO_GET_TEMPLELIST, SAVEANCHOR } from '../../constant/actionType'
 
 import './templeList.less'
 
-const _temple = new Temple()
-
-@connect(
-    state=>state.praydata,
-    {saveTempleList}
+@connect( ({praydata})=>praydata,
+    dispatch => ({
+        getTempleList: (payload,callback) => dispatch({type: TO_GET_TEMPLELIST, payload,callback}),
+        saveAnchor: (payload) => dispatch({type: SAVEANCHOR, payload}),
+    })
 )
 class TempleList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             pickerVal:'',
-            index:1,
-            templeList:[]
         }
     }
     componentDidMount(){
-        if(this.props.templeList.length>0){
-            this.setState({
-                templeList :this.props.templeList,
-                index:Math.ceil(this.props.templeList.length/5)
-            })
-            // setTimeout(() => { window.location.href = this.props.anchor }, 500)  //回退定位
-        }else{
-            this.ajaxTempleList({index:this.state.index})
-        }
-    }
-    async ajaxTempleList({province='',tag='',name='',index},scrollMore=false){
-        let res 
-        if(name !== ''){
-            res = await  _temple.getTempleListByName(name,index)
-        }else if(province !== ''&&tag !== ''){
-            res = await  _temple.getTempleListByPicker(province,tag,index)
-        }else if(this.state.pickerVal!==''){
-            const arr = this.state.pickerVal.split('，')
-            res = await  _temple.getTempleListByPicker(...arr,index)
-        }else{
-            res = await  _temple.getTempleListAll(index)
-        }
-        
-        if(res.status === 200){
-            if( !scrollMore || true){
-                if(res.data instanceof Array){
-                    this.setState({
-                        templeList: res.data,
-                        index : ++index
-                    })
-                    this.props.saveTempleList(res.data)
-                    return true
-                }else{
-                    return false
-                }
-            }else{
-                return false
-            }
+        const { templeList,index, getTempleList} = this.props
+        const { pickerVal} = this.state
+        if(templeList.length===0){
+            getTempleList({index, pickerVal})
         }
     }
     handlePicker(v){
@@ -72,10 +34,7 @@ class TempleList extends React.Component{
         this.setState({
             pickerVal : v.join('，')
         })
-        this.ajaxTempleList({province,tag,index:1})
-    }
-    handleSearchBar(v){
-        this.ajaxTempleList({name:v,index:1})
+        this.props.getTempleList({province,tag,index:1})
     }
     render(){
         // let pickerOpt = [
@@ -92,6 +51,7 @@ class TempleList extends React.Component{
         //         {label: '事业',value: '事业',},
         //     ],
         // ]
+        const {getTempleList,saveAnchor, templeList, index} = this.props
         return (
             <div>
                 {/* <List>
@@ -107,9 +67,11 @@ class TempleList extends React.Component{
                 </List> */}
                 <SearchBar
                     placeholder="关键字搜索"
-                    onChange={v=>this.handleSearchBar( v )}
+                    onChange={v=> getTempleList({name:v,index:1})}
                 />
-                <Listview templeData={this.state.templeList} getMore={()=>this.ajaxTempleList({index:this.state.index},true)}>
+                <Listview templeData={templeList} 
+                    saveAnchor={ (val)=>saveAnchor(val)}
+                    getMore={(callback)=> getTempleList({index,scrollMore:true},callback)}>
 
                 </Listview>
             </div>

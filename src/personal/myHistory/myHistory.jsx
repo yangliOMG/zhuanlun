@@ -1,16 +1,16 @@
 import React from 'react'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
 import {connect} from 'react-redux'
-import Tem from '../../service/temple-service.jsx'
 
 import logo from '../../pray/temple/foqian.jpg';
 // import { StickyContainer, Sticky } from 'react-sticky';
-
+import { TO_GET_HISTORYLIST,  } from '../../constant/actionType'
 import "./myHistory.less"
-const _temple = new Tem()
-@connect(
-    state=>state.user,
-    // {update}
+
+@connect(()=>({}),
+    dispatch => ({
+        getHistoryList: (payload,callback) => dispatch({type: TO_GET_HISTORYLIST, payload,callback}),
+    })
 )
 class MyHistory extends React.Component{
     constructor(props){
@@ -20,17 +20,13 @@ class MyHistory extends React.Component{
         }
     }
     componentWillMount(){
-         _temple.getHistoryListByType(0).then(res=>{
-            const list = [...new Set(res.data.map(v=>v[3]))]
-            const promise = list.map(id=>_temple.getTempleById(id))
-            Promise.all(promise).then(res=>{
-                let historylist = res.map(i=>i.data)
-                this.setState({historylist})
-            })
-        })
+         this.props.getHistoryList({type:0},historylist=>{
+            this.setState({historylist})
+         })
     }
 
     render(){
+        const {historylist} = this.state
         return (
             <div>
                 <WhiteSpace/>
@@ -42,7 +38,7 @@ class MyHistory extends React.Component{
                             <div className="text-overflow4a c-grey1 pt-20">点击前往寺庙列表页</div>
                         </div>
                     </div>
-                    {this.state.historylist.map((v,idx)=>
+                    {historylist.map((v,idx)=>
                         // <StickyContainer key={v.id}>
                         //   <Sticky>
                         //     {({style,}) => (
@@ -66,7 +62,7 @@ class MyHistory extends React.Component{
 
                         // </StickyContainer>  
                     )}
-                    <div className={`emptyList ${this.state.historylist.length===0?'':'hidden'}`}>足迹为空</div>
+                    <div className={`emptyList ${historylist.length===0?'':'hidden'}`}>足迹为空</div>
                 </WingBlank>
             </div>
         )

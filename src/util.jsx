@@ -2,7 +2,7 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-11-06 10:26:37
+ * @Last Modified time: 2019-01-06 15:03:05
  */
 import { Toast } from 'antd-mobile';
 /**
@@ -83,6 +83,15 @@ export function removeStorage(name){
  */
 export function showToast(msg,duration=1) {
     Toast.info(msg, duration);
+}
+/**
+ * 弹出框
+ * @param {内容} msg 
+ * @param {时长（秒）} duration 
+ * @param {结束回调} fn 
+ */
+export function showLoading(msg,duration=1,fn) {
+    Toast.loading(msg, duration, fn)
 }
 /**
  * 数字转汉字
@@ -168,7 +177,22 @@ export function dateDictionary(date){
     } catch (error) {
         return ''
     }
-    
+}
+/**
+ * 倒计时
+ * @param {时长} timelong 
+ * @param {是否终止} flagCallback 
+ * @param {更新回调} updateCallback 
+ * @param {结束回调} endCallback 
+ */
+export function countDown(timelong, flagCallback,  updateCallback, endCallback){
+    timelong -= 1
+    if(timelong<=0 || flagCallback()){
+        endCallback()
+    }else{
+        updateCallback(timelong)
+        setTimeout( () => countDown(timelong, flagCallback, updateCallback, endCallback),1000)
+    }
 }
 /**
  * 三维数组选出最优的num个位置
@@ -281,4 +305,22 @@ export function ArraySum(arr){
 	let a = 0
     arr.forEach(el=>a +=Number(el))
 	return a
+}
+/**
+ * 数组格式重组 
+ * @param {数组} arr 
+ * @param {几个一组} number 
+ */
+export function ArrayFormat(arr, num=2){
+	let rowData = [],hang=[];
+    arr.forEach((val,idx)=>{
+        if(idx%num===0){
+            hang=[];
+            hang.push(val)
+            rowData.push(hang)
+        }else{
+            hang.push(val)
+        }
+    })
+    return rowData
 }

@@ -40,14 +40,14 @@ class TabEx extends React.Component {
 
 
     render() {
-        const data = this.props.data
+        const {data, curPage, seatSelection} = this.props
         const tabs2 = data.map((i, idx) => ({ title: idx + 1 + ' Tab', sub: idx + 1 + '' }))
         const tabHeight = document.documentElement.clientHeight - 233
         //  <div style={{position:'absolute',top:'-20px',left:'-20px',right:'-20px',bottom:'-20px',background:`url(${require('./tower.png')}) ` }}></div> 
         return (
             <Tabs tabs={tabs2}
-                initialPage={this.props.curPage} page={this.props.curPage}
-                // onChange={(tab, idx) => this.props.turnPage(toPage)}
+                initialPage={curPage} page={curPage}
+                // onChange={(tab, idx) => turnPage(toPage)}
                 // 在添加onTouchStart等事件后，Tabs的onChange事件，在首尾屏上下滚动的时候，就会莫名触发翻页，所以屏蔽掉
                 renderTabBar={false}
             >
@@ -66,9 +66,9 @@ class TabEx extends React.Component {
                             {darr.map((arr, idx1) =>
                                 <div key={idx1} style={{ display: 'table-row' }}>
                                     {arr.map((v, idx2) => <div key={idx2} style={{ display: 'table-cell' }}>{v.state !== 0 ? v.state !== 1 ?
-                                        <span className={`lampIcon l-red mini`} onClick={() => this.props.seatSelection(idx, idx1, idx2)}></span> :
+                                        <span className={`lampIcon l-red mini`} onClick={() => seatSelection(idx, idx1, idx2)}></span> :
                                         <span className={`lampIcon l-gong-mini mini`}></span> :
-                                        <span className={`lampIcon l-grey mini`} onClick={() => this.props.seatSelection(idx, idx1, idx2)}></span>
+                                        <span className={`lampIcon l-grey mini`} onClick={() => seatSelection(idx, idx1, idx2)}></span>
                                     }</div>
                                     )}
                                 </div>

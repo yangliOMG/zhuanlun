@@ -1,17 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { getQueryString,  getStorage, setStorage } from '../../util'
-import User from '../../service/user-service.jsx'
-import {loadData} from '../../redux/user.redux'
+
+import { getQueryString,  getStorage, } from '../../util'
+import { TO_GET_LOGIN } from '../../constant/actionType'
+
 import "./shouye.css"
 
 
-const _user = new User()
 const isMoblieMode = false
 
-@connect(
-    state=>state.user,
-    {loadData}
+@connect(()=>({}),
+    dispatch => ({
+        getUserLogin: (payload,callback) => dispatch({type: TO_GET_LOGIN, payload,callback}),
+        // loadData: (payload) => dispatch({type: LOAD_DATA, payload }),
+    })
 )
 class Shouye extends React.Component{
     constructor(props){
@@ -23,28 +25,24 @@ class Shouye extends React.Component{
         const type = getQueryString("type")||'temple'
         const user = getStorage('user')
         if(code){
-            _user.getUserLogin(isMoblieMode,code).then(res=>this.storageSave(res.data,type))
+            this.props.getUserLogin({isMoblieMode,code}, () =>{
+                window.location.href = `/${type.replace(':','#')}`
+            })
         }else if(user === ''|| !user.openid){
             if(isMoblieMode){
-                let appid = 'wxf707fc6da6cf1a2f',//瑞金网络'wxf707fc6da6cf1a2f',福佑法缘'wx9ce81988a89adfc4'，金品购'wxf1f524212dffeab5'
+                let appid = 'wx9ce81988a89adfc4',//瑞金网络'wxf707fc6da6cf1a2f',福佑法缘'wx9ce81988a89adfc4'，金品购'wxf1f524212dffeab5'
                     RedicetURI = window.location.href,
                     uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${RedicetURI}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`
                 window.location.href = uri;
             }else{
-                _user.getUserLogin(isMoblieMode).then(res=>this.storageSave(res.data,type))
+                this.props.getUserLogin({isMoblieMode}, ()=>{
+                    window.location.href = `/${type.replace(':','#')}`
+                })
             }
-        }else{
-            this.reduxSaveAndPush(user,type)
+        }else{ 
+            window.location.href = `/${type.replace(':','#')}`
+            // this.props.loadData(user)      
         }
-    }
-    storageSave(data,type){
-        const userinfo = {id:data.id, openid:data.openid, nick:data.nick, headImgURL:data.headImgURL}
-        setStorage('user', userinfo )
-        this.reduxSaveAndPush(userinfo,type)
-    }
-    reduxSaveAndPush(userinfo,type){
-        this.props.loadData(userinfo)       //为了在个人中心页中，从微信取了用户信息能够及时显示，所以只能用redux
-        window.location.href = `/${type.replace(':','#')}`
     }
 
     render(){

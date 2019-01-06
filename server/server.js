@@ -24,7 +24,7 @@ assethook({
 const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
-const DEFAULT_PORT = 8081
+const DEFAULT_PORT = 8020
 const proxyPath = 'http://localhost:8080'
 
 app.use(cookieParser())
@@ -34,8 +34,10 @@ app.use(bodyParser.json())
 app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}))
 
 app.use(function (req, res, next) {   //不是/static(静态资源)，都映射到index.html
-    if ( req.url.startsWith('/static')||req.url.startsWith('/foli')||req.url.startsWith('/html')||req.url.startsWith('/fontAwesome')
-        ||req.url.endsWith('.ico')||req.url.endsWith('.txt')) {
+    const regArr = [ /^\/static/, /^\/foli/, /^\/html/, /^\/fontAwesome/, /.ico$/, /.txt$/ ]
+    if(regArr.some( v=> v.test(req.url) )){
+    // if ( req.url.startsWith('/static')||req.url.startsWith('/foli')||req.url.startsWith('/html')||req.url.startsWith('/fontAwesome')
+    //     ||req.url.endsWith('.ico')||req.url.endsWith('.txt')) {
         return next()
     }
     const store = createStore(reducer, compose(

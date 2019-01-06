@@ -51,16 +51,15 @@ class User{
     }
 
     submitSuggest(content){
-        // return axios.post(`/back/save.do`,{
-        //     content,
-        // })
+        return axios.post(`/back/save.do`,
+            qs.stringify({content}),
+        )
 
-        return axios({
-            method: 'post',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify({content}),
-            url:'/back/save.do',
-        })
+        // return axios({
+        //     method: 'post',
+        //     data: qs.stringify({content}),
+        //     url:'/back/save.do',
+        // })
     }
 
 }

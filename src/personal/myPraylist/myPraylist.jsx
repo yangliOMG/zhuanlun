@@ -5,30 +5,25 @@ import {connect} from 'react-redux'
 import {timeLongCount,duringDictionary,timeFormat,showToast,positionMesArray
     // continueLamp 
 } from '../../util'
-import Order from '../../service/order-service.jsx'
-import {savePrayList} from '../../redux/pray.redux'
+import { TO_GET_ORDERLIST, TO_GET_ORDERDELETE } from '../../constant/actionType'
 import  "./myPraylist.less"
-const _order = new Order()
-@connect(
-    state=>state.prayList,
-    {savePrayList}
+
+@connect(({prayList})=>prayList,
+    dispatch => ({
+        getOrderList: (payload,callback) => dispatch({type: TO_GET_ORDERLIST, payload,callback}),
+        deleteOrder: (payload,callback) => dispatch({type: TO_GET_ORDERDELETE, payload,callback}),
+    })
 )
 class MyPraylist extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            praylist : this.props.prayList
         }
     }
 
     componentDidMount(){
         if(this.props.prayList.length===0){
-            _order.getOrderList().then(res=>{
-                if(res.status === 200){
-                    this.setState({praylist : res.data})
-                    this.props.savePrayList(res.data)
-                }
-            })
+            this.props.getOrderList()
         }
     }
 
@@ -37,13 +32,8 @@ class MyPraylist extends React.Component{
         Modal.alert('删除', '确认删除订单？', [
             { text: '取消' },
             { text: '确认', onPress: () => {
-                _order.deleteOrder(id).then(res=>{
-                    if(res.status === 200&&res.data.returnCode===1000){
-                        const praylist = this.state.praylist.filter(v=>v.id!==id)
-                        this.setState({praylist})
-                        this.props.savePrayList(praylist)
-                    }
-                    showToast(res.data.data)
+                this.props.deleteOrder({id},()=>{
+                    showToast('刪除成功')
                 })
             } },
         ])
@@ -55,11 +45,12 @@ class MyPraylist extends React.Component{
     }
 
     render(){
+        const {prayList} = this.props
         return (
             <div>
                 <WhiteSpace/>
                 <WingBlank size="lg">
-                    {this.state.praylist.map((v,idx)=>
+                    {prayList.map((v,idx)=>
                         <div key={v.id}>
                             <Card full className='radius prayLi' 
                                 // onClick={()=>this.props.history.push(`/prayDetail#${v.id}`)}>
@@ -107,7 +98,7 @@ class MyPraylist extends React.Component{
                             <WhiteSpace/>
                         </div>
                     )}
-                    <div className={`emptyList ${this.state.praylist.length===0?'':'hidden'}`}>祈福列表为空</div>
+                    <div className={`emptyList ${prayList.length===0?'':'hidden'}`}>祈福列表为空</div>
                 </WingBlank>
             </div>
         )

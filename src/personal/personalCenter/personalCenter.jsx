@@ -2,16 +2,16 @@ import React from 'react'
 import { List, WhiteSpace , WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
-import { removeStorage,getStorage } from '../../util'
-import Order from '../../service/order-service.jsx'
-import {savePrayList} from '../../redux/pray.redux'
 
-// import {update} from '../../redux/user.redux'
+import { removeStorage,getStorage } from '../../util'
+import { TO_GET_ORDERLIST } from '../../constant/actionType'
+
 import "./personalCenter.css"
-const _order = new Order()
-@connect(
-    state=>state,
-    {savePrayList}
+
+@connect( state=>state,
+    dispatch => ({
+        getOrderList: (payload,callback) => dispatch({type: TO_GET_ORDERLIST, payload,callback}),
+    })
 )
 class PersonalCenter extends React.Component{
     constructor(props){
@@ -21,7 +21,7 @@ class PersonalCenter extends React.Component{
     }
     componentDidMount(){
         if(this.props.prayList.prayList.length===0){
-            _order.getOrderList()
+            this.props.getOrderList()
         }
     }
 
