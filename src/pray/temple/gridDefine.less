@@ -1,0 +1,36 @@
+.titlecard{background-size: 100% 100%;;position:relative;height:170px;margin:0 12px 12px;overflow: hidden;display: flex;align-items: flex-end;
+    .title{flex: 1 1;background: #fff;padding: 5px;width: 100%;
+        .name{font-size: 1.2rem;padding-bottom: 3px;}
+    }
+}
+
+.d-flexbox{padding: 0 12px;overflow: hidden;
+    .d-flexitem{width: 50%;float:left;
+        &:nth-child(2n)>div{margin-left: 10px;}
+        &:nth-child(2n+1)>div{margin-right: 10px;}
+        .d-content{margin-bottom: 10px;overflow: hidden;
+            &:active {background-color: #ddd;}
+            .d-img{width: 100%;display: block;}
+            .d-text{background: #fff;border-top: 1px solid #eee;text-align: center;padding: 5px;
+                .d-name{font-size: 1rem;}
+            }
+            .d-qifu{text-align: center;padding: 5px;color: white;}
+        }
+    }
+    .temCard{padding:10px;display: flex;background: #fff;position: relative;margin-bottom: 10px;margin-top: 40px;
+        .img{flex: 1 1;position: relative;
+            .ico{height: 130px;box-shadow: 2px 2px 0px #aaa;border-radius: 9px;position: absolute;bottom:0;}
+        }
+        .ti{flex: 1 1;padding-left: 5px;text-align:center;font-size: 1.06rem;
+            .title{margin-bottom: 3px;}
+            .d-tips{margin-bottom: 10px;}
+            .d-qifu{width: 80%;margin: 0 auto;border-radius: 20px;color: white;padding: 5px;font-size: 1rem;}
+        }
+    }
+}
+
+.botCard{
+    margin:0 10px;padding:10px 5px;display: flex;justify-content: center;background: #fff;
+    .img{height: 85px;margin-right:5px;border-radius: 15px;}
+    .title{font-size: 1.1rem;color:black;padding-bottom: 5px}
+}
