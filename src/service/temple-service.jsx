@@ -1,6 +1,5 @@
 import axios from "./axios"
 
-
 class Temple{
 
     getTempleListAll(index){

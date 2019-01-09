@@ -1,24 +1,17 @@
 import React from 'react'
 import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker, Toast, Button } from 'antd-mobile'
-import {connect} from 'react-redux'
-import District from './area'
-import {duringDictionary, dateDictionary, showToast, timeFormat, positionMesArray } from '../../util'
-import Popup from '../../component/userMesTable/userMesTable.jsx'
-import {updateOrder} from '../../redux/order.redux'
 
-import Order from '../../service/order-service.jsx'
-import User from '../../service/user-service.jsx'
+import Popup from '../../component/userMesTable/userMesTable.jsx'
+import District from './area'
+
+import {duringDictionary, dateDictionary, showToast, timeFormat, positionMesArray, getQueryString } from '../../util'
+import { withContext } from '../../context'
+import {ajaxOrderDetail, ajaxBlissMan} from '../../service/asyncFun'
+
 import './prayDetail.less'
 import {webchatPay } from '../prayForm/wechatPay.js'
 
-// import asyncComponent from '../../component/dashboard/AsyncComponent'
-// const District = asyncComponent(() => import("./area"))
-const _order = new Order()
-const _user = new User()
-@connect(
-    state=>state.prayList,
-    {updateOrder}
-)
+@withContext
 class PrayDetail extends React.Component{
     constructor(props){
         super(props);
@@ -50,36 +43,13 @@ class PrayDetail extends React.Component{
         }
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
-        // let order = this.props.prayList.find(v=>v.id===id)
-        // if(order){
-        //     this.messageInit(order)
-        // }else{
-            _order.getOrderByid(id).then(res=>{
-                if(res.status === 200){
-                    this.messageInit(res.data)
-                }else{
-                    this.props.history.push('/myPraylist')
-                }
-            })
-            _user.judgeIsFollow().then(res=>{
-                if(res.status === 200){
-                    this.setState({followFlag : res.data})
-                }
-            })
-        // }
-    }
-    messageInit(order){
-        this.setState({order : order})
-        if(order.payStatus===2&&order.blissStatus===2){
-            // this.handleInput('messageModal2',true)
-        }else if(order.payStatus!==2){
-            _order.getWechatPayCallback({prayId:order.id}).then(res=>{
-                if(res.status===200&&res.data.trade_state==='SUCCESS'){
-                    this.messageInit({...order,payStatus:2})
-                }
-            })
-        }
+        const id = getQueryString("id")
+        ajaxOrderDetail({id},(order, followFlag)=>{
+            this.setState({order, followFlag})
+        },(mes)=>{
+            // this.props.history.push('/myPraylist')
+            console.log(mes)
+        })
     }
 
     showModal = key => (e) => {
@@ -93,14 +63,15 @@ class PrayDetail extends React.Component{
         this.setState({[key]: value})
     }
     handleSubMes(){
+        const { name, phone, sex, birthday, thing} = this.state
         let blissMan = {}
-        let id = this.props.location.hash.replace("#","")
-            blissMan.name = this.state.name
-            blissMan.phone = this.state.phone
-            blissMan.sex = (this.state.sex*1) ||0  //1男 2女 0未知
-            blissMan.birthday = dateDictionary(this.state.birthday)
+        let id = getQueryString("id")
+            blissMan.name = name
+            blissMan.phone = phone
+            blissMan.sex = (sex*1) ||0  //1男 2女 0未知
+            blissMan.birthday = dateDictionary(birthday)
             blissMan.address = document.getElementById('addrPicker').getElementsByClassName('am-list-extra')[0].innerHTML.replace(/,/g,'')
-            blissMan.thing = this.state.thing
+            blissMan.thing = thing
             blissMan.pid = id
         if(!blissMan.name){
             return showToast('请输入姓名')
@@ -110,12 +81,8 @@ class PrayDetail extends React.Component{
             return showToast('请选择性别')
         }
         Toast.loading('升疏生成中...',0)
-        _order.createBlissMan(blissMan).then(res=>{
-            if(res.status === 200){
-                return 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
-            }
-        }).then(data =>{
-            this.setState({src: data})
+        ajaxBlissMan({blissMan},(src)=>{
+            this.setState({src})
             Toast.hide()
         })
         this.onClose('messageModal')()
@@ -144,7 +111,7 @@ class PrayDetail extends React.Component{
     }
 
     render(){
-        const order = this.state.order
+        const { order, show, followFlag, messageModal2, messageModal, birthday, address, src, burning} = this.state
         //computed
         const during = duringDictionary().find(v=>v.type===order.duration).name
 
@@ -175,7 +142,7 @@ class PrayDetail extends React.Component{
                             </div>
                             <div className='inf'>
                                 <div className='leftBlock c-erji'>
-                                    <p className={this.state.show?'':'text-overflow2'} onClick={()=>this.setState({show:!this.state.show})}>
+                                    <p className={show?'':'text-overflow2'} onClick={()=>this.setState({show:!show})}>
                                         供灯位置：{order.dengwei.map(v=>
                                         positionMesArray(v.side,v.row,v.col,v.maxrow,"mode1")).map(val=>val[0]).join("、")}</p>
                                     <p>供灯时长：{during}</p>
@@ -185,7 +152,7 @@ class PrayDetail extends React.Component{
                                     <img width='100%' src={require('./qrcode.jpg')} alt=""/>
                                 </div>
                             </div>   
-                            <div className={`follow ${this.state.followFlag?'hidden':''}`}>
+                            <div className={`follow ${followFlag?'hidden':''}`}>
                                 <img className='arrow pos-a' width="15px" src={require('./arrow.png')} alt='' />
                                 <div className='f-16 c-red'>长按图片 识别二维码关注公众号</div>
                             </div>                    
@@ -199,7 +166,7 @@ class PrayDetail extends React.Component{
                 <WhiteSpace/>
 
 
-                <Popup messageModal={this.state.messageModal2} shutdown={this.onClose('messageModal2')}>
+                <Popup messageModal={messageModal2} shutdown={this.onClose('messageModal2')}>
                     <div className='messageModal'>
                         <div className='title'>填写完整信息，获得升疏(表)</div>
                         <div className='content'>上表升疏是向神佛陈情之章奏，需严肃慎重。凡升疏（表）者，需在疏（表）文中明确自己的住址、姓名、生辰及所求之事。代别人升表
@@ -212,7 +179,7 @@ class PrayDetail extends React.Component{
                     </div>
                 </Popup>
                 
-                <Popup messageModal={this.state.messageModal} shutdown={this.onClose('messageModal')}>
+                <Popup messageModal={messageModal} shutdown={this.onClose('messageModal')}>
                     <div className='messageModal'>
                         <List>
                             <InputItem placeholder="福佑联系人姓名"
@@ -230,7 +197,7 @@ class PrayDetail extends React.Component{
                                     <input type="radio" name="radio" id="female" onChange={v=>this.handleInput('sex','2')}/>女
                                 </label>
                             </List.Item>
-                            <DatePicker mode="date" title="生日" extra="福佑联系人生日" value={this.state.birthday} 
+                            <DatePicker mode="date" title="生日" extra="福佑联系人生日" value={birthday} 
                                 minDate={new Date(1900,1,1)} maxDate={new Date()} onChange={birthday => this.setState({ birthday })}
                                 >
                                 <List.Item arrow="horizontal">生日：</List.Item>
@@ -238,7 +205,7 @@ class PrayDetail extends React.Component{
                             <Picker extra="所在地区" cols={2}
                                 data={District}
                                 title="地址选择"
-                                value={this.state.address}
+                                value={address}
                                 onOk={address => this.setState({ address })}
                                 onChange={address => this.setState({ address })}
                                 >
@@ -257,10 +224,10 @@ class PrayDetail extends React.Component{
                     </div>
                 </Popup>
 
-                <div className={`dbssBlock ${this.state.src===''?'hidden':'showin'} ${this.state.burning?'burnings':''}`}>
-                    <img src={this.state.src} alt=""/> 
-                    <div className={`burnBtn  ${this.state.burning?'bg-grey1':'orangeBg'}`} onClick={()=>this.handleBurning()}>点击开始焚化</div>
-                    <div className={`burnBlock ${this.state.burning?'burning':''}`}></div>
+                <div className={`dbssBlock ${src===''?'hidden':'showin'} ${burning?'burnings':''}`}>
+                    <img src={src} alt=""/> 
+                    <div className={`burnBtn  ${burning?'bg-grey1':'orangeBg'}`} onClick={()=>this.handleBurning()}>点击开始焚化</div>
+                    <div className={`burnBlock ${burning?'burning':''}`}></div>
                 </div>
                 
             </div>

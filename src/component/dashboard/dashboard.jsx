@@ -1,28 +1,7 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import { Route, Redirect} from 'react-router-dom' 
 // import QueueAnim from 'rc-queue-anim';
 import { AnimatedSwitch } from 'react-router-transition';
-
-// import Gongde from '../../pray/introduce/gongde.jsx'
-// import Haochu from '../../pray/introduce/haochu.jsx'
-// import Yuanqi from '../../pray/introduce/yuanqi.jsx'
-// import TempleList from '../../pray/templeList/templeList.jsx'
-// import PrayForm from '../../pray/prayForm/prayForm.jsx'
-// import TempleDetail from '../../pray/templeDetail/templeDetail.jsx'
-// import Template from '../../pray/template/template.jsx'
-// import LampDetail from '../../pray/lampDetail/lampDetail.jsx'
-// import PrayDetail from '../../pray/prayDetail/prayDetail.jsx'
-
-
-// import Temple from '../../pray/temple/temple.jsx'
-
-// import PersonalCenter from '../../personal/personalCenter/personalCenter.jsx'
-// import MyPraylist from '../../personal/myPraylist/myPraylist.jsx'
-// import MyCarelist from '../../personal/myCarelist/myCarelist.jsx'
-// import MyHistory from '../../personal/myHistory/myHistory.jsx'
-// import MyPhone from '../../personal/myPhone/myPhone.jsx'
-// import MySuggest from '../../personal/mySuggest/mySuggest.jsx'
 
 import {setStorage, getStorage, comparePath} from '../../util'
 import asyncComponent from './AsyncComponent'
@@ -45,16 +24,8 @@ const MyHistory = asyncComponent(() => import("../../personal/myHistory/myHistor
 const MyPhone = asyncComponent(() => import("../../personal/myPhone/myPhone.jsx"))
 const MySuggest = asyncComponent(() => import("../../personal/mySuggest/mySuggest.jsx"))
 
-@connect(
-    state=>state,
-)
 class Dashboard extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            title:'',
-        }
-    }
+
     componentDidMount(){
         let height = document.documentElement.clientHeight
         document.getElementById('root').style.height = height +'px'
@@ -105,8 +76,6 @@ class Dashboard extends React.Component{
             }
             return (
                 <div>
-                    {/* <NavBar id="navbar" icon={<span className="navleft"><Icon type="left" /><span id="pagetitle">{page.title}</span></span>} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}></NavBar> */}
-                    {/* <NavBar id="navbar" icon={<Icon type="left" style={{color:'black'}} />} mode='light' onLeftClick={()=>this.handleLeftClick(page.path)}>{page.title}</NavBar> */}
                     <AnimatedSwitch
                         atEnter={{ opacity: 0, foo: 0 }}
                         atLeave={{ opacity: 0, foo: 2 }}

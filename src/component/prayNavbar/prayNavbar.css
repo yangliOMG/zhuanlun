@@ -5,4 +5,13 @@
     background-color: #eee;
     color: #ff6201;
     box-shadow: 2px 2px 2px #bbb;
+
+    font-size: 16px;
+    padding: 10px;
+    overflow: hidden;
+    white-space:nowrap;
+}
+.am-notice-board{
+    overflow-x: auto;
+    overflow-y: hidden;
 }

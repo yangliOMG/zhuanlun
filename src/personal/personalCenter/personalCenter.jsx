@@ -1,18 +1,14 @@
 import React from 'react'
 import { List, WhiteSpace , WingBlank} from 'antd-mobile'
-import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
-import { removeStorage,getStorage } from '../../util'
-import Order from '../../service/order-service.jsx'
-import {savePrayList} from '../../redux/pray.redux'
 
-// import {update} from '../../redux/user.redux'
+import { removeStorage,getStorage } from '../../util'
+import { withContext } from '../../context'
+import {ajaxPraylist} from '../../service/asyncFun'
+
 import "./personalCenter.css"
-const _order = new Order()
-@connect(
-    state=>state,
-    {savePrayList}
-)
+
+@withContext
 class PersonalCenter extends React.Component{
     constructor(props){
         super(props);
@@ -20,9 +16,16 @@ class PersonalCenter extends React.Component{
         }
     }
     componentDidMount(){
-        if(this.props.prayList.prayList.length===0){
-            _order.getOrderList()
+        let { prayList, save} = this.props.context
+        if( prayList.list.length===0){
+            ajaxPraylist( res=>{
+                prayList.list = res
+                save({prayList})
+            })
         }
+        // setTimeout(() => {          //!!!!!!!!!!!
+        //     save({user:getStorage('user')})
+        // }, 500);
     }
 
     handleClick(){
@@ -32,16 +35,16 @@ class PersonalCenter extends React.Component{
     }
 
     render(){
+        let { user } = this.props.context
         const Item = List.Item
         const namelist = [
                 {title:"我的祈福",path:'/myPraylist',fontname:'heart',color:'red'},
-                // {title:"我的收藏",path:'/myCarelist',fontname:'star',color:'orange'},
                 {title:"我的足迹",path:'/myHistory',fontname:'clock-o',color:'grey'},
                 {title:"手机绑定",path:'/myPhone',fontname:'phone',color:'#108ee9'},
                 {title:"意见反馈",path:'/mySuggest',fontname:'commenting',color:'grey'},
             ]
-        const headImg = this.props.user.headImgURL || getStorage('user').headImgURL
-        const nick = this.props.user.nick || getStorage('user').nick
+        const headImg = user.headImgURL || getStorage('user').headImgURL
+        const nick = user.nick || getStorage('user').nick
         return (
             <div>
                 <WhiteSpace/>

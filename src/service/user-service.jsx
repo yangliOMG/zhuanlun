@@ -28,9 +28,9 @@ class User{
             isMoblieMode,code
           }})
     }
-    getUserMes(){
+    getUserMes(openid){
         return axios.get(`/login/info.do`,{params: {
-            openid: '',
+            openid,
         }})
     }
 

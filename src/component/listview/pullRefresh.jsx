@@ -2,33 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router-dom'
 import { PullToRefresh } from 'antd-mobile';
-import {connect} from 'react-redux'
-
-import {saveAnchor} from '../../redux/temple.redux'
 
 import './style.less'
 
-
-// function genData() {
-//     const dataArr = [];
-//     for (let i = 0; i < 20; i++) {
-//       dataArr.push(i);
-//     }
-//     return dataArr;
-//   }
-
 @withRouter
-@connect(
-    state=>state.praydata,
-    {saveAnchor}
-)
 class Listview extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             refreshing: false,
             height: typeof document !== 'undefined' ? document.documentElement.clientHeight : 300 ,
-        //   data: [],
         };
     }
 
@@ -36,20 +19,15 @@ class Listview extends React.Component {
         const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
         setTimeout(() => this.setState({
             height: hei,
-            // data: genData(),
         }), 0);
     }
 
     onRefresh = () => {
         this.setState({ refreshing: true, isLoading: true });
-        this.props.getMore().then(res=>{
-            // this.rData = genData()
-            this.setState({
-                // data: genData(),
-                refreshing: false,
-                isLoading: false,
-            });
-        })
+        this.props.getMore( () => this.setState({
+            refreshing: false,
+            isLoading: false,
+        }))
     };
     handleClick(id){
         this.props.saveAnchor(`#${id}`)
@@ -57,20 +35,22 @@ class Listview extends React.Component {
     }
 
     render() {
+        const { height,refreshing} = this.state
+        const { templeData } = this.props
         return (
             <div>
                 <PullToRefresh
                     ref={el => this.ptr = el}
                     style={{
-                        height: this.state.height,
+                        height: height,
                         overflow: 'auto',
                     }}
                     indicator='上拉可以刷新'
                     direction='up'
-                    refreshing={this.state.refreshing}
+                    refreshing={refreshing}
                     onRefresh={this.onRefresh}
                 >
-                    {this.props.templeData.map((obj,idx) => (
+                    {templeData.map((obj,idx) => (
                         <div id={obj.id} key={obj.id} className='line_box'
                             onClick={()=>this.handleClick(obj.id)}
                         >

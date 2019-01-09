@@ -1,17 +1,14 @@
 import React from 'react'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
-import {connect} from 'react-redux'
-import Tem from '../../service/temple-service.jsx'
+
+import { withContext } from '../../context'
+import {ajaxHistoryList} from '../../service/asyncFun'
 
 import logo from '../../pray/temple/foqian.jpg';
-// import { StickyContainer, Sticky } from 'react-sticky';
 
 import "./myHistory.less"
-const _temple = new Tem()
-@connect(
-    state=>state.user,
-    // {update}
-)
+
+@withContext
 class MyHistory extends React.Component{
     constructor(props){
         super(props);
@@ -20,17 +17,13 @@ class MyHistory extends React.Component{
         }
     }
     componentWillMount(){
-         _temple.getHistoryListByType(0).then(res=>{
-            const list = [...new Set(res.data.map(v=>v[3]))]
-            const promise = list.map(id=>_temple.getTempleById(id))
-            Promise.all(promise).then(res=>{
-                let historylist = res.map(i=>i.data)
-                this.setState({historylist})
-            })
+        ajaxHistoryList({type:0},historylist=>{
+            this.setState({historylist})
         })
     }
 
     render(){
+        const {historylist} = this.state
         return (
             <div>
                 <WhiteSpace/>
@@ -42,14 +35,7 @@ class MyHistory extends React.Component{
                             <div className="text-overflow4a c-grey1 pt-20">点击前往寺庙列表页</div>
                         </div>
                     </div>
-                    {this.state.historylist.map((v,idx)=>
-                        // <StickyContainer key={v.id}>
-                        //   <Sticky>
-                        //     {({style,}) => (
-                        //       <header style={{...style,zIndex: 3,backgroundColor: '#eee',
-                        //       }}>{v.time}</header>
-                        //     )}
-                        //   </Sticky>
+                    {historylist.map((v,idx)=>
                         <div key={v.temple[0].id}>
                             <WhiteSpace/>  
                             <div className='li radius ofhd' onClick={()=>this.props.history.push(`/temple#${v.temple[0].id}`)}>
@@ -63,10 +49,8 @@ class MyHistory extends React.Component{
                                 </div>
                             </div>
                         </div>                        
-
-                        // </StickyContainer>  
                     )}
-                    <div className={`emptyList ${this.state.historylist.length===0?'':'hidden'}`}>足迹为空</div>
+                    <div className={`emptyList ${historylist.length===0?'':'hidden'}`}>足迹为空</div>
                 </WingBlank>
             </div>
         )

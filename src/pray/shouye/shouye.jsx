@@ -1,18 +1,16 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import { getQueryString,  getStorage, setStorage } from '../../util'
 import User from '../../service/user-service.jsx'
-import {loadData} from '../../redux/user.redux'
 import "./shouye.css"
 
 
 const _user = new User()
 const isMoblieMode = false
 
-@connect(
-    state=>state.user,
-    {loadData}
-)
+// @connect(
+//     state=>state.user,
+//     {loadData}
+// )
 class Shouye extends React.Component{
     constructor(props){
         super(props);
@@ -43,7 +41,7 @@ class Shouye extends React.Component{
         this.reduxSaveAndPush(userinfo,type)
     }
     reduxSaveAndPush(userinfo,type){
-        this.props.loadData(userinfo)       //为了在个人中心页中，从微信取了用户信息能够及时显示，所以只能用redux
+        // this.props.loadData(userinfo)       //为了在个人中心页中，从微信取了用户信息能够及时显示，所以只能用redux
         window.location.href = `/${type.replace(':','#')}`
     }
 

@@ -1,18 +1,13 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import { WhiteSpace } from 'antd-mobile'
 
-import { newOrder} from '../../redux/order.redux'
-import Tem from '../../service/temple-service.jsx'
+import {ajaxTempleMessage} from '../../service/asyncFun'
+import { ArrayFormat, getQueryString } from '../../util'
+import { withContext } from '../../context'
 
 import './gridDefine.less'
 
-const _temple = new Tem()
-
-@connect(
-    state=>state,
-    {newOrder}
-)
+@withContext
 class Temple extends React.Component{
     constructor(props){
         super(props);
@@ -23,19 +18,10 @@ class Temple extends React.Component{
         }
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
-        _temple.getHistoryByType(0)
-        .then(res=> (id||res.data.oid)? 
-            _temple.getTempleById(id||res.data.oid,true):
-            window.location.href = '/templeList'
-        ).then(res=>{
-            if(res.status === 200&&res.data.temple.length>0){
-                this.setState({
-                    ...res.data,
-                    temple : res.data.temple[0]
-                })
-                document.title = this.state.temple.name
-            }
+        const id = getQueryString("id")
+        ajaxTempleMessage(id, res =>{
+            this.setState({ ...res, temple : res.temple[0] })
+            document.title = res.temple[0].name
         })
     }
 
@@ -44,25 +30,13 @@ class Temple extends React.Component{
     }
     handleClickPray(id,e){
         e.preventDefault()
-        this.props.newOrder()
+        this.props.context.init('order')
         window.location.href = `/pay/prayForm?src=${1}#${id}`
-        // this.props.history.push(`/pay/prayForm#${id}`)
     }
 
     render(){
-        const temple = this.state.temple
-        const facility = this.state.facility
-        const templeMaterial = this.state.templeMaterial
-        let rowData = [],hang=[];
-        facility.forEach((val,idx)=>{
-            if(idx%2===0){
-                hang=[];
-                hang.push(val)
-                rowData.push(hang)
-            }else{
-                hang.push(val)
-            }
-        })
+        const {temple, facility, templeMaterial} = this.state
+        let rowData = ArrayFormat(facility)
         return (
             <div>
                 <WhiteSpace />

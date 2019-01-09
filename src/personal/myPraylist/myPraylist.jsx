@@ -1,33 +1,25 @@
 import React from 'react'
 import { WhiteSpace, Card, WingBlank,Modal } from 'antd-mobile'
-import {connect} from 'react-redux'
 
-import {timeLongCount,duringDictionary,timeFormat,showToast,positionMesArray
-    // continueLamp 
-} from '../../util'
-import Order from '../../service/order-service.jsx'
-import {savePrayList} from '../../redux/pray.redux'
+import {timeLongCount,duringDictionary,timeFormat,showToast,positionMesArray} from '../../util'
+import { withContext } from '../../context'
+import {ajaxPraylist, ajaxOrderDelete} from '../../service/asyncFun'
 import  "./myPraylist.less"
-const _order = new Order()
-@connect(
-    state=>state.prayList,
-    {savePrayList}
-)
+
+@withContext
 class MyPraylist extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            praylist : this.props.prayList
         }
     }
 
     componentDidMount(){
-        if(this.props.prayList.length===0){
-            _order.getOrderList().then(res=>{
-                if(res.status === 200){
-                    this.setState({praylist : res.data})
-                    this.props.savePrayList(res.data)
-                }
+        let { prayList, save} = this.props.context
+        if( prayList.list.length===0){
+            ajaxPraylist( res=>{
+                prayList.list = res
+                save({prayList})
             })
         }
     }
@@ -37,13 +29,12 @@ class MyPraylist extends React.Component{
         Modal.alert('删除', '确认删除订单？', [
             { text: '取消' },
             { text: '确认', onPress: () => {
-                _order.deleteOrder(id).then(res=>{
-                    if(res.status === 200&&res.data.returnCode===1000){
-                        const praylist = this.state.praylist.filter(v=>v.id!==id)
-                        this.setState({praylist})
-                        this.props.savePrayList(praylist)
-                    }
-                    showToast(res.data.data)
+                ajaxOrderDelete({id},()=>{
+                    let { prayList, save} = this.props.context
+                    prayList.list = prayList.list.filter(v=>v.id!==id)
+                    save({prayList})
+                    showToast('刪除成功')
+
                 })
             } },
         ])
@@ -51,19 +42,19 @@ class MyPraylist extends React.Component{
 
     handleContinueClick(id,fid,e){
         e.stopPropagation()
-        window.location.href = `/pay/prayForm?pid=${id}#${fid}`
+        window.location.href = `/pay/prayForm?pid=${id}&id=${fid}`
     }
 
     render(){
+        const { list } = this.props.context.prayList
         return (
             <div>
                 <WhiteSpace/>
                 <WingBlank size="lg">
-                    {this.state.praylist.map((v,idx)=>
+                    {list.map((v,idx)=>
                         <div key={v.id}>
                             <Card full className='radius prayLi' 
-                                // onClick={()=>this.props.history.push(`/prayDetail#${v.id}`)}>
-                                onClick={()=>window.location.href = `/pay/prayDetail#${v.id}`}>
+                                onClick={()=>window.location.href = `/pay/prayDetail?id=${v.id}`}>
                                 <div className='prayHead orangeBg'>{v.blessing}</div>
                                 <Card.Body>
                                     <div className='prayTitle'>
@@ -95,11 +86,6 @@ class MyPraylist extends React.Component{
                                         <div className='lf' onClick={(e)=>this.handleDeleteClick(v.id,e)}>
                                             <div className='btn btnred'>删除订单</div>
                                         </div>
-                                        {/* <div className='ct' onClick={(e)=>this.handleContinueClick(v.id,v.fid,e)}>
-                                            { continueLamp(v.closeTime) ?
-                                                <div className='btn btngold'>续灯</div>:''
-                                            }
-                                        </div> */}
                                         <div className='rt'>查看详情 > </div>
                                     </div>
                                 </Card.Body>
@@ -107,7 +93,7 @@ class MyPraylist extends React.Component{
                             <WhiteSpace/>
                         </div>
                     )}
-                    <div className={`emptyList ${this.state.praylist.length===0?'':'hidden'}`}>祈福列表为空</div>
+                    <div className={`emptyList ${list.length===0?'':'hidden'}`}>祈福列表为空</div>
                 </WingBlank>
             </div>
         )

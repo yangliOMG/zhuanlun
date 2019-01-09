@@ -2,8 +2,9 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2018-11-06 10:26:37
+ * @Last Modified time: 2019-01-09 14:52:57
  */
+import qs from 'qs'
 import { Toast } from 'antd-mobile';
 /**
  * 获取url参数
@@ -16,6 +17,31 @@ export function getQueryString(name){
     let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
     let r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
+}
+/**
+ * 将#转换为id=
+ * @param {url} href 
+ */
+export function compatUrl(href){
+    if(href.indexOf('#')>=0){
+        if(href.indexOf('?')>=0){
+            href = href.replace('#','&id=')
+        }else{
+            href = href.replace('#','?id=')
+        }
+    }
+    return href
+}
+/**
+ * 将code 和state 删除
+ * @param {url} href 
+ */
+export function arrangeUrl(location){
+    let {search, origin, pathname} = location
+    let paramObj = qs.parse(search.substr(1))
+    delete paramObj.code
+    delete paramObj.state
+    return Object.keys(paramObj).length === 0 ? origin+pathname : origin+pathname+"?"+qs.stringify(paramObj)
 }
 /**
  * 比较页面父子关系
@@ -282,3 +308,22 @@ export function ArraySum(arr){
     arr.forEach(el=>a +=Number(el))
 	return a
 }
+/**
+ * 数组格式重组 
+ * @param {数组} arr 
+ * @param {几个一组} number 
+ */
+export function ArrayFormat(arr, num=2){
+	let rowData = [],hang=[];
+    arr.forEach((val,idx)=>{
+        if(idx%num===0){
+            hang=[];
+            hang.push(val)
+            rowData.push(hang)
+        }else{
+            hang.push(val)
+        }
+    })
+    return rowData
+}
+
