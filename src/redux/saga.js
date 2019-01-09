@@ -36,12 +36,18 @@ export function* watchLogin(){
     while(true){
         const action = yield take(TO_GET_LOGIN)
         const { isMoblieMode,code } = action.payload
+        const callback = action.callback
         let res = yield call(getUserLogin, isMoblieMode,code)
         try {
             const { id, openid, nick, headImgURL } = res.data
-            const userinfo = {id , openid , nick , headImgURL }
-            setStorage('user', userinfo )
-            yield put({ type: LOAD_DATA, payload: userinfo })
+            if(id){
+                const userinfo = {id , openid , nick , headImgURL }
+                setStorage('user', userinfo )
+                yield put({ type: LOAD_DATA, payload: userinfo })
+                if(callback){
+                    callback()
+                }
+            }
         } catch (error) {
             console.error(error)
         }
@@ -131,25 +137,29 @@ export function* watchTempleList(){
         const {province='',tag='',name='',index,scrollMore=false,pickerVal=''} = action.payload
         const callback = action.callback
         let res 
-        if(name !== ''){
-            res = yield call(getTempleListByName,name,index)
-        }else if(province !== ''&&tag !== ''){
-            res = yield call(getTempleListByPicker,province,tag,index)
-        }else if(pickerVal!==''){
-            const arr = pickerVal.split('，')
-            res = yield call(getTempleListByPicker,...arr,index)
-        }else{
-            res = yield call(getTempleListAll,index)
-        }
-        if(res.status === 200){
-            if( !scrollMore || true){
-                if(res.data instanceof Array){
-                    yield put({ type: SAVELIST, payload: res.data, index: index+1 })
-                    if(callback){
-                        callback()
+        try {
+            if(name !== ''){
+                res = yield call(getTempleListByName,name,index)
+            }else if(province !== ''&&tag !== ''){
+                res = yield call(getTempleListByPicker,province,tag,index)
+            }else if(pickerVal!==''){
+                const arr = pickerVal.split('，')
+                res = yield call(getTempleListByPicker,...arr,index)
+            }else{
+                res = yield call(getTempleListAll,index)
+            }
+            if(res.status === 200){
+                if( !scrollMore || true){
+                    if(res.data instanceof Array){
+                        yield put({ type: SAVELIST, payload: res.data, index: index+1 })
+                        if(callback){
+                            callback()
+                        }
                     }
                 }
             }
+        } catch (error) {
+            console.log(error)
         }
     }
 }
@@ -175,13 +185,17 @@ export function* watchTemMes(){
         const { id,ifset=false } = action1.payload
         const callback = action1.callback
         const res = yield call(getHistoryByType,0)
-        if(id||res.data.oid){
-            const res2 = yield call(getTempleById,id||res.data.oid,ifset)
-            if(res2.status === 200&&res2.data.temple.length>0){
-                callback(res2.data)
+        try {
+            if(id||res.data.oid){
+                const res2 = yield call(getTempleById,id||res.data.oid,ifset)
+                if(res2.status === 200&&res2.data.temple.length>0){
+                    callback(res2.data)
+                }
+            }else{
+                window.location.href = '/templeList'
             }
-        }else{
-            window.location.href = '/templeList'
+        } catch (error) {
+            console.log(error)
         }
     }
 }
@@ -275,11 +289,15 @@ export function* watchTemplate(){
         const { type } = action1.payload
         const { callback, callback2 } = action1 
         const res = yield call(getRandomTemplateByType,type)
-        if(res.status === 200&& res.data.content){
-            yield put({ type: UPDATEORDER, payload: { blessing: res.data.content} })
-            callback()
-        }else{
-            callback2()
+        try {
+            if(res.status === 200&& res.data.content){
+                yield put({ type: UPDATEORDER, payload: { blessing: res.data.content} })
+                callback()
+            }else{
+                callback2()
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 }
@@ -287,7 +305,11 @@ export function* watchOrderList(){
     while(true){
         yield take(TO_GET_ORDERLIST)
         const res = yield call( getOrderList )
-        yield put({ type: SAVEPRAYLIST, payload: res.data  })
+        try {
+            yield put({ type: SAVEPRAYLIST, payload: res.data  })
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 export function* watchOrderDelete(){
@@ -306,16 +328,19 @@ export function* watchTextScan(){
         const { blessing } = action1.payload
         const { callback, callback2 } = action1 
         const res = yield call( getTextScan,blessing )
-
-        if(res.status === 200&& res.data.suggestion==='pass'){
-            callback()
-        }else if(res.status === 200&& res.data.suggestion==='block'){
-            const dic = { spam:'含垃圾信息', ad:'广告', politics:'涉政', terrorism:'暴恐',
-                abuse:'辱骂', porn:'色情', flood:'灌水', contraband:'违禁', meaningless:'无意义'}
-                
-            callback2('祈愿文内容违规，违规原因：'+dic[res.data.label])
-        }else{
-            callback2(JSON.stringify(res.data))
+        try {
+            if(res.status === 200&& res.data.suggestion==='pass'){
+                callback()
+            }else if(res.status === 200&& res.data.suggestion==='block'){
+                const dic = { spam:'含垃圾信息', ad:'广告', politics:'涉政', terrorism:'暴恐',
+                    abuse:'辱骂', porn:'色情', flood:'灌水', contraband:'违禁', meaningless:'无意义'}
+                    
+                callback2('祈愿文内容违规，违规原因：'+dic[res.data.label])
+            }else{
+                callback2(JSON.stringify(res.data))
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 }
@@ -367,19 +392,23 @@ export function* watchOrderPut(){
         const { callback, callback2 } = action1 
         const res = yield call( createOrder,order )
 
-        if(res.data.returnCode===1000){
-            yield put({ type: INITORDER  })
-            callback(res.data.data)
-        }else{
-            if(res.data.data){
-                let occ = res.data.data.occ
-                if(occ){
-                    yield put({ type: UPDATEPOSITION, payload: occ })
-                }
-                callback2(res.data.data.errorInfo)
+        try {
+            if(res.data.returnCode===1000){
+                yield put({ type: INITORDER  })
+                callback(res.data.data)
             }else{
-                callback2(JSON.stringify(res.data))
+                if(res.data.data){
+                    let occ = res.data.data.occ
+                    if(occ){
+                        yield put({ type: UPDATEPOSITION, payload: occ })
+                    }
+                    callback2(res.data.data.errorInfo)
+                }else{
+                    callback2(JSON.stringify(res.data))
+                }
             }
+        } catch (error) {
+            console.log(error)
         }
     }
 }

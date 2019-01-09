@@ -3,6 +3,7 @@ import { Route, Switch} from 'react-router-dom';
 
 import AuthLogin from './component/authLogin/authLogin.jsx';
 import Dashboard from './component/dashboard/dashboard.jsx';
+import Login from './component/authLogin/login.jsx';
 
 class App extends React.Component{
     constructor(props){
@@ -26,11 +27,12 @@ class App extends React.Component{
             <div>{ err.stack?err.stack.toString():err.toString()}</div>
         </div>
         :(
-            <AuthLogin>
-                <Switch>
+            <Switch>
+                <Route key="login" path='/login' component={Login}></Route>
+                <AuthLogin>
                     <Route component={Dashboard}></Route>
-                </Switch>
-            </AuthLogin>
+                </AuthLogin>
+            </Switch>
         )
     }
 }

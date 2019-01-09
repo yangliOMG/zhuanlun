@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import {removeStorage, showLoading } from '../util'
+import {removeStorage, getStorage, showLoading, getQueryString } from '../util'
 
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 10000
@@ -14,9 +14,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
      // 在这里你可以判断后台返回数据携带的请求码
      if(response.data.returnCode === 3005 || response.data.returnCode === '3005'){
         // 3005未登录
-        showLoading('重新登录...', 0);
-        removeStorage('user')
-        setTimeout(() => window.location.reload(), 100)
+        const code = getQueryString("code")
+        const user = getStorage('user')
+        showLoading('登录...'+response.config.url, 2);
+        if(!code||user !== ''){
+            removeStorage('user')
+            setTimeout(() => window.location.reload(), 100)
+        }
         // console.log("axois",response)
         // return response.data
     }else if (response.status === 200 || response.status === '200') {

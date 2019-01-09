@@ -1,3 +1,5 @@
+//constant
+export const ISMOBILEMODE = false
 // worker action
 export const UPDATEORDER = 'UPDATEORDER';
 export const INITORDER = 'INITORDER';

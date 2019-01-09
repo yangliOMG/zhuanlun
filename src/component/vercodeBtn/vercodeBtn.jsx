@@ -29,7 +29,7 @@ class VercodeBtn extends React.Component{
                     this.breakFlag = false
                 }
             )
-            this.props.sendVerCode( phone, 
+            this.props.sendVerCode( {phone}, 
                 mes=> showToast( mes,2),
                 () => this.breakFlag = true
             )

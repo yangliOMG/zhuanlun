@@ -3,7 +3,7 @@ import { List, WhiteSpace , WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome';
 
-import { removeStorage,getStorage } from '../../util'
+import { removeStorage,getStorage, } from '../../util'
 import { TO_GET_ORDERLIST } from '../../constant/actionType'
 
 import "./personalCenter.css"

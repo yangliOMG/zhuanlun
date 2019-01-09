@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import { WhiteSpace } from 'antd-mobile'
 
 import { TO_GET_TEMPLE, INITORDER } from '../../constant/actionType'
-import { ArrayFormat } from '../../util'
+import { ArrayFormat, getQueryString } from '../../util'
 import './gridDefine.less'
 
 @connect( ()=>({}) ,
@@ -22,7 +22,7 @@ class Temple extends React.Component{
         }
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
+        const id = getQueryString("id")
         this.props.getTempleMessage({id,ifset:true}, res =>{
             this.setState({
                 ...res,
@@ -33,13 +33,13 @@ class Temple extends React.Component{
     }
 
     handleClick(id){
-        this.props.history.push(`/templeDetail#${id}`)
+        this.props.history.push(`/templeDetail?id=${id}`)
     }
     handleClickPray(id,e){
         e.preventDefault()
         this.props.orderClear()
-        window.location.href = `/pay/prayForm?src=${1}#${id}`
-        // this.props.history.push(`/pay/prayForm#${id}`)
+        window.location.href = `/pay/prayForm?src=${1}&id=${id}`
+        // this.props.history.push(`/pay/prayForm?id=${id}`)
     }
 
     render(){

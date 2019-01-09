@@ -41,7 +41,7 @@ class MyPraylist extends React.Component{
 
     handleContinueClick(id,fid,e){
         e.stopPropagation()
-        window.location.href = `/pay/prayForm?pid=${id}#${fid}`
+        window.location.href = `/pay/prayForm?pid=${id}&id=${fid}`
     }
 
     render(){
@@ -53,8 +53,8 @@ class MyPraylist extends React.Component{
                     {prayList.map((v,idx)=>
                         <div key={v.id}>
                             <Card full className='radius prayLi' 
-                                // onClick={()=>this.props.history.push(`/prayDetail#${v.id}`)}>
-                                onClick={()=>window.location.href = `/pay/prayDetail#${v.id}`}>
+                                // onClick={()=>this.props.history.push(`/prayDetail?id=${v.id}`)}>
+                                onClick={()=>window.location.href = `/pay/prayDetail?id=${v.id}`}>
                                 <div className='prayHead orangeBg'>{v.blessing}</div>
                                 <Card.Body>
                                     <div className='prayTitle'>

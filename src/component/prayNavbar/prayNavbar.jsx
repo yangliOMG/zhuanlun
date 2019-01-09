@@ -12,7 +12,7 @@ import './prayNavbar.css'
 //         }
 //     }
 //     componentWillMount(){
-//         const fid = window.location.hash.replace("#","")
+//         const fid = window.location.hash.replace(":","")
 //         _order.getTopMes(fid).then(res=>{
 //             if(res.status === 200){
 //                 const data = res.data.data

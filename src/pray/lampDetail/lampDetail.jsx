@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 
 
 import TabEx from  './tabEx.jsx'
-import {directionDictionary, recommendAI, positionMesArray, showToast} from '../../util'
+import {directionDictionary, recommendAI, positionMesArray, showToast, getQueryString} from '../../util'
 import { TO_GET_LAYOUT,UPDATEORDER} from '../../constant/actionType'
 
 import './lampDetail.less'
@@ -58,7 +58,7 @@ class LampDetail extends React.Component{
 
     componentWillMount(){
         const position = this.props.position
-        const id = this.props.location.hash.replace("#","")
+        const id = getQueryString("id")
         if(id){
             Toast.loading('加载中。。。',0)
             this.props.getLayoutById({id},(data,total,occupy)=>{

@@ -43,14 +43,14 @@ class PrayForm extends React.Component{
         }
     }
     ajaxGetRandomPosition(num){
-        // let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
+        // let id = (getQueryString("id")||"").replace(/[^0-9a-zA-Z]/g,'')
         // this.props.getRandomPosition({id,num},(mes)=>{
         //     console.log(mes)
         // })
     }
 
     componentWillMount(){
-        let id = this.props.location.hash.replace("#","").replace(/[^0-9a-zA-Z]/g,'')
+        let id = (getQueryString("id")||"").replace(/[^0-9a-zA-Z]/g,'')
         let pid = getQueryString("pid")
         const { position,num } = this.props.order
         if(pid){
@@ -182,7 +182,7 @@ class PrayForm extends React.Component{
         order.openTime = (new Date()).getTime()
         order.type = 1
         order.adds = order.position.map(i=>i[0])
-        order.fid = this.props.location.hash.replace("#","")
+        order.fid = getQueryString("id")
         order.source = getQueryString('src')===1? 1:2       //src = 1 入口，src = 2扫码
         order.content = contentType.length===1?contentType[0].name:contentType.map(v=>v.name).join("、")
         if((order.num !== order.position.length)||(order.adds.length<=0)){

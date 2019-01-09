@@ -3,6 +3,8 @@ import { Button, WhiteSpace ,WingBlank} from 'antd-mobile'
 import {connect} from 'react-redux'
 
 import { TO_GET_TEMPLE, } from '../../constant/actionType'
+import {  getQueryString } from '../../util'
+
 import './templeDetail.less'
 
 
@@ -22,7 +24,7 @@ class TempleDetail extends React.Component{
         }
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
+        const id = getQueryString("id")
         this.props.getTempleMessage({id}, res =>{
             this.setState({
                 ...res,

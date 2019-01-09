@@ -3,7 +3,7 @@ import { WhiteSpace ,WingBlank, List ,InputItem,TextareaItem,DatePicker,Picker, 
 import {connect} from 'react-redux'
 
 import District from './area'
-import {duringDictionary, dateDictionary, showToast, timeFormat, positionMesArray } from '../../util'
+import {duringDictionary, dateDictionary, showToast, timeFormat, positionMesArray, getQueryString } from '../../util'
 import Popup from '../../component/userMesTable/userMesTable.jsx'
 
 import {webchatPay } from '../prayForm/wechatPay.js'
@@ -48,7 +48,7 @@ class PrayDetail extends React.Component{
         }
     }
     componentWillMount(){
-        const id = this.props.location.hash.replace("#","")
+        const id = getQueryString("id")
         this.props.getOrderDetail({id},(order, followFlag)=>{
             this.setState({order, followFlag})
         },(mes)=>{
@@ -70,7 +70,7 @@ class PrayDetail extends React.Component{
     handleSubMes(){
         const { name, phone, sex, birthday, thing} = this.state
         let blissMan = {}
-        let id = this.props.location.hash.replace("#","")
+        let id = getQueryString("id")
             blissMan.name = name
             blissMan.phone = phone
             blissMan.sex = (sex*1) ||0  //1男 2女 0未知

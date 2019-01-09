@@ -2,9 +2,11 @@
  * @Author: yangli 
  * @Date: 2018-05-21 11:17:09 
  * @Last Modified by: yangli
- * @Last Modified time: 2019-01-06 15:03:05
+ * @Last Modified time: 2019-01-09 13:51:20
  */
 import { Toast } from 'antd-mobile';
+import qs from 'qs'
+
 /**
  * 获取url参数
  * @param {参数key} name 
@@ -16,6 +18,31 @@ export function getQueryString(name){
     let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
     let r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
+}
+/**
+ * 将#转换为id=
+ * @param {url} href 
+ */
+export function compatUrl(href){
+    if(href.indexOf('#')>=0){
+        if(href.indexOf('?')>=0){
+            href = href.replace('#','&id=')
+        }else{
+            href = href.replace('#','?id=')
+        }
+    }
+    return href
+}
+/**
+ * 将code 和state 删除
+ * @param {url} href 
+ */
+export function arrangeUrl(location){
+    let {search, origin, pathname} = location
+    let paramObj = qs.parse(search.substr(1))
+    delete paramObj.code
+    delete paramObj.state
+    return Object.keys(paramObj).length === 0 ? origin+pathname : origin+pathname+"?"+qs.stringify(paramObj)
 }
 /**
  * 比较页面父子关系
