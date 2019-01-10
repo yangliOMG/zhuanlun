@@ -1,7 +1,7 @@
 import { getQueryString,  getStorage, compatUrl, arrangeUrl } from '../../util'
 import {ajaxLogin} from '../../service/asyncFun'
 
-const isMoblieMode = true
+const isMoblieMode = false
 
 function AuthLogin(props){      
     const code = getQueryString("code")

@@ -31,7 +31,7 @@ class Listview extends React.Component {
     };
     handleClick(id){
         this.props.saveAnchor(`#${id}`)
-        this.props.history.push(`/temple#${id}`)
+        this.props.history.push(`/temple?id=${id}`)
     }
 
     render() {

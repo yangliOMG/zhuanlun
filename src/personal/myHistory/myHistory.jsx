@@ -38,7 +38,7 @@ class MyHistory extends React.Component{
                     {historylist.map((v,idx)=>
                         <div key={v.temple[0].id}>
                             <WhiteSpace/>  
-                            <div className='li radius ofhd' onClick={()=>this.props.history.push(`/temple#${v.temple[0].id}`)}>
+                            <div className='li radius ofhd' onClick={()=>this.props.history.push(`/temple?id=${v.temple[0].id}`)}>
                                 <div className='imgBlock'><img src={v.temple[0].ico} alt="" /></div>
                                 <div className='textBlock'>
                                     <div className='b name'>{v.temple[0].name}</div>

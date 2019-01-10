@@ -6,12 +6,9 @@ import csshook from 'css-modules-require-hook/preset'
 import assethook from 'asset-require-hook'
 
 import React from 'react'
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
 import { StaticRouter } from 'react-router-dom';
 import App from '../src/app.jsx'
-import reducer from '../src/reducer.jsx'
+import Provider from '../src/provider.jsx'
 
 import { renderToNodeStream } from 'react-dom/server'
 import staticPath from '../build/asset-manifest.json'
@@ -38,9 +35,6 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
         ||req.url.endsWith('.ico')||req.url.endsWith('.txt')) {
         return next()
     }
-    const store = createStore(reducer, compose(
-        applyMiddleware(thunk)
-    ))
     let context = {}
     const obj = {
         '/gongde': '供灯功德',
@@ -72,7 +66,7 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
         <body>
         <div id="root">`)
     const markupStream = renderToNodeStream(
-        <Provider store={store}>
+        <Provider>
             <StaticRouter
                 location={req.url}
                 context={context}

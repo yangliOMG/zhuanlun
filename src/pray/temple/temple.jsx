@@ -26,12 +26,12 @@ class Temple extends React.Component{
     }
 
     handleClick(id){
-        this.props.history.push(`/templeDetail#${id}`)
+        this.props.history.push(`/templeDetail?id=${id}`)
     }
     handleClickPray(id,e){
         e.preventDefault()
         this.props.context.init('order')
-        window.location.href = `/pay/prayForm?src=${1}#${id}`
+        window.location.href = `/pay/prayForm?src=${1}&id=${id}`
     }
 
     render(){

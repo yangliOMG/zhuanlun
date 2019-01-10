@@ -1,15 +1,10 @@
 import React from 'react'
 import {  Card, WhiteSpace, WingBlank } from 'antd-mobile'
-import {connect} from 'react-redux'
 
 
 // import {update} from '../../redux/user.redux'
 import "./myCarelist.css"
 
-@connect(
-    state=>state.user,
-    // {update}
-)
 class MyCarelist extends React.Component{
     constructor(props){
         super(props);

@@ -103,25 +103,29 @@ export async function ajaxHistoryList(payload ,callback,){
 export async function ajaxTempleList(payload ,callback,callback2){
     let {province='',tag='',name='',index,scrollMore=false,pickerVal=''} = payload
     let res 
-    if(name !== ''){
-        res = await  _temple.getTempleListByName(name,index)
-    }else if(province !== ''&&tag !== ''){
-        res = await  _temple.getTempleListByPicker(province,tag,index)
-    }else if(pickerVal!==''){
-        res = await  _temple.getTempleListByPicker(...pickerVal.split('，'),index)
-    }else{
-        res = await  _temple.getTempleListAll(index)
-    }
-    
-    if(res.status === 200){
-        if( !scrollMore || true){
-            if(res.data instanceof Array){
-                callback(res.data,index+1)
-                if(callback2){
-                    callback2()
+    try {
+        if(name !== ''){
+            res = await  _temple.getTempleListByName(name,index)
+        }else if(province !== ''&&tag !== ''){
+            res = await  _temple.getTempleListByPicker(province,tag,index)
+        }else if(pickerVal!==''){
+            res = await  _temple.getTempleListByPicker(...pickerVal.split('，'),index)
+        }else{
+            res = await  _temple.getTempleListAll(index)
+        }
+        
+        if(res.status === 200){
+            if( !scrollMore || true){
+                if(res.data instanceof Array){
+                    callback(res.data,index+1)
+                    if(callback2){
+                        callback2()
+                    }
                 }
             }
         }
+    } catch (error) {
+        console.log(error)
     }
 }
 export async function ajaxTempleMessage(id, callback){

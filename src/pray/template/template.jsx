@@ -1,18 +1,12 @@
 import React from 'react'
 import { WhiteSpace  , SearchBar, WingBlank, NavBar,Icon} from 'antd-mobile'
-import {connect} from 'react-redux'
 // import {Redirect} from 'react-router-dom'
 
-import {updateOrder} from '../../redux/order.redux'
 import Order from '../../service/order-service.jsx'
 
 import './template.css'
 const _order = new Order()
 
-@connect(
-    state=>state.user,
-    {updateOrder}
-)
 class Template extends React.Component{
     constructor(props){
         super(props);

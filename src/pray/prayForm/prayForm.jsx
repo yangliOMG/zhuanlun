@@ -228,6 +228,10 @@ class PrayForm extends React.Component{
         this.setState({[key]: false,...value})
         document.getElementById('root').style.overflow =''
     }
+    onTest(){
+        const { order, saveOrder } = this.props.context
+        saveOrder({ num:order.num + 1 })
+    }
 
     render(){
         const { obj, price, unick, typeList,navList, checkBoxFlag, infoVisible, positionChangable, modal2 } = this.state
@@ -249,7 +253,7 @@ class PrayForm extends React.Component{
                 <WingBlank size="lg">
                     <WhiteSpace size="lg" />
                     <div className='temCard radius'>
-                        <div className='img'>   
+                        <div id="img" className='img' onClick={()=>this.onTest()}>   
                             <img className='ico' src={obj.ico} alt="" />
                         </div>
                         <div className='ti' onClick={()=>this.setState({infoVisible:!infoVisible})}>
