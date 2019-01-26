@@ -1,4 +1,14 @@
 # 问题总结
+* 从零开始建立react项目
+```
+1.mkdir文件夹 -> npm init(创建package.json) -> npm install react/webpack/babel -> .babelrc文件
+2.package.json中配置scripts命令行，以及webpack.config.js文件，index.html
+```
+```
+* 不用create-react-app: .babelrc-preset：react必需？放弃es2015、tate-0，使用env
+* 用create-react-app: .babelrc-preset：只需react-app(这个预设对babel/webpack都做了一定封装，只能在cra使用)
+--->cra中，默认一个entry入口，一般指向根文件，可以改成多个(https://www.jianshu.com/p/5e32f0315bb1)
+```
 * 从零开始在linux系统中运行natapp
 ```
 1.下载linux客户端natapp，拷到linux中
@@ -348,37 +358,14 @@ Array.prototype.slice.call(arguments)
 [].slice.call(arguments)   
 [...arguments]
 ```
+* eval() 
+```
+1.接受任意的字符串，并当作javaScript代码来处理  
+2.eval函数的每一次执行，也会进入eval执行中的上下文
+```
+
 * 兄弟组件通信： 观察者模式  订阅-发布模式
-```
-//优点：解耦
-//缺点：创建这个函数同样需要内存，过度使用会导致难以跟踪维护
-var obz = (function(){
-	var list = [], trigger, listener
-	
-	trigger = function (){
-		var key = [].shift.call(arguments)
-		var msg = list[key]
-		if(!msg){
-        	return false
-		}
-		for(let i=0; i< msg.length; i++){
-			msg[i].apply(this,arguments)
-		}
-	}
 
-	listener = function (key,fn){
-		var msg = list[key]
-		if(!msg){
-			list[key] = []
-		}
-        list[key].push(fn)
-	}
-	return {trigger, listener}
-})()
-
-obz.listener("key",a=>console.log("listener接收的消息是："+a))
-obz.trigger("key",["trigger发送消息1"])
-```
 * 祖父孙子组件通信： 生产者消费者模式
 ```
 //优点：实现跨层级的组件通信
@@ -513,7 +500,35 @@ ReactDOM.findDOMNode(ref)
 对于html元素使用ref的情况，ref本身引用的就是该元素的实际dom节点（ref===ReactDOM.findDOMNode(ref)）
 该方法常用于React组件上的ref（ref!==ReactDOM.findDOMNode(ref)）
 ```
-* xxx.d.ts  (d.ts就是TypedDefinition 类型定义文件，用来定义类型信息以及接口规范。)
+* TypeScript
+```
+1. xxx.d.ts  (d.ts就是TypedDefinition 类型定义文件，用来定义类型信息以及接口规范。)
+2. typescript提供babel的功能
+```
+```将js改为ts
+1. npm i --S-D source-map-loader typescript awesome-typescript-loader @types/react @types/react-dom
+2. 创建tsconfig.json (https://www.typescriptlang.org/docs/handbook/compiler-options.html)
+3. 修改webpack.config.js 装载awesome-typescript-loader source-map-loader
+4. 修改jsx为tsx，
+      * 将import语句更改为import * as React from "react"。这是因为在导入CommonJS模块时，Babel假定modules.export为默认导出，而TypeScript则不是。
+      * class XXX extends React.Component <props, state>
+      * 给props/state添加interface，添加特殊常量：枚举，数组等。函数的输入输出添加类型，private
+      * interface xxx {。。。}  ===  type xxx = {...}
+      * interface 和type很像。type 的含义是定义自定义类型，当 TS 提供给你的基础类型都不满足的时候，可以使用 type 自由组合出你的新类型，而 interface 应该是对外输出的接口。type 不可以被继承，但 interface
+```
+```将cra升级为ts
+1. npx create-react-app xxx --typescript
+2. npm install --save typescript @types/xxx     对于ts/tsx文件需要引入各种@types实现类型定义文件
+3. 把js文件全部改为ts
+```
+```总结
+1. ts利于类型的规范，不仅是接口，包括props/state的值都能有效规范
+2. interface的声明最好在当前文件夹下新建声明文件，类似 接口文档与逻辑代码分离
+3. 一些插件并没有.d.ts，就无法在ts中引入
+4. 在js文件中引入.d.ts，在vscode中会有类型提示，但是不会进行校验。在js项目中仅仅加入.d.ts意义不大，最多充当接口文档
+```
+
+* css in js (一种开发模式)。 emotion (其一种实现库)
 
 * cssnext (cssnext 和 css4 并不是一个东西，cssnext使用下个版本css的草案语法)
 > cssnext 特性： 1.自定义属性，自定义选择器  2. 选择器嵌套  3. 函数   4.编译速度 比 预处理 快得多
@@ -601,4 +616,96 @@ WebAssembly 文件体积更小，下载速度更快, 解析更快
 编译和优化：WebAssembly更接近于汇编语言，比 JavaScript 代码更快更直接的转换成机器代码。 编译和优化所需的时间较少，因为在将文件推送到服务器之前已经进行了更多优化，JavaScript 需要为动态类型多次编译代码
 
 把高级别的语言（C，C++和Rust）编译为WebAssembly。目前还需要JS进行交互，用JS作为入口。
+```
+
+* React Hooks api       //最新react@alpha才支持
+```
+Hooks 是一种函数，该函数允许您从函数式组件 “勾住(hook into)” React 状态和生命周期功能。 Hooks 在类内部不起作用 - 它们允许你无需类就使用 React。 
+
+**不要在循环，条件或嵌套函数中调用 Hook 。在组件顶层调用 Hook **
+
+useState: 无需类就使用this.state 
+useEffect: 在刷新对 DOM 的更改后运行你的 “effect” 函数，且不会阻止浏览器  ≈ componentDidMount
+     · React 在下次运行 effect 之前会清理之前渲染的effect
+     · 传递给 useEffect 的函数在延迟事件期间在 layout(布局) 和 paint(绘制) 后触发
+```
+* 动态import
+```
+· 动态import，then传过来的参数，不会是默认default
+· 动态import是一个Promise对象
+import('./constant').then(({default:Com }) => {  
+      。。。
+})
+```
+* Suspense与react.lazy
+```
+· 初衷是为logading场景提供优雅的通用解决方案，允许组件树挂起等待（即延迟渲染）异步数据
+· Suspense组件可以放在（组件树中）Lazy组件上方的任意位置，并且下方可以有多个Lazy组件。
+· 没被Suspense包起来的Lazy组件会报错
+
+const C = React.lazy(() => import('./constant'))
+<Suspense fallback={<div>Loading...</div>}>     
+      <C></C>
+</Suspense>
+```
+* graphql.js    npm express-graphql graphql =====>  Relay是一套基于GraphQL和React的框架
+> 好处：1.GraphQL最小化了需要网络传输的数据量   2.兼顾不同前端框架，不同平台  3.多个api可以转变为一个api解决
+
+> 标量包含，String、Int、Float、Boolean、Enum。
+> Schema：query（查询）、mutation（更改）和subscription（订阅）
+```
+REST -- REpresentational State Transfer，
+英语的直译就是“表现层状态转移”---> RESTful:URL定位资源，用HTTP动词（GET,POST,PUT,DELETE)描述操作。
+```
+
+* mongodb
+```
+* 官网下载windows版的msi，
+* mongod --dbpath c:\data\db  //cmd中，在mongodb/bin目录下运行MongoDB 服务器
+*       ----->>>>>              //命令即可连接上 MongoDB,27017端口即运行mongodb
+* mongo.exe //运行 mongo.exe   //可以用来查询数据库
+```
+
+* ramda : 函数式编程, 方法都支持柯里化
+```
+import * as R from 'ramda'          // * as  会将 若干export导出的内容组合成一个对象返回
+
+import xxx from ‘xxx’：（export default mutations）只会导出这个默认的对象作为一个对象
+```
+
+* babel ->.babelrc：presets是一组Plugins的集合
+```
+Babel会从当前目录查找.babelrc文件。这个目录是文件被编译的目录。如果不存在，那么他会根据目录树上寻这个文件，或者在package.json中寻找"babel":{}这个选项。
+
+* babel-polyfill：它是通过向全局对象和内置对象的prototype上添加方法来实现的。会造成全局空间污染
+* babel-runtime: 只要是ES6的语法，它都会进行转码成ES5，它不会污染全局对象和内置对象的原型，只需要import xxxx,这样不仅避免污染全局对象，而且可以减少不必要的代码。
+* transform-runtime：避免手动引入 import的痛苦，并且它还做了公用方法的抽离。
+
+* babel-core是Babel编译器的核心
+* babel-loader：babel所做的事情是转换代码，所有需要使用loader去转换，因此我们需要配置babel-loader。
+* babel-preset-env：它的功能类似于 babel-preset-latest
+* babel-node：提供一个支持ES6的REPL环境，支持Node的REPL环境的所有功能，可以直接运行ES6代码。
+* babel-register：通过 node 引入的带 .es6, .es, .jsx 和 .js 后缀的所有后续文件都将会被 Babel 转译
+```
+```
+config:
+* env.js：env.js的主要目的在于读取env配置文件并将env的配置信息给到全局变量process.env
+```
+
+* rxjs : 函数式 + 响应式 编程（functional + reactive），能 线性处理 同步和非同步
+```
+Observable(create,fromEvent,from,of).pipe( [Operators] )     Subject(next())     observer(next,complete,error)
+
+Operators(
+      map, mapTo, filter | take, first, takeUntil, concatAll | skip, takeLast, last, concat, startWith, merge
+      combineLatest, withLatestFrom, zip | scan, buffer | delay, delayWhen | throttle, debounce
+      distinct, distinctUntilChanged | catch, retry, retryWhen, repeat | switch, mergeAll, concatAll
+      switchMap, mergeMap, concatMap |
+
+      不常用：window, windowToggle, groupBy
+
+      服务于Subject：multicast, refCount, publish, share
+)
+* Observable没有被订阅，不会真的对元素做运算
+* 渐进式取值：每个元素送出后就是运算到底
 ```

@@ -38,7 +38,7 @@ app.use(function (req, res, next) {   //不是/static(静态资源)，都映射�
     if(regArr.some( v=> v.test(req.url) )){
     // if ( req.url.startsWith('/static')||req.url.startsWith('/foli')||req.url.startsWith('/html')||req.url.startsWith('/fontAwesome')
     //     ||req.url.endsWith('.ico')||req.url.endsWith('.txt')) {
-        return next()
+        return next()       //静态资源，都走下一个中间件
     }
     const store = createStore(reducer, compose(
         applyMiddleware(thunk)
