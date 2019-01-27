@@ -171,6 +171,18 @@ app.use(middlewareA);
 app.use(middlewareB);
 app()
 ```
+### js实现异步sleep
+```
+async function test() {
+    console.log(new Date().getTime())
+    await sleep(3000)
+    console.log(new Date().getTime())
+}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+test()
+```
 
 ### ES6 模块与 CommonJS 模块 
 * CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
