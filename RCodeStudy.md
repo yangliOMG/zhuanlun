@@ -53,7 +53,7 @@ obz.trigger("key",["trigger发送消息1"])
 * call(),具有将this指针转换为首个参数的功能，所以具体实现思路就是 函数作为首个参数的函数，这样再调用，实现this指针指向的转移
 ```核心部分
 Function.prototype.call2 = function(context){
-      context.fn = this;
+      context.fn = this;            //this指向 自定义function
       context.fn()
 }
 
@@ -110,6 +110,22 @@ function Promise(fn) {
     }
     fn(resolve, reject)
 }
+function Promise1(fn) {
+    var state = 'pending', callbacks = [];
+    this.then = function (onFulfilled) {
+        callbacks.push(onFulfilled);
+        return this;
+    }
+    function resolve(newValue) {
+        state = 'fulfilled';
+        setTimeout(function () {
+            callbacks.forEach(function (callback) {
+                callback(newValue);
+            });
+        }, 0);
+    }
+    fn(resolve)
+}
 ---
 new Promise((resolve, reject) => {
   resolve(1);
@@ -127,7 +143,7 @@ function fd(fn,time){
 			flag = false
             clearTimeout(timer)
             timer = setTimeout(()=>{
-                fn.apply(this,arguments)
+                fn.apply(this,arguments)        //this指向dom节点，arguments指向event事件
 				flag = true
             },time)
 		}
@@ -219,6 +235,7 @@ var createMask = function(){
   }
 }()
 ```
+* 居中  1. textAlign:center  2.margin:0 auto  3.lineHeight = height
 * 遮罩层居中问题  1. ab+50+margin负值   2.flex
 ```
 父：position:fixed,top/bottom/left/right:0;  
