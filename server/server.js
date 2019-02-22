@@ -24,13 +24,13 @@ assethook({
 const app = express()
 const server = require('http').Server(app)
 const proxy = require('http-proxy-middleware')
-const DEFAULT_PORT = 8020
+const DEFAULT_PORT = 8021
 const proxyPath = 'http://localhost:8080'
 
 app.use(cookieParser())
 app.use(bodyParser.json())
 
-
+//CORS是一个W3C标准，全称是"跨域资源共享"（Cross-origin resource sharing）
 app.use(['/img/*','*.do'], proxy({target: proxyPath, changeOrigin: true}))
 
 app.use(function (req, res, next) {   //不是/static(静态资源)，都映射到index.html
