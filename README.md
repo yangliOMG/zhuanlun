@@ -656,6 +656,7 @@ const C = React.lazy(() => import('./constant'))
 ```
 REST -- REpresentational State Transfer，
 英语的直译就是“表现层状态转移”---> RESTful:URL定位资源，用HTTP动词（GET,POST,PUT,DELETE)描述操作。
+规范接口命名，方法+名称，便于理解
 ```
 
 * mongodb
